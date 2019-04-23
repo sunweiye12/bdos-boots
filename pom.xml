@@ -90,11 +90,6 @@
 			<version>5.1.38</version><!--$NO-MVN-MAN-VER$ -->
 		</dependency>
 
-		<dependency>
-			<groupId>org.apache.httpcomponents</groupId>
-			<artifactId>httpclient</artifactId>
-		</dependency>
-
 		<!-- com.alibaba.fastjson -->
 		<dependency>
 			<groupId>com.alibaba</groupId>
@@ -107,32 +102,19 @@
 			<artifactId>junit</artifactId>
 			<version>4.12</version><!--$NO-MVN-MAN-VER$ -->
 		</dependency>
+		
 		<!-- org.apache.poi -->
 		<dependency>
 	         <groupId>org.apache.poi</groupId>
 	         <artifactId>poi</artifactId>
 	         <version>3.10-FINAL</version>
 	     </dependency>
-	     
 	     <dependency>
 	         <groupId>org.apache.poi</groupId>
 	         <artifactId>poi-ooxml</artifactId>
 	         <version>3.10-FINAL</version>
 	    </dependency>
 
-		<!-- kubernetes-client -->
-		<dependency>
-			<groupId>io.fabric8</groupId>
-			<artifactId>kubernetes-client</artifactId>
-			<version>4.1.0</version><!-- 对应k8s的1.9版本 -->
-		</dependency>
-
-		<!-- harbor-client -->
-		<dependency>
-			<groupId>com.bonc.bdos</groupId>
-			<artifactId>harbor.client</artifactId>
-			<version>1.6.1-0.0.2</version><!-- 对应harbor的1.6.1版本 -->
-		</dependency>
 		<!-- Swagger -->
 		<dependency>
 			<groupId>io.springfox</groupId>
@@ -150,121 +132,16 @@
 			<version>21.0</version>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.ant</groupId>
-			<artifactId>ant</artifactId>
-			<version>1.8.2</version>
-		</dependency>
-		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
 			<version>3.4</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-compress</artifactId>
-			<version>1.18</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
 			<version>2.6</version>
 		</dependency>
-		<dependency>
-			<groupId>com.jcraft</groupId>
-			<artifactId>jsch</artifactId>
-			<version>0.1.46</version>
-		</dependency>
-		<dependency>
-			<groupId>com.ceph</groupId>
-			<artifactId>libcephfs</artifactId>
-			<version>0.80.5</version>
-		</dependency>
-		<dependency>
-			<groupId>net.java.dev.jna</groupId>
-			<artifactId>jna</artifactId>
-			<version>4.1.0</version>
-		</dependency>
-		<dependency>
-			<groupId>com.ceph</groupId>
-			<artifactId>rados</artifactId>
-			<version>0.4.0</version>
-		</dependency>
-		<dependency>
-			<groupId>io.github.twonote</groupId>
-			<artifactId>radosgw-admin4j</artifactId>
-			<version>1.0.2</version>
-		</dependency>
-		<dependency>
-			<groupId>com.amazonaws</groupId>
-			<artifactId>aws-java-sdk-s3</artifactId>
-			<version>1.11.298</version>
-		</dependency>
-		<!-- docker-java引用的jackson版本为3.0.3，springboot引用的jackson版本为2.6.3 ，使用时候有冲突，下面处理为统一版本为2.6.3 -->
-		<!-- kubernetes api依赖的jersey在dockerjava中已经引用 -->
-		<dependency>
-			<groupId>com.github.docker-java</groupId>
-			<artifactId>docker-java</artifactId>
-			<version>3.0.3</version>
-			<exclusions>
-				<exclusion>
-					<groupId>com.fasterxml.jackson.jaxrs</groupId>
-					<artifactId>jackson-jaxrs-json-provider</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>com.fasterxml.jackson.module</groupId>
-					<artifactId>jackson-module-jaxb-annotations</artifactId>
-				</exclusion>
-				<!-- -->
-				<!-- <exclusion> <groupId>javax.ws.rs</groupId> <artifactId>javax.ws.rs-api</artifactId> 
-					</exclusion> -->
-				<exclusion>
-					<groupId>io.netty</groupId>
-					<artifactId>netty-buffer</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>io.netty</groupId>
-					<artifactId>netty-handler-proxy</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>io.netty</groupId>
-					<artifactId>netty-codec-http</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>io.netty</groupId>
-					<artifactId>netty-handler</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>io.netty</groupId>
-					<artifactId>
-                        netty-transport-native-epoll
-                    </artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<!-- 使用2.0版本的少个类, 先使用默认的 -->
-		<!-- <dependency> <groupId>javax.ws.rs</groupId> <artifactId>javax.ws.rs-api</artifactId> 
-			<version>2.0</version> </dependency> -->
-		<dependency>
-			<groupId>org.glassfish.jersey.inject</groupId>
-			<artifactId>jersey-hk2</artifactId>
-			<version>2.27</version>
-		</dependency>
-		<dependency>
-			<groupId>com.fasterxml.jackson.jaxrs</groupId>
-			<artifactId>jackson-jaxrs-json-provider</artifactId>
-			<version>2.6.3</version>
-		</dependency>
-		<dependency>
-			<groupId>com.fasterxml.jackson.module</groupId>
-			<artifactId>jackson-module-jaxb-annotations</artifactId>
-			<version>2.6.3</version>
-		</dependency>
-		<!-- docker-java end -->
-		<dependency>
-			<groupId>javatar</groupId>
-			<artifactId>javatar</artifactId>
-			<version>2.5</version>
-		</dependency>
+		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
@@ -274,86 +151,6 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
 			<version>4.3.6.RELEASE</version>
-		</dependency>
-
-		<!-- feign -->
-		<dependency>
-			<groupId>com.netflix.feign</groupId>
-			<artifactId>feign-core</artifactId>
-			<version>8.18.0</version>
-		</dependency>
-		<dependency>
-			<groupId>com.netflix.feign</groupId>
-			<artifactId>feign-gson</artifactId>
-			<version>8.18.0</version>
-		</dependency>
-
-		<!-- 定时任务框架Quartz的依赖 -->
-		<dependency>
-			<groupId>org.quartz-scheduler</groupId>
-			<artifactId>quartz</artifactId>
-			<version>2.2.1</version>
-			<exclusions>
-				<exclusion>
-					<artifactId>slf4j-api</artifactId>
-					<groupId>org.slf4j</groupId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency><!-- 该依赖必加，里面有sping对schedule的支持 -->
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-context-support</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>io.netty</groupId>
-			<artifactId>netty-all</artifactId>
-			<version>4.1.25.Final</version>
-		</dependency>
-
-		<!-- etcd V3 client -->
-		<dependency>
-			<groupId>com.coreos</groupId>
-			<artifactId>jetcd-core</artifactId>
-			<version>0.0.2</version>
-			<exclusions>
-				<exclusion>
-					<groupId>io.netty</groupId>
-					<artifactId>netty-handler-proxy</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>io.netty</groupId>
-					<artifactId>netty-codec-http</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>io.netty</groupId>
-					<artifactId>netty-handler</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>io.netty</groupId>
-					<artifactId>netty-codec-http2</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-
-		<!-- ftp client -->
-		<dependency>
-			<groupId>commons-net</groupId>
-			<artifactId>commons-net</artifactId>
-			<version>3.6</version>
-		</dependency>
-
-		<!--页面xterm 插件 -->
-		<dependency>
-			<groupId>org.webjars.npm</groupId>
-			<artifactId>xterm</artifactId>
-			<version>2.9.2</version>
-		</dependency>
-
-		<!--webSocket -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-websocket</artifactId>
 		</dependency>
 
 	</dependencies>
@@ -377,6 +174,7 @@
 	</profiles>
 
 	<build>
+	    <finalName>bdos</finalName>
 		<resources>
 			<resource>
 				<directory>src/main/resources</directory>
@@ -393,13 +191,13 @@
 					<include>application-${profileActive}.properties</include>
 				</includes>
 			</resource>
-			<resource>
+			<!-- <resource>
 				<directory>src/main/webapp</directory>
 				<targetPath>META-INF/resources</targetPath>
 				<includes>
 					<include>**/**</include>
 				</includes>
-			</resource>
+			</resource> -->
 		</resources>
 
 		<plugins>
