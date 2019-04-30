@@ -1,5 +1,5 @@
-FROM 172.16.3.50:8443/library/jdk:8
+FROM 172.16.3.216:8443/library/tomcat:8.5.38
   
-COPY target/bdos-0.0.1-SNAPSHOT.jar /root
+COPY target/bdos.war /usr/local/tomcat/webapps/
 
-#CMD java -jar /root/bdos-0.0.1-SNAPSHOT.jar
+CMD catalina.sh run
