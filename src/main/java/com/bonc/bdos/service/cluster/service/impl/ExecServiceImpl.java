@@ -331,7 +331,6 @@ public class ExecServiceImpl implements ExecService{
 
 			exec.setPlaybooks(initPlaybooks(exec.getPlayCode()));
 		}
-
 		return new ExecProcess(exec);
 	}
 

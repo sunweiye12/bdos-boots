@@ -40,14 +40,13 @@ public  class ExecProcess{
     public ExecProcess(SysInstallPlayExec exec) {
         // 设置执行状态
         this.status = exec.getStatus();
-        this.size = exec.getCurIndex();
         this.targetIps = exec.getTargetIps();
         this.stdout = exec.getStdout();
         this.msg = exec.getMessage();
         int size=0;
         // 获取已经完成的任务数量
         for(SysInstallPlaybook playbook:exec.getPlaybooks()){
-            if (playbook.getIndex()<exec.getCurIndex()){
+            if (playbook.getIndex()<=exec.getCurIndex()){
                 size++;
             }
         }
