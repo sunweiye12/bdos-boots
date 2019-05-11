@@ -292,7 +292,6 @@ public class ExecServiceImpl implements ExecService{
 			TaskManager.exec(exec);
 		}catch (Exception e){
 			e.printStackTrace();
-			TaskManager.destroy(exec.getUuid());
 			throw new ClusterException(ReturnCode.CODE_CLUSTER_BOOTSTRAP_CALL_FAIL,"执行任务调度失败！");
 		}
 	}

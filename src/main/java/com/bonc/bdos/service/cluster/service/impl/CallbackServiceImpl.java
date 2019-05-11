@@ -67,8 +67,6 @@ public class CallbackServiceImpl implements CallbackService{
 			Optional<SysClusterHost> optional = clusterHostDao.findById(ip);
 			optional.ifPresent(this::unlockHost);
 		}
-
-		TaskManager.destroy(finish.getUuid());
 	}
 
 	@Override
