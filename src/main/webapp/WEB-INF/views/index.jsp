@@ -133,7 +133,7 @@
                 <button type="button" id="closeLog"  class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             </div>
             <div class="modal-body">
-                <div id="installPercent" class="progress"><div role="progressbar" ></div></div>
+                <div id="installPercent" class="progress"><div role="progressbar" class="progress-bar progress-bar-striped"></div></div>
                 <div id="log-container" >
                     <div class="logInsert" ></div>
                 </div>
