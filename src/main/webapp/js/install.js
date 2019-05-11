@@ -75,11 +75,17 @@ var InstallCluster = function (play_code,targets) {
     };
 
     var active_show = function (task_status,size,status) {
-        var length= _this._play.playbooks().length;
+        var playbooks = _this._play.playbooks();
+        var length= playbooks.length;
         var percents = parseInt(size*100/length) ;
         var _class= "progress-bar progress-bar-striped "+(task_status?"bg-success progress-bar-animated ": (status==='2'?"bg-success ":(status==='4'?"":"bg-danger ")));
         $("#installPercent div").attr('class',_class).attr('style','width: '+percents+"%").html(percents+"%");
-        $("#processTitle").html(_this._play.playbooks()[size].playbookName);
+        for(var index in playbooks){
+            if(playbooks[index].index === size){
+                $("#processTitle").html(playbooks[index].playbookName);
+                break;
+            }
+        }
     };
 
     /**
