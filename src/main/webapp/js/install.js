@@ -53,14 +53,7 @@ var InstallCluster = function (play_code,targets) {
                     // 滚动进度
                     active_show(_this.status(),data.data.size,data.data.status);
 
-                    // 安装失败，释放按钮操作
-                    if(data.data.status==='3'){
-                        action_btn(play.status());
-                    }
-
-                    if(data.data.status==='2'){
-                        // 跳转到主机页面
-                    }
+                    action_btn(play.status());
                 }
             }
         });

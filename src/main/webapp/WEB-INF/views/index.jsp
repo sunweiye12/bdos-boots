@@ -139,7 +139,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button id="resumeBtn" type="button" class="btn btn-primary" data-loading-text="操作中....">继续安装</button>
+                <button id="resumeBtn" type="button" class="btn btn-primary" data-loading-text="操作中...."></button>
             </div>
         </div>
     </div>

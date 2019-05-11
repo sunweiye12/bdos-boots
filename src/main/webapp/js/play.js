@@ -85,7 +85,7 @@ var Play = function (play_code,opt) {
             async: false,
             success : function(result) {
                 if(result.code===200){
-                    _this.status(result.data.status!=='2'&&result.data.status!=='3');
+                    _this.status(result.data.status==='1'||result.data.status==='0');
                     _opt.callback(_this,result);
                 }
             }
