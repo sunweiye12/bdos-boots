@@ -303,6 +303,11 @@ public class SysInstallPlayExec implements Serializable {
 	}
 
 	@ApiModelProperty(hidden = true)
+	public boolean isStop() {
+		return this.status == SysInstallPlayExec.FAILED||this.status == SysInstallPlayExec.PAUSE;
+	}
+
+	@ApiModelProperty(hidden = true)
 	public boolean isStart() {
 		return this.status == SysInstallPlayExec.INIT;
 	}

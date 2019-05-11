@@ -302,14 +302,21 @@ public class ExecServiceImpl implements ExecService{
 		Optional<SysInstallPlayExec> execOpt = installPlayExecDao.findById(uuid);
 		if (!execOpt.isPresent())				{throw new ClusterException(ReturnCode.CODE_CLUSTER_TASK_NOT_EXIST,"该任务不存在");}
 
-		SysInstallPlayExec oldExec = execOpt.get();
-		if (!oldExec.isFailed())					{throw new ClusterException(ReturnCode.CODE_CLUSTER_TASK_NOT_FAILED,"该任务未失败");}
+		SysInstallPlayExec exec = execOpt.get();
+		if (!exec.isStop())					{throw new ClusterException(ReturnCode.CODE_CLUSTER_TASK_NOT_FAILED,"该任务状态不可恢复执行");}
 
-		playExec(oldExec,oldExec.getTargetIps());
+		playExec(exec,exec.getTargetIps());
 	}
 
 	@Override
+    @Transactional
 	public void pause(String uuid) {
+        Optional<SysInstallPlayExec> execOpt = installPlayExecDao.findById(uuid);
+        if (!execOpt.isPresent())				{throw new ClusterException(ReturnCode.CODE_CLUSTER_TASK_NOT_EXIST,"该任务不存在");}
+        SysInstallPlayExec exec = execOpt.get();
+
+        if (!exec.isRun())					{throw new ClusterException(ReturnCode.CODE_CLUSTER_PLAY_NOT_RUNNING,"当前任务未在运行中");}
+
 		TaskManager.destroy(uuid);
 	}
 
