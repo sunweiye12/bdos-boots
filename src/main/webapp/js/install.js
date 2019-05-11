@@ -76,7 +76,10 @@ var InstallCluster = function (play_code,targets) {
 
     var active_show = function (task_status,size,status) {
         var length= _this._play.playbooks().length;
-        var percents = parseInt(size*100/length) ;
+        var percents = parseInt((size+1)*100/length) ;
+        if (percents>100){
+            percents = 100;
+        }
         var _class= "progress-bar progress-bar-striped "+(task_status?"bg-success active ": (status==='2'?"bg-success ":(status==='4'?"":"bg-danger ")));
         $("#installPercent div").attr('class',_class).attr('style','width: '+percents+"%").html(percents+"%");
         $("#processTitle").html(_this._play.playbooks()[size].playbookName);
