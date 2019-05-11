@@ -43,14 +43,7 @@ public  class ExecProcess{
         this.targetIps = exec.getTargetIps();
         this.stdout = exec.getStdout();
         this.msg = exec.getMessage();
-        int size=0;
-        // 获取已经完成的任务数量
-        for(SysInstallPlaybook playbook:exec.getPlaybooks()){
-            if (playbook.getIndex()<=exec.getCurIndex()){
-                size++;
-            }
-        }
-        this.size = size;
+        this.size = exec.getCurIndex();
         this.present = (exec.getPercent()+size*100)*100/(100*exec.getPlaybooks().size());
     }
 }
