@@ -168,7 +168,7 @@ public class CmdExecutor extends Thread {
         if (StringUtils.isEmpty(line)) {
             buffer.append("<br/>");
         } else {
-            buffer.append("<div>").append(line).append("</div>");
+            buffer.append("<div>[ ").append(DateUtil.getCurrentDateTime()).append(" ]  ").append(line).append("</div>");
         }
         buffer.append("\n");
     }

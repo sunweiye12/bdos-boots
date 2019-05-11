@@ -1246,23 +1246,6 @@ public class StringUtils {
         return DOMAIN_PATTERN.matcher(input).matches();
     }
 
-    /**
-     * 判断输入是否为IP地址
-     *
-     * @param input
-     * @return
-     * @since fangxiang @ Oct 28, 2010
-     * @deprecated
-     */
-    // @Deprecated
-    // public static boolean isIP(String input) {
-    // if (StringUtils.isEmpty(input)) {
-    // return false;
-    // }
-    // return IP_PATTERN.matcher(input).matches();
-    // }
-
-    
     
     /**
      * 判断是否为IPv4的地址

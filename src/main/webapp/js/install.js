@@ -2,7 +2,6 @@ var InstallCluster = function (play_code,targets) {
     var $resume_btn = $("#resumeBtn");
     var $log_container = $("#log-container");
     var _this = this;
-
     var init = function () {
         // 初始化 滚动日志
         $log_container.css({
@@ -12,6 +11,14 @@ var InstallCluster = function (play_code,targets) {
             cursorcolor:"gray",
             cursorwidth:"16px",
             enablescrollonselection: true  // 当选择文本时激活内容自动滚动
+        });
+
+        var scroll_flag = true;
+        var top = 0;
+        $log_container.scroll(function () {
+            var cur_top = $log_container.scrollTop();
+            scroll_flag = cur_top>top;
+            top = cur_top;
         });
 
         var play = new Play(play_code,{
@@ -32,7 +39,9 @@ var InstallCluster = function (play_code,targets) {
                     $(".logInsert").html(data.data.stdout);
 
                     // 滚动进度
-                    active_show(_this.status(),data.data.size,data.data.status==='2');
+                    if (scroll_flag){
+                        active_show(_this.status(),data.data.size,data.data.status==='2');
+                    }
 
                     // 安装失败，释放按钮操作
                     if(data.data.status==='3'){
