@@ -27,6 +27,7 @@ public class SysInstallPlayExec implements Serializable {
 	public static final char RUNNING = '1';
 	public static final char SUCCESS = '2';
 	public static final char FAILED = '3';
+	public static final char PAUSE = '4';
 
 	public SysInstallPlayExec() {
 		setCreateDate(new Timestamp(DateUtil.getCurrentTimeMillis()));

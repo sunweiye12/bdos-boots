@@ -128,17 +128,18 @@
     <div class="modal-dialog modal-xl modal-dialog-centered" >
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="myModalLabel">安装进度</h4>
+                <h4 class="modal-title" >安装进度 <span class="small" id="processTitle"></span></h4>
+
                 <button type="button" id="closeLog"  class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             </div>
             <div class="modal-body">
-                <div id="installPercent" class="progress"></div>
+                <div id="installPercent" class="progress"><div role="progressbar" ></div></div>
                 <div id="log-container" >
                     <div class="logInsert" ></div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button id="resumeBtn" type="button" class="btn btn-primary" data-loading-text="安装中....">继续安装</button>
+                <button id="resumeBtn" type="button" class="btn btn-primary" data-loading-text="操作中....">继续安装</button>
             </div>
         </div>
     </div>

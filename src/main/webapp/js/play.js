@@ -13,12 +13,15 @@ var Play = function (play_code,opt) {
         targets: [],
         read_last:false,
         interval_time: 1000,
+        // 启动的回掉函数
         start: function(play,data){
             console.log(play.uuid());
         },
+        // 暂停或者恢复后的回掉函数
         resume: function(play,data){
             console.log(play.uuid());
         },
+        // 日志输出的回掉函数
         callback: function (play,data) {
             console.log(play.uuid());
         }
@@ -47,8 +50,10 @@ var Play = function (play_code,opt) {
                 success : function(result) {
                     if(result.code===200){
                         task_id = result.data;
-                        task_status = true;
+                        _this.status(true);
                         _opt.start(_this,result);
+                    }else{
+                        _this.status(false);
                     }
                 }
             });
@@ -80,7 +85,7 @@ var Play = function (play_code,opt) {
             async: false,
             success : function(result) {
                 if(result.code===200){
-                    task_status = (result.data.status!=='2'&&result.data.status!=='3');
+                    _this.status(result.data.status!=='2'&&result.data.status!=='3');
                     _opt.callback(_this,result);
                 }
             }
@@ -95,7 +100,10 @@ var Play = function (play_code,opt) {
         return _opt.targets;
     };
 
-    this.status = function () {
+    this.status = function (status) {
+        if (status!==undefined){
+            task_status = status;
+        }
         return task_status;
     };
 
@@ -103,8 +111,8 @@ var Play = function (play_code,opt) {
         return playbooks;
     };
 
-    // 继续执行当前的task
-    this.resume=function () {
+    // 暂停或者继续执行当前任务
+    this.resume=function (status) {
         // 校验任务是否存在
         if (task_id === ""){
             return false;
@@ -112,12 +120,12 @@ var Play = function (play_code,opt) {
         // 进行任务调度
         $.ajax({
             type:"post",
-            url:basePath+"v1/cluster/exec/resume",
+            url:basePath+"v1/cluster/exec/"+(status?"pause":"resume"),
             contentType:'application/json',
             data: task_id,
             async: false,
             success:function(result){
-                task_status= result.code===200;
+                _this.status(result.code===200) ;
                 if(!task_status){
                     console.log(task_name+"继续执行失败!")
                 }
@@ -142,7 +150,7 @@ var Play = function (play_code,opt) {
             data:JSON.stringify(_opt.targets),
             async: false,
             success:function(result){
-                task_status = result.code===200;
+                _this.status(result.code===200) ;
                 if(task_status){
                     task_id = result.data;
                 }else{

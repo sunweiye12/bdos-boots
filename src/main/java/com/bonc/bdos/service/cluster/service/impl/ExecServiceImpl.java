@@ -310,6 +310,11 @@ public class ExecServiceImpl implements ExecService{
 	}
 
 	@Override
+	public void pause(String uuid) {
+		TaskManager.destroy(uuid);
+	}
+
+	@Override
 	public ExecProcess query(String uuid)  {
 		SysInstallPlayExec exec = TaskManager.getTask(uuid);
 		if (null == exec){

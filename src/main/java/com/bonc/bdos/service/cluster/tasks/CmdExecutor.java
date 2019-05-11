@@ -71,6 +71,8 @@ public class CmdExecutor extends Thread {
     private final StringBuffer buffer;
     private final List<String> cmdList = new ArrayList<>();
     private final List<String> message = new ArrayList<>();
+    private Process process;
+    private boolean pause = false;
 
     CmdExecutor(SysInstallPlayExec exec) {
         this.exec = exec;
@@ -128,7 +130,7 @@ public class CmdExecutor extends Thread {
                     .directory(new File(RUN_PATH));
 
             // 启动进程
-            Process process = pb.start();
+            process = pb.start();
 
             // 获取进程输出流stdout读取器
             BufferedReader br = new BufferedReader(new InputStreamReader(process.getInputStream()));
@@ -251,11 +253,13 @@ public class CmdExecutor extends Thread {
             exec.setStatus(SysInstallPlayExec.FAILED);
         } finally {
             // 设置保存信息
-            exec.setCmd(String.join("\n", cmdList));
-            exec.setStdout(buffer.toString());
-            exec.setMessage(JSON.toJSONString(message));
-            exec.setEndDate(new Timestamp(DateUtil.getCurrentTimeMillis()));
-            CALL_BACK.finish(exec);
+            if (!pause){
+                exec.setCmd(String.join("\n", cmdList));
+                exec.setStdout(buffer.toString());
+                exec.setMessage(JSON.toJSONString(message));
+                exec.setEndDate(new Timestamp(DateUtil.getCurrentTimeMillis()));
+                CALL_BACK.finish(exec);
+            }
         }
     }
 
@@ -269,7 +273,21 @@ public class CmdExecutor extends Thread {
      * 实现任务终止逻辑
      */
     void destroyTask() {
+        // 1. 暂停线程
+        pause = true;
+        process.destroy();
 
+        // 2.设置保存信息
+        message.add("暂停安装");
+        exec.setStatus(SysInstallPlayExec.PAUSE);
+        exec.setCmd(String.join("\n", cmdList));
+        exec.setStdout(buffer.toString());
+        exec.setMessage(JSON.toJSONString(message));
+        exec.setEndDate(new Timestamp(DateUtil.getCurrentTimeMillis()));
+        CALL_BACK.finish(exec);
+
+        // 3. 接数线程
+        super.interrupt();
     }
 
 }

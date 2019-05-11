@@ -247,6 +247,19 @@ public class ClusterController {
     }
 
     /**
+     * 任务继续执行接口
+     */
+    @RequestMapping(value = { "exec/pause" }, method = RequestMethod.POST)
+    @ApiOperation(value = "任务暂停接口", notes = "任务暂停接口")
+    @ApiImplicitParams({@ApiImplicitParam(name = "uuid",value = "任务ID,通过任务执行接口获取",required = true)})
+    public ApiResult pause(@RequestBody String uuid) {
+        return handle(() -> {
+            execService.pause(uuid);
+            return new ArrayList<>();
+        });
+    }
+
+    /**
      * 任务执行查询接口
      */
     @RequestMapping(value = { "exec/task" },method = RequestMethod.GET)

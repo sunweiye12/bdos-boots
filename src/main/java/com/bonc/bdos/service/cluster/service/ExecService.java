@@ -46,7 +46,9 @@ public interface ExecService {
 	 * @param uuid play 生成的uuid
 	 */
 	void resume(String uuid) ;
-	
+
+	void pause(String uuid);
+
 	/**
 	 * 逻辑：
 	 * 根据执行记录表，获取到对应的执行日志
@@ -75,4 +77,5 @@ public interface ExecService {
 	 * @return 任务ID
 	 */
 	String getLatestUuid(String playCode);
+
 }
