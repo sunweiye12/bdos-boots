@@ -77,26 +77,8 @@ var InstallCluster = function (play_code,targets) {
     var active_show = function (task_status,size,status) {
         var length= _this._play.playbooks().length;
         var percents = parseInt(size*100/length) ;
-        var $process = $("#installPercent div");
-        $process.attr('style','width: '+percents+"%").html(percents+"%");
-        if (!task_status&&$process.hasClass("avtive")){
-            $process.removeClass("bg-success").removeClass("active");
-        }
-        if (status!=='2'&&$process.hasClass("bg-success")){
-            $process.removeClass("bg-success");
-        }
-        if(status!=='3'&&$process.hasClass("bg-danger")){
-            $process.removeClass("bg-danger");
-        }
-        if (task_status&&!$process.hasClass("avtive")){
-            $process.addClass("bg-success").addClass("active");
-        }
-        if(status==='2'&&!$process.hasClass("bg-success")){
-            $process.addClass("bg-success");
-        }
-        if(status==='3'&&!$process.hasClass("bg-danger")){
-            $process.addClass("bg-danger");
-        }
+        var _class= "progress-bar progress-bar-striped "+(task_status?"bg-success progress-bar-animated ": (status==='2'?"bg-success ":(status==='4'?"":"bg-danger ")));
+        $("#installPercent div").class(_class).attr('style','width: '+percents+"%").html(percents+"%");
         $("#processTitle").html(_this._play.playbooks()[size].playbookName);
     };
 
