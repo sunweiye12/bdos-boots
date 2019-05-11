@@ -111,6 +111,7 @@ public class CmdExecutor extends Thread {
 
             // 设置当前执行的playbook标识
             exec.setCurIndex(playbook.getIndex());
+            LOG.info("当前任务索引: {}", exec.getCurIndex());
 
             // 根据任务生成playbook 的host文件
             String invName = playbook.initPlaybookInv(exec.getUuid());
