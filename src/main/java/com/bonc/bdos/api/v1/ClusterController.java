@@ -88,7 +88,7 @@ public class ClusterController {
     @ApiImplicitParams(@ApiImplicitParam(name = "ip",value = "主机IP"))
     public ApiResult delHost(@RequestBody  String ip) {
         return handle(() -> {
-            hostService.deleteHost(ip);
+            hostService.deleteHost(ip,false);
             return new ArrayList<>();
         });
     }
@@ -340,7 +340,7 @@ public class ClusterController {
     @ApiOperation(value = "回调删除接口", notes = "回调删除接口")
     public ApiResult calldelHost(@RequestParam String ip) {
         return handle(() -> {
-            hostService.deleteHost(ip);
+            hostService.deleteHost(ip,true);
             return new ArrayList<>();
         });
     }

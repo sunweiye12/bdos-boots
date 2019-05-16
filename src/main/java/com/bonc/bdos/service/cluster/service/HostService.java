@@ -26,9 +26,9 @@ public interface HostService {
 	 * 校验二、主机上没有安装好的角色
 	 * 
 	 * 逻辑 、   删除dev  role   host
-	 * @param ip  主机IP
+	 * @param ip  主机IP    flag主机安装标识
 	 */
-	void deleteHost(String ip) ;
+	void deleteHost(String ip,boolean flag) ;
 	
 	/**
 	 * 主机查询接口
