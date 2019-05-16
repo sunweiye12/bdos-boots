@@ -268,7 +268,7 @@ var Table = function () {
     };
 
     // 删除主机事件
-    var delEvent= function (e, value, row, index) {
+    var delTableEvent= function (row) {
         $.ajax({
             type:"delete",
             url:basePath+'v1/cluster/host',
@@ -285,29 +285,41 @@ var Table = function () {
     };
 
     // 清理node
-//    var delEvent= function (e, value, row, index) {
-//    	
-//    	_this._delete = new DELETE_NODE("delete_node");
-//    	
-//    	console.info(row);
-//    	if(row.locked === true){
-//    		alert("主机"+row.ip+"处于锁状态！");
-//    		return;
-//    	}
-//    	
-//    	if((row.roles.harbor !== undefined && row.roles.harbor.status === '2') 
-//    		|| (row.roles.master !== undefined && row.roles.master.status === '2') 
-//    		|| (row.roles.etcd !== undefined && row.roles.etcd.status === '2')
-//    		|| (row.roles.ceph_mon !== undefined && row.roles.ceph_mon.status === '2')
-//    		|| (row.roles.ceph_osd !== undefined && row.roles.ceph_osd.status === '2')){
-//    		
-//    		alert("主机"+row.ip+"存在系统角色，不能清理！");
-//    		return;
-//    	}
-//    	
-//    	_this._delete.delete_node(row.ip);
-//    	
-//    }
+    var delEvent= function (e, value, row, index) {
+    	
+    	var flag = false;
+    	for(var i in row.roles){
+	    	if(row.roles[i].status==='2'){
+	    		flag=true;
+	    	}
+    	}
+    	
+    	if(flag){
+    		_this._delete = new DELETE_NODE("delete_node");
+        	
+        	console.info(row);
+        	if(row.locked === true){
+        		alert("主机"+row.ip+"处于锁状态！");
+        		return;
+        	}
+        	
+        	if((row.roles.harbor !== undefined && row.roles.harbor.status === '2') 
+        		|| (row.roles.master !== undefined && row.roles.master.status === '2') 
+        		|| (row.roles.etcd !== undefined && row.roles.etcd.status === '2')
+        		|| (row.roles.ceph_mon !== undefined && row.roles.ceph_mon.status === '2')
+        		|| (row.roles.ceph_osd !== undefined && row.roles.ceph_osd.status === '2')){
+        		
+        		alert("主机"+row.ip+"存在系统角色，不能清理！");
+        		return;
+        	}
+        	
+        	_this._delete.delete_node(row.ip);
+    	}else{
+    		delTableEvent(row);
+    	}
+    	
+    	
+    }
     
     // 检查主机事件
     var checkEvent = function (e, value, row, index) {
