@@ -92,7 +92,7 @@ public class ClusterController {
             return new ArrayList<>();
         });
     }
-
+    
     /**
      * 主机查询接口
      */
@@ -332,6 +332,15 @@ public class ClusterController {
                 }
             }
             callbackService.saveGlobal(map);
+            return new ArrayList<>();
+        });
+    }
+    
+    @RequestMapping(value = { "callback/host" }, method = RequestMethod.DELETE)
+    @ApiOperation(value = "回调删除接口", notes = "回调删除接口")
+    public ApiResult calldelHost(@RequestParam String ip) {
+        return handle(() -> {
+            hostService.deleteHost(ip);
             return new ArrayList<>();
         });
     }
