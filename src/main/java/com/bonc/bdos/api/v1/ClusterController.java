@@ -338,7 +338,7 @@ public class ClusterController {
     
     @RequestMapping(value = { "callback/host" }, method = RequestMethod.DELETE)
     @ApiOperation(value = "回调删除接口", notes = "回调删除接口")
-    public ApiResult calldelHost(@RequestParam String ip) {
+    public ApiResult calldelHost(@RequestBody String ip) {
         return handle(() -> {
             hostService.deleteHost(ip,true);
             return new ArrayList<>();
