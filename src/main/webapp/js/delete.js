@@ -10,12 +10,12 @@
 var DELETE_NODE = function (play_code) {
     var _this = this;
     
-    this.start = function (ip) {
+    this.delete_node = function (ip) {
         var list = {targets: [ip]};
         
         $.ajax({
             type:"post",
-            url:basePath+"v1/cluster/exec/"+task_name,
+            url:basePath+"v1/cluster/exec/"+play_code,
             contentType: 'application/json',
             data:JSON.stringify(list.targets),
             async: false,
