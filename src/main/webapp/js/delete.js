@@ -23,7 +23,7 @@ var DELETE_NODE = function (play_code) {
                 if(result.code===200){
                     task_id = result.data;
                 }else{
-                    console.log(task_name+"任务创建失败!")
+                    console.log(play_code+"任务创建失败!")
                 }
             }
         });
