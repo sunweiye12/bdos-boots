@@ -28,6 +28,8 @@ var DELETE_NODE = function (play_code) {
             }
         });
         
+        
+        
         $.ajax({
             type:"delete",
             url:basePath+'v1/cluster/callback/host',
