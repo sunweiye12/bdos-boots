@@ -10,13 +10,38 @@
 var DELETE_NODE = function (play_code) {
     var _this = this;
     
-    this.delete_node  = function (ip) {
-        var play = new Play(play_code,{
-            targets: [ip],
-            read_last:false,
-            interval_time: 1000,
+    this.start = function (ip) {
+        var list = {targets: [ip]};
+        
+        $.ajax({
+            type:"post",
+            url:basePath+"v1/cluster/exec/"+task_name,
+            contentType: 'application/json',
+            data:JSON.stringify(list.targets),
+            async: false,
+            success:function(result){
+                if(result.code===200){
+                    task_id = result.data;
+                }else{
+                    console.log(task_name+"任务创建失败!")
+                }
+            }
         });
-        return play.start();
-    };
-    
+        
+        $.ajax({
+            type:"delete",
+            url:basePath+'v1/cluster/callback/host',
+            contentType:'application/json',
+            data:ip,
+            success:function(data){
+                if (data.code === 200){
+                	var table = new Table();
+                	table.refresh();
+                }else {
+                    console.log(data.code);
+                }
+            }
+        });
+
+    }
 };

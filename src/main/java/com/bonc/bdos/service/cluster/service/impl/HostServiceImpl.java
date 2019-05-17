@@ -71,11 +71,10 @@ public class HostServiceImpl implements HostService{
 	@Override
 	@Transactional
 	public void deleteHost(String ip, boolean installflag)  {
-	    
-	    if(!installflag) {
-	     // 校验1： 主机是否有锁
-	        checkHostLock(ip);
-
+	    // 校验1： 主机是否有锁
+        checkHostLock(ip);
+        
+        if(!installflag) {
 	        //校验2、主机上没有安装好的角色
 	        List<SysClusterHostRole> hostRoles = clusterHostRoleDao.findByIp(ip);
 	        if(hostRoles!=null) {
