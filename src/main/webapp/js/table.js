@@ -30,7 +30,7 @@ var Table = function () {
             responseHandler:function(res){
                 if(res.code===200){
                     host_num = res.data.length;
-                    if (_this._policy.getCfg("K8S_INSTALL_FLAG") !== "true" && host_num>=3){
+                    if (_this._policy.getCfg("COMPOSE_K8S_INSTALL_FLAG") !== "true" && host_num>=3){
                         _this._policy.policyRole(res.data);
                     }
                     return res.data;
@@ -112,7 +112,7 @@ var Table = function () {
 
 
         // 集群安装或者拓展功能
-        if (_this._policy.getCfg("K8S_INSTALL_FLAG")==="false"){
+        if (_this._policy.getCfg("COMPOSE_K8S_INSTALL_FLAG")==="false"){
             _this._install = new InstallCluster("install_cluster");
             $install_btn.html(' 安装集群 <i title="安装集群" class="fa fa-power-off"></i>');
             $install_btn.on('click',function () {
@@ -221,10 +221,10 @@ var Table = function () {
             var show_class = row.roles[role] === undefined ? "btn-secondary":row.roles[role].status==='2'?"btn-primary":"btn-success";
 
             // 集群安装好之后就不展示没安装的角色。
-            if(_this._policy.getCfg("K8S_INSTALL_FLAG") === "true" ){
+            if(_this._policy.getCfg("COMPOSE_K8S_INSTALL_FLAG") === "true" ){
                 str += '<button type="button" class="btn '+show_class+' btn-sm " data-role-code="'+role+'" ><i class="fa fa-cogs"> '+role+'</i></button> '
             }
-            if (_this._policy.getCfg("K8S_INSTALL_FLAG") !== "true" ){
+            if (_this._policy.getCfg("COMPOSE_K8S_INSTALL_FLAG") !== "true" ){
                 str += '<button type="button" class="btn '+show_class+' btn-sm change" data-role-code="'+role+'" ><i class="fa fa-cogs"> '+role+'</i></button> '
             }
         }
@@ -332,7 +332,7 @@ var Table = function () {
 
     // 调整角色事件
     var changeRoleEvent = function (e, value, row, index) {
-        if (_this._policy.getCfg("K8S_INSTALL_FLAG") === "true" ){
+        if (_this._policy.getCfg("COMPOSE_K8S_INSTALL_FLAG") === "true" ){
             return;
         }
 
