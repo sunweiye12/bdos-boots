@@ -42,14 +42,8 @@ public abstract class Global {
         return all;
     }
 
-    protected static SysClusterInfo getEntity(String key, char cfgType) {
-        SysClusterInfo cfg = Global.GLOBAL.get(key);
-//        if (cfg != null && cfg.isEnable(cfgType)) {
-        if (cfg != null ) {
-            return cfg;
-        } else {
-            return null;
-        }
+    protected static SysClusterInfo getEntity(String key) {
+        return Global.GLOBAL.get(key);
     }
 
     public static void updateGlobal(SysClusterInfo cfg) {
@@ -62,7 +56,7 @@ public abstract class Global {
      * @return WORK_DIR_ANSIBLE
      */
     public static String getAnsibleDir() {
-        return Global.GLOBAL.get("WORK_DIR_ANSIBLE").getCfgValue();
+        return Global.GLOBAL.get("SYSTEM_WORK_DIR_ANSIBLE").getCfgValue();
     }
 
     /**

@@ -159,7 +159,7 @@ public class ClusterServiceImpl extends Global implements ClusterService{
 		if (!errorMsgs.isEmpty())		{throw new ClusterException(ReturnCode.CODE_CLUSTER_PLAY_RUNNING,errorMsgs,"有正在执行的任务，请稍后更新集群状态");}
 
 		for(String key:global.keySet()){
-			SysClusterInfo cfg = Global.getEntity(key,cfgType);
+			SysClusterInfo cfg = Global.getEntity(key);
 			if (cfg == null)		{continue;}
 			cfg.setCfgValue(global.get(key));
 			clusterInfoDao.save(cfg);

@@ -374,8 +374,8 @@ var Policy = function (table) {
             method: "post",
             contentType: "application/json",
             data: JSON.stringify({
-                K8S_VIRTUAL_IP: vip,
-                REGISTER_IP : REGISTER_IP
+                COMPOSE_K8S_VIRTUAL_IP: vip,
+                COMPOSE_HARBOR_IP : REGISTER_IP
             }),
             async: false,
             success: function (data) {
