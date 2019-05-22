@@ -266,7 +266,7 @@ public class CmdExecutor extends Thread {
 
     SysInstallPlayExec getTask() {
         exec.setStdout(buffer.toString());
-        exec.setMessage(message.toString());
+        exec.setMessage(JSON.toJSONString(message));
         return exec;
     }
 
