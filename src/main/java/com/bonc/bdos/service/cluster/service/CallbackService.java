@@ -1,8 +1,10 @@
 package com.bonc.bdos.service.cluster.service;
 
-import com.bonc.bdos.service.cluster.entity.*;
+import com.bonc.bdos.service.cluster.entity.SysClusterHost;
+import com.bonc.bdos.service.cluster.entity.SysClusterHostRole;
+import com.bonc.bdos.service.cluster.entity.SysClusterRoleDev;
+import com.bonc.bdos.service.cluster.entity.SysInstallPlayExec;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public interface CallbackService {

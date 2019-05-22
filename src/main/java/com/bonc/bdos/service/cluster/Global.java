@@ -24,12 +24,10 @@ public abstract class Global {
         }
     }
 
-    protected static HashMap<String, String> getCfgMap(char status) {
+    public static HashMap<String, String> getCfgMap() {
         HashMap<String, String> cfgMap = new HashMap<>();
         for (SysClusterInfo cfg : GLOBAL.values()) {
-            if (cfg.isEnable(status)) {
-                cfgMap.put(cfg.getCfgKey(), cfg.getCfgValue());
-            }
+            cfgMap.put(cfg.getCfgKey(), cfg.getCfgValue());
         }
         return cfgMap;
     }

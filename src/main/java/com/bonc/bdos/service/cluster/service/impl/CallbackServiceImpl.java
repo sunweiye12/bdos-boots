@@ -8,7 +8,6 @@ import com.bonc.bdos.service.cluster.repository.SysClusterRoleDevRepository;
 import com.bonc.bdos.service.cluster.repository.SysInstallPlayExecRepository;
 import com.bonc.bdos.service.cluster.service.CallbackService;
 import com.bonc.bdos.service.cluster.service.ClusterService;
-import com.bonc.bdos.service.cluster.tasks.TaskManager;
 import com.bonc.bdos.utils.DateUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;

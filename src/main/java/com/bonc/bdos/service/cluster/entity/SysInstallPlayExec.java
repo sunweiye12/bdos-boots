@@ -5,7 +5,6 @@ import com.alibaba.fastjson.annotation.JSONField;
 import com.bonc.bdos.utils.DateUtil;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import org.hibernate.annotations.GenericGenerator;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -122,12 +121,6 @@ public class SysInstallPlayExec implements Serializable {
 	private Boolean flag = true;
 
 	/**
-	 *  每个exec 执行的时候都会附带global参数
-	 */
-	@Transient
-	private HashMap<String,String> global = new HashMap<>();
-
-	/**
 	 *  定义该playExec 对应的所有playbook报文数据
 	 */
 	@Transient
@@ -236,14 +229,6 @@ public class SysInstallPlayExec implements Serializable {
 
 	public void setFlag(Boolean flag) {
 		this.flag = flag;
-	}
-
-	public HashMap<String, String> getGlobal() {
-		return global;
-	}
-
-	public void addGlobal(HashMap<String, String> global) {
-		if (null != global)			{this.global.putAll(global);}
 	}
 
     @Override

@@ -5,7 +5,6 @@ import com.bonc.bdos.service.cluster.entity.*;
 import com.bonc.bdos.service.cluster.exception.ClusterException;
 import com.bonc.bdos.service.cluster.model.ExecProcess;
 import com.bonc.bdos.service.cluster.repository.*;
-import com.bonc.bdos.service.cluster.service.ClusterService;
 import com.bonc.bdos.service.cluster.service.ExecService;
 import com.bonc.bdos.service.cluster.tasks.TaskManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,13 +25,11 @@ public class ExecServiceImpl implements ExecService{
 	private final SysClusterRoleDevRepository clusterRoleDevDao;
 //	private final PlayExecFactory factory;
 
-	private final ClusterService clusterService;
 
 	@Autowired
 	public ExecServiceImpl(SysInstallPlayRepository installPlayDao,SysInstallPlaybookRepository installPlaybookDao,
 						   SysClusterHostRepository clusterHostDao,SysClusterHostRoleRepository clusterHostRoleDao,
-						   SysInstallPlayExecRepository installPlayExecDao,
-						   SysInstallHostControlRepository installHostControlDao,ClusterService clusterService,
+						   SysInstallPlayExecRepository installPlayExecDao, SysInstallHostControlRepository installHostControlDao,
 						   SysClusterRoleDevRepository clusterRoleDevDao) {
 		this.installPlayDao = installPlayDao;
 		this.installPlaybookDao = installPlaybookDao;
@@ -41,8 +38,6 @@ public class ExecServiceImpl implements ExecService{
 		this.installPlayExecDao = installPlayExecDao;
 		this.installHostControlDao = installHostControlDao;
 		this.clusterRoleDevDao = clusterRoleDevDao;
-
-		this.clusterService = clusterService;
 	}
 
 	/**
@@ -80,7 +75,6 @@ public class ExecServiceImpl implements ExecService{
 			// 生成32位token  组装SysInstallPlayExec exec
 			exec.setStatus(SysInstallPlayExec.INIT);
 			exec.setTargetsJson(this.targets);
-			exec.addGlobal(clusterService.findGlobal());
 			exec.setPlayName(playName);
 			
 			//获取执行play的所有的playbook

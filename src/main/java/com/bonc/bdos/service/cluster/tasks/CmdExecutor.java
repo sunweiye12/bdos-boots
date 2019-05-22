@@ -116,7 +116,7 @@ public class CmdExecutor extends Thread {
             // 根据任务生成playbook 的host文件
             String invName = playbook.initPlaybookInv(exec.getUuid());
             HashMap<String, Object> data = new HashMap<>();
-            data.put("bdos_global", exec.getGlobal());
+            data.put("bdos_global", Global.getCfgMap());
             data.put("bdos_roles", playbook.getRoles());
             String cmd = "ansible-playbook " + playbook.getPlaybook() + " -i " + invName + " -e " + "'"
                     + JSON.toJSONString(data) + "'";

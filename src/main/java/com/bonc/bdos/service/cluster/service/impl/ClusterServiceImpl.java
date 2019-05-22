@@ -24,7 +24,6 @@ public class ClusterServiceImpl extends Global implements ClusterService{
 	private final SysClusterRoleRepository clusterRoleDao;
 	private final SysClusterHostRoleRepository clusterHostRoleDao;
 	private final SysClusterRoleDevRepository clusterRoleDevDao;
-	private final SysInstallPlayExecRepository installPlayExecDao;
 	private final SysClusterStoreCfgRepository clusterStoreCfgDao;
 	private EntityManager em;
 
@@ -32,14 +31,13 @@ public class ClusterServiceImpl extends Global implements ClusterService{
 
 	@Autowired
 	public ClusterServiceImpl(SysClusterInfoRepository clusterInfoDao, SysClusterHostRepository clusterHostDao, SysClusterHostRoleRepository clusterHostRoleDao,
-							  SysClusterRoleDevRepository clusterRoleDevDao, SysInstallPlayExecRepository installPlayExecDao,SysClusterStoreCfgRepository clusterStoreCfgDao,
+							  SysClusterRoleDevRepository clusterRoleDevDao, SysClusterStoreCfgRepository clusterStoreCfgDao,
 							  HostService hostService,SysClusterRoleRepository clusterRoleDao) {
 		this.clusterInfoDao = clusterInfoDao;
 		this.clusterHostDao = clusterHostDao;
 		this.clusterRoleDao = clusterRoleDao;
 		this.clusterHostRoleDao = clusterHostRoleDao;
 		this.clusterRoleDevDao = clusterRoleDevDao;
-		this.installPlayExecDao = installPlayExecDao;
 		this.clusterStoreCfgDao = clusterStoreCfgDao;
 
 		this.hostService = hostService;
