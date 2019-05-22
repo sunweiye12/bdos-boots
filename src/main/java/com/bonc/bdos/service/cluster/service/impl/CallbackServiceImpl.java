@@ -44,6 +44,7 @@ public class CallbackServiceImpl implements CallbackService{
 	}
 
 	@Override
+	@Transactional
 	public void start(SysInstallPlayExec exec)  {
 		exec.setStatus(SysInstallPlayExec.RUNNING);
 		installPlayExecDao.save(exec);
@@ -70,6 +71,7 @@ public class CallbackServiceImpl implements CallbackService{
 	}
 
 	@Override
+	@Transactional
 	public void reset() {
 		// 将所有运行中的PLAY状态置为失败
 		List<SysInstallPlayExec> execs = installPlayExecDao.findByStatus(SysInstallPlayExec.RUNNING);
@@ -138,6 +140,7 @@ public class CallbackServiceImpl implements CallbackService{
 	}
 
 	@Override
+	@Transactional
 	public void saveHostRole(SysClusterHostRole hostRole) {
 		Optional<SysClusterHostRole> optional =  clusterHostRoleDao.findById(hostRole.getId());
 		if (optional.isPresent()){
@@ -152,6 +155,7 @@ public class CallbackServiceImpl implements CallbackService{
 	 * @param roleDev 设备信息
 	 */
 	@Override
+	@Transactional
 	public void saveRoleDev(SysClusterRoleDev roleDev) {
 		Optional<SysClusterRoleDev> optional = clusterRoleDevDao.findById(roleDev.getId());
 		if (optional.isPresent()){
@@ -166,6 +170,7 @@ public class CallbackServiceImpl implements CallbackService{
 	}
 
 	@Override
+	@Transactional
 	public void saveGlobal(Map<String, String> info) {
 		clusterService.saveGlobal(info, Global.INNER_SET);
 	}

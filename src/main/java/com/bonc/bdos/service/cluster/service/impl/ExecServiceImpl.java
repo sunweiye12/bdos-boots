@@ -257,6 +257,7 @@ public class ExecServiceImpl implements ExecService{
 	}
 
 	@Override
+	@Transactional
 	public String exec(List<String> targets, String playCode)  {
 		SysInstallPlayExec exec = new SysInstallPlayExec(playCode);
 
@@ -265,8 +266,7 @@ public class ExecServiceImpl implements ExecService{
 		return exec.getUuid();
 	}
 
-	@Transactional
-	public void playExec(SysInstallPlayExec exec, List<String> targets) throws ClusterException {
+	private void playExec(SysInstallPlayExec exec, List<String> targets) throws ClusterException {
 		//获取play
 		Optional<SysInstallPlay> playOpt = installPlayDao.findById(exec.getPlayCode());
 		if (!playOpt.isPresent()||!playOpt.get().getStatus())               {throw new ClusterException(ReturnCode.CODE_CLUSTER_PLAY_NOT_EXIST,"不存在该任务");}
