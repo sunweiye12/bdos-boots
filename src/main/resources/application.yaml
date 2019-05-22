@@ -1,0 +1,43 @@
+server:
+  port: 8888
+  servlet:
+    context-path: /boots/
+
+spring:
+  mvc:
+    view:
+      prefix: /WEB-INF/views/
+      suffix: .jsp
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 100MB
+      max-request-size: 200MB
+  datasource:
+    url: jdbc:mysql://172.16.3.80:3306/bdos?useUnicode=true&characterEncoding=UTF-8&useSSL=true
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.jdbc.Driver
+    tomcat:
+      max-idle: 10
+      min-idle: 2
+      test-while-idle: true
+      test-on-borrow: true
+      validation-query: SELECT 1
+  jpa:
+    database: MYSQL
+    show-sql: false
+    open-in-view: true
+    hibernate:
+      ddl-auto: update
+      naming:
+        physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL55Dialect
+
+#log.file
+logging:
+  path: /opt/logs/bdos
+  level:
+    root: info
