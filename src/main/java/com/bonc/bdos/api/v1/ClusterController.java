@@ -13,6 +13,7 @@ import com.bonc.bdos.service.cluster.service.CallbackService;
 import com.bonc.bdos.service.cluster.service.ClusterService;
 import com.bonc.bdos.service.cluster.service.ExecService;
 import com.bonc.bdos.service.cluster.service.HostService;
+import com.bonc.bdos.service.cluster.tasks.TaskManager;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -230,7 +231,11 @@ public class ClusterController {
     @ApiImplicitParams({@ApiImplicitParam(name = "targets",value = "目标主机，如果为空视为所有主机",required = true),
             @ApiImplicitParam(name = "playCode",value = "任务编码")})
     public ApiResult exec(@RequestBody List<String> targets, @PathVariable String playCode) {
-        return handle(() -> execService.exec(targets,playCode));
+        return handle(() -> {
+            String taskId = execService.exec(targets,playCode);
+            TaskManager.start(taskId);
+            return taskId;
+        });
     }
 
     /**
@@ -242,6 +247,7 @@ public class ClusterController {
     public ApiResult resume(@RequestBody String uuid) {
         return handle(() -> {
             execService.resume(uuid);
+            TaskManager.start(uuid);
             return new ArrayList<>();
         });
     }

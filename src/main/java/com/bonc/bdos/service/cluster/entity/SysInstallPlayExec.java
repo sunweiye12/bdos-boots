@@ -39,7 +39,6 @@ public class SysInstallPlayExec implements Serializable {
 	 */
 	public SysInstallPlayExec(String playCode) {
 		this.uuid = UUID.randomUUID().toString().replace("-","");
-		this.token = UUID.randomUUID().toString().replace("-","");
 		this.playCode = playCode;
 		this.curIndex = 0;
 		this.createDate = new Timestamp(DateUtil.getCurrentTimeMillis());
@@ -56,9 +55,6 @@ public class SysInstallPlayExec implements Serializable {
 	@Id
 	private String uuid;
 
-	@Column(name = "`token`",length = 32)
-	private String token;
-	
 	@Column(name = "`play_code`",length = 32)
 	private String playCode;
 
@@ -144,14 +140,6 @@ public class SysInstallPlayExec implements Serializable {
 
 	public void setUuid(String uuid) {
 		this.uuid = uuid;
-	}
-
-	public String getToken() {
-		return token;
-	}
-
-	public void setToken(String token) {
-		this.token = token;
 	}
 
 	public String getPlayCode() {
@@ -260,7 +248,7 @@ public class SysInstallPlayExec implements Serializable {
 
     @Override
 	public String toString() {
-		return "SysInstallPlayExec [uuid=" + uuid + ", token=" + token + ", playCode=" + playCode + ", curIndex=" + curIndex
+		return "SysInstallPlayExec [uuid=" + uuid +  ", playCode=" + playCode + ", curIndex=" + curIndex
 				+ ", cmd=" + cmd +  ", createDate=" + createDate + ", beginDate="
 				+ beginDate + ", endDate=" + endDate + ", status=" + status + "]";
 	}

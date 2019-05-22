@@ -239,12 +239,14 @@ public class CmdExecutor extends Thread {
     @Override
     public void run() {
         try {
-            // 开始执行任务
-            exec.setBeginDate(new Timestamp(DateUtil.getCurrentTimeMillis()));
-            CALL_BACK.start(exec);
-            exec();
-            // 设置成功
-            exec.setStatus(SysInstallPlayExec.SUCCESS);
+            synchronized (exec){
+                // 开始执行任务
+                exec.setBeginDate(new Timestamp(DateUtil.getCurrentTimeMillis()));
+                CALL_BACK.start(exec);
+                exec();
+                // 设置成功
+                exec.setStatus(SysInstallPlayExec.SUCCESS);
+            }
         } catch (Exception e) {
             e.printStackTrace();
             // 设置失败

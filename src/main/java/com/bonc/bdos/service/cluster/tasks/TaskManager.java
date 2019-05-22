@@ -10,13 +10,18 @@ public class TaskManager {
 
     private static Map<String, CmdExecutor> taskMap = Collections.synchronizedMap(new HashMap<>());
 
-    public static void exec(SysInstallPlayExec exec) {
+    public static void create(SysInstallPlayExec exec) {
         // 创建任务执行器
         CmdExecutor ce = new CmdExecutor(exec);
-        // 启动任务
-        ce.start();
+
         // 将任务添加到全局任务表里面
         taskMap.put(exec.getUuid(),ce);
+    }
+
+    public static void start(String uuid) {
+        if (taskMap.containsKey(uuid)){
+            taskMap.get(uuid).start();
+        }
     }
 
     /**
@@ -32,10 +37,11 @@ public class TaskManager {
     }
 
 
-    public static SysInstallPlayExec getTask(String uuid) {
+    public static SysInstallPlayExec get(String uuid) {
         if (taskMap.containsKey(uuid)){
             return taskMap.get(uuid).getTask();
         }
         return null;
     }
+
 }

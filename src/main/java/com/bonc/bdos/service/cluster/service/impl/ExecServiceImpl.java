@@ -260,9 +260,7 @@ public class ExecServiceImpl implements ExecService{
 	@Transactional
 	public String exec(List<String> targets, String playCode)  {
 		SysInstallPlayExec exec = new SysInstallPlayExec(playCode);
-
 		playExec(exec,targets);
-
 		return exec.getUuid();
 	}
 
@@ -289,7 +287,7 @@ public class ExecServiceImpl implements ExecService{
 
 		// step 4 callDriver
 		try{
-			TaskManager.exec(exec);
+			TaskManager.create(exec);
 		}catch (Exception e){
 			e.printStackTrace();
 			throw new ClusterException(ReturnCode.CODE_CLUSTER_BOOTSTRAP_CALL_FAIL,"执行任务调度失败！");
@@ -322,7 +320,7 @@ public class ExecServiceImpl implements ExecService{
 
 	@Override
 	public ExecProcess query(String uuid)  {
-		SysInstallPlayExec exec = TaskManager.getTask(uuid);
+		SysInstallPlayExec exec = TaskManager.get(uuid);
 		if (null == exec){
 			Optional<SysInstallPlayExec> optional = installPlayExecDao.findById(uuid);
 			if (!optional.isPresent())				{throw new ClusterException(ReturnCode.CODE_CLUSTER_TASK_NOT_EXIST,"该任务不存在");}
