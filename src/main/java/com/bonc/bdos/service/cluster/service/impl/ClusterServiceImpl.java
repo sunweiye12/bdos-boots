@@ -150,14 +150,6 @@ public class ClusterServiceImpl extends Global implements ClusterService{
 	@Override
 	@Transactional
 	public void saveGlobal(Map<String, String> global,char cfgType)  {
-		List<String> errorMsgs = new ArrayList<>();
-		// 判断是否有任务在执行
-		List<SysInstallPlayExec> execs = installPlayExecDao.findAll();
-		for(SysInstallPlayExec exec : execs){
-			if (exec.isRun())	{errorMsgs.add(exec.getStatusDesc());}
-		}
-		if (!errorMsgs.isEmpty())		{throw new ClusterException(ReturnCode.CODE_CLUSTER_PLAY_RUNNING,errorMsgs,"有正在执行的任务，请稍后更新集群状态");}
-
 		for(String key:global.keySet()){
 			SysClusterInfo cfg = Global.getEntity(key);
 			if (cfg == null)		{continue;}
