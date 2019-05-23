@@ -20,8 +20,7 @@ public class SysInstallPlaybook implements Serializable {
 
     private static final long serialVersionUID = -2102082194607883083L;
 
-    private static final String HOST_PATH = SysInstallPlaybook.class.getResource("/").getPath() + File.separator
-            + "hosts";
+    private static final String HOST_PATH = SysInstallPlaybook.class.getResource("/").getPath() + File.separator + "hosts" + File.separator;
 
     @Id
     @Column(name = "`id`")
@@ -41,14 +40,6 @@ public class SysInstallPlaybook implements Serializable {
      */
     @Column(name = "`index`")
     private int index;
-    /*
-    
-    	*/
-    /**
-     * 百分系数，站整个playCode时长的比例
-     *//*
-        * @Column(name="weight") private Integer weight;
-        */
 
     /**
      * 构造标识：默认是true true : 对应playbook 的数据可以构造成功 false : 对应playbook 的数据构造失败
@@ -61,11 +52,6 @@ public class SysInstallPlaybook implements Serializable {
      */
     @Transient
     private HashMap<String, HashMap<String, SysClusterHost>> roles = new HashMap<>();
-
-    /**
-     * 生成inv文件的后缀
-     */
-    private static final String SUFFIX = ".host";
 
     public Long getId() {
         return id;
@@ -139,7 +125,7 @@ public class SysInstallPlaybook implements Serializable {
             buffer.append("\n");
         }
 
-        String invFilePath = HOST_PATH + taskName + playbook + SUFFIX;
+        String invFilePath = HOST_PATH + taskName+ "-" + playbook + ".host";
         FileWriter invWriter = new FileWriter(invFilePath, false);
         invWriter.write(buffer.toString());
         invWriter.close();
