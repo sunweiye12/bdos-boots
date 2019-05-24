@@ -21,6 +21,7 @@ var InstallCluster = function (play_code,targets) {
             top = cur_top;
         });
 
+        var is_finish = false;
         var action_btn = function (status) {
             $resume_btn.html(status?"暂停安装":"继续安装");
         };
@@ -53,7 +54,13 @@ var InstallCluster = function (play_code,targets) {
                     // 滚动进度
                     active_show(_this.status(),data.data.size,data.data.status);
 
-                    action_btn(play.status());
+                    if (data.data.status === '2'){
+                        is_finish = true;
+                        $resume_btn.html("安装完成");
+                        $("#installPercent div").removeClass("progress-bar-striped");
+                    }else{
+                        action_btn(play.status());
+                    }
                 }
             }
         });
@@ -63,7 +70,9 @@ var InstallCluster = function (play_code,targets) {
         _this._play = play;
 
         $resume_btn.on('click',function () {
-            play.resume(_this.status());
+            if(!is_finish){
+                play.resume(_this.status());
+            }
         });
 
         return _this;
