@@ -44,4 +44,7 @@ public class TaskManager {
         return null;
     }
 
+    public static void remove(String uuid) {
+        taskMap.remove(uuid);
+    }
 }
