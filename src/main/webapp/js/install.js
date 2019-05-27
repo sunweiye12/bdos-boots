@@ -70,7 +70,9 @@ var InstallCluster = function (play_code,targets) {
         _this._play = play;
 
         $resume_btn.on('click',function () {
-            if(!is_finish){
+            if(is_finish){
+                close();
+            }else{
                 play.resume(_this.status());
             }
         });
@@ -78,9 +80,14 @@ var InstallCluster = function (play_code,targets) {
         return _this;
     };
 
-    // 展示任务界面操作
+    // open任务界面操作
     var show = function () {
         $("#installModel").modal('show');
+    };
+    
+    // close任务界面操作
+    var close = function () {
+        $("#installModel").modal('hide');
     };
 
     var active_show = function (task_status,size,status) {
