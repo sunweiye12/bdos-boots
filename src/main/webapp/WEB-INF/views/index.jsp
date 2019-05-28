@@ -11,6 +11,14 @@
     <style>
         .bs-checkbox label {margin: 2px 0 0 0;}
         .input-group-prepend span {padding: 10px 12px 6px;}
+        .host-style {
+        	text-align:center;
+			border:2px solid rgba(0, 0, 0, 0.11);
+			padding:5px 20px; 
+			border-radius:25px;
+			color:#212529;
+			box-shadow: 10px 10px 5px #888888;
+		}
     </style>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link rel="stylesheet" href="<%=path %>/bootstrap-4.3.1-dist/css/bootstrap.css">
@@ -23,6 +31,7 @@
     <script src="<%=path %>/bootstrap-table/dist/extensions/toolbar/bootstrap-table-toolbar.js" ></script>
     <script src="<%=path %>/bootstrap-table/dist/extensions/i18n-enhance/bootstrap-table-i18n-enhance.min.js"></script>
     <script src="<%=path %>/jquery.nicescroll-3.7.6/jquery.nicescroll.js" ></script>
+    
 </head>
 <body>
 <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
@@ -144,6 +153,7 @@
         </div>
     </div>
 </div>
+
 </body>
 <script src="<%=path %>/js/play.js"></script>
 <script src="<%=path %>/js/policy.js"></script>

@@ -185,15 +185,17 @@ var Table = function () {
             color = "text-success";
         }else if(row.status ==='1'){
             color = 'text-danger';
-            popover = 'data-container="body" data-toggle="popover" data-placement="right" data-content="'+row.message+'"';
+//            popover = 'data-container="body" data-toggle="popover" data-placement="right" data-content="'+row.message+'"';
+            popover = '<span class="host-style" >'+row.message+'</span>'
+            
         }else if (row.status === '0'){
             color = 'text-secondary';
         }else {
             color = "text-primary";
         }
-        return ['<span class="message ',color,'" id="',value.replace(/\./g,'_'),'" ',popover,'><i title="校验主机" class="fa fa-desktop" ></i> ',value,'</span>'].join('');
+        return ['<span class="message ',color,'" id="',value.replace(/\./g,'_'),'" ><i title="校验主机" class="fa fa-desktop" ></i> ',value,'</span>',popover].join('');
     };
-
+    
     // 设备格式化展示
     var devFormatter = function(value,row,index){
         var devButton = " ";
