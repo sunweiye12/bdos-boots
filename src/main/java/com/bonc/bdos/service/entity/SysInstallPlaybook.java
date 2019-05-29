@@ -25,8 +25,6 @@ public class SysInstallPlaybook implements Serializable {
 
     private static final long serialVersionUID = -2102082194607883083L;
 
-    private static final String HOST_PATH = Global.getWorkDir() +File.separator +"hosts"+ File.separator + "hosts" + File.separator;
-
     @Id
     @Column(name = "`id`")
     private Long id;
@@ -74,12 +72,13 @@ public class SysInstallPlaybook implements Serializable {
             buffer.append("\n");
         }
 
-        File dir = new File(HOST_PATH);
+        String hostPath = Global.getWorkDir() +File.separator +"hosts"+ File.separator + "hosts" + File.separator;
+        File dir = new File(hostPath);
         if(!dir.exists()&&!dir.mkdirs()){
             LOG.error("主机目录不存在且创建失败！");
             throw new ClusterException(ReturnCode.CODE_CLUSTER_HOST_DIR_NOT_EXISTED,  new ArrayList<>(),"主机host文件目录不存在，且无法创建");
         }
-        String invFilePath = HOST_PATH + taskName+ "-" + playbook + ".host";
+        String invFilePath = hostPath + taskName+ "-" + playbook + ".host";
         FileWriter invWriter = new FileWriter(invFilePath, false);
         invWriter.write(buffer.toString());
         invWriter.close();
