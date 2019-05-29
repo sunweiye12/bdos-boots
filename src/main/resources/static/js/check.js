@@ -25,7 +25,7 @@ var HostCheck = function (table) {
     var getDev = function (ip) {
         var dev = [];
         $.ajax({
-            url:  "v1/cluster/dev?ip="+ip,
+            url:  "v1/dev?ip="+ip,
             async: false,
             success: function (data) {
                 if (data.code === 200){

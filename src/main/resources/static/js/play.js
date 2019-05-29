@@ -45,7 +45,7 @@ var Play = function (play_code,opt) {
         if (_opt.read_last){
             $.ajax({
                 type : "get",
-                url :   "v1/cluster/exec/task?playCode="+task_name,
+                url :   "v1/exec/task?playCode="+task_name,
                 async: false,
                 success : function(result) {
                     if(result.code===200){
@@ -62,7 +62,7 @@ var Play = function (play_code,opt) {
         // 加载playbooks 执行步骤清单
         $.ajax({
             type : "get",
-            url :   "v1/cluster/exec/playbooks?playCode="+task_name,
+            url :   "v1/exec/playbooks?playCode="+task_name,
             async: false,
             success : function(result) {
                 playbooks = result.data;
@@ -80,7 +80,7 @@ var Play = function (play_code,opt) {
 
         $.ajax({
             type : "get",
-            url :   "v1/cluster/exec/query?uuid="+task_id,
+            url :   "v1/exec/query?uuid="+task_id,
             contentType:'application/json',
             async: false,
             success : function(result) {
@@ -120,7 +120,7 @@ var Play = function (play_code,opt) {
         // 进行任务调度
         $.ajax({
             type:"post",
-            url: "v1/cluster/exec/"+(status?"pause":"resume"),
+            url: "v1/exec/"+(status?"pause":"resume"),
             contentType:'application/json',
             data: task_id,
             async: false,
@@ -145,7 +145,7 @@ var Play = function (play_code,opt) {
 
         $.ajax({
             type:"post",
-            url: "v1/cluster/exec/"+task_name,
+            url: "v1/exec/"+task_name,
             contentType: 'application/json',
             data:JSON.stringify(_opt.targets),
             async: false,

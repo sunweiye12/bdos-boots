@@ -18,7 +18,7 @@ var Table = function () {
 
         $table.bootstrapTable('changeLocale', 'zh-CN');
         $table.bootstrapTable({
-            url: "v1/cluster/host",
+            url: "v1/host",
             showRefresh:true,
             classes: "table",
             search:true,
@@ -273,7 +273,7 @@ var Table = function () {
     var delTableEvent= function (row) {
         $.ajax({
             type:"delete",
-            url: 'v1/cluster/host',
+            url: 'v1/host',
             contentType:'application/json',
             data:row.ip,
             success:function(data){
@@ -390,7 +390,7 @@ var Table = function () {
 
                 $.ajax({
                     type:"post",
-                    url: 'v1/cluster/dev/' + (dev.status === '1'?'disable':'enable'),
+                    url: 'v1/dev/' + (dev.status === '1'?'disable':'enable'),
                     contentType:'application/json',
                     data: dev.id,
                     success:function(data){
@@ -440,7 +440,7 @@ var Table = function () {
             // 如果任务失败，将更新数据库的状态
             if (status==='1'){
                 $.ajax({
-                    url:  "v1/cluster/callback/host",
+                    url:  "v1/callback/host",
                     type: "post",
                     data: {host: encodeURI(JSON.stringify(_host))}
                 });

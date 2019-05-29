@@ -453,4 +453,11 @@ public class ClusterServiceImpl extends Global implements ClusterService {
 		return clusterRoleDao.findAll();
 	}
 
+	@Override
+	public void unlockHost(SysClusterHost host){
+		if (null!=host && host.getHostLock()){
+			host.setHostLock(false);
+			clusterHostDao.save(host);
+		}
+	}
 }

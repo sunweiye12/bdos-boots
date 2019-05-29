@@ -78,11 +78,6 @@ public interface CallbackService {
 	 */
 	void finish(SysInstallPlayExec finish) ;
 
-	/**
-	 *  bootstrap 服务重启的时候需要将所有执行的PLAY状态变为失败，解锁全部主机
-	 */
-	void reset();
-
 	void saveHost(SysClusterHost host);
 
 	void saveHostRole(SysClusterHostRole hostRole);

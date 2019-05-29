@@ -1,5 +1,6 @@
 package com.bonc.bdos.service.service;
 
+import com.bonc.bdos.service.entity.SysClusterHost;
 import com.bonc.bdos.service.entity.SysClusterRole;
 import com.bonc.bdos.service.entity.SysClusterStoreCfg;
 
@@ -95,4 +96,6 @@ public interface ClusterService {
     List<SysClusterStoreCfg> storeCfg();
 
     List<SysClusterRole> roleCfg();
+
+	void unlockHost(SysClusterHost host);
 }

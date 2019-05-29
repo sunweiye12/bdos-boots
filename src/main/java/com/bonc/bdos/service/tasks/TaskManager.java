@@ -30,6 +30,15 @@ public class TaskManager {
     }
 
     /**
+     *  删除所有任务
+     */
+    public static void destroys(){
+        for (String uuid: taskMap.keySet()){
+            destroy(uuid);
+        }
+    }
+
+    /**
      *  删除一个任务，从内存里面删除任务
      * @param uuid 任务ID
      */

@@ -20,7 +20,7 @@ var Policy = function (table) {
 
     var init = function () {
         $.ajax({
-            url:  "v1/cluster/global",
+            url:  "v1/global",
             async: false,
             success: function (data) {
                 if (data.code===200){
@@ -32,7 +32,7 @@ var Policy = function (table) {
         });
 
         $.ajax({
-            url:  "v1/cluster/roles_cfg",
+            url:  "v1/roles_cfg",
             async: false,
             success: function (data) {
                 if (data.code===200){
@@ -55,7 +55,7 @@ var Policy = function (table) {
 
         // 初始化存储配置表
         $.ajax({
-            url:  "v1/cluster/store",
+            url:  "v1/store",
             async: false,
             success: function (data) {
                 if (data.code===200){
@@ -370,7 +370,7 @@ var Policy = function (table) {
         var flag = false;
         var REGISTER_IP = roles_set.harbor[0];
         $.ajax({
-            url:   "v1/cluster/global",
+            url:   "v1/global",
             method: "post",
             contentType: "application/json",
             data: JSON.stringify({
@@ -392,7 +392,7 @@ var Policy = function (table) {
         }
 
         $.ajax({
-            url:   "v1/cluster/roles",
+            url:   "v1/roles",
             method: "post",
             contentType: "application/json",
             data: JSON.stringify(roles_set),
@@ -450,7 +450,7 @@ var Policy = function (table) {
 		
     	var flag = true;
     	$.ajax({
-            url:   "v1/cluster/roles",
+            url:   "v1/roles",
             method: "post",
             contentType: "application/json",
             data: JSON.stringify(roles_set),

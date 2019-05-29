@@ -5,6 +5,7 @@ import com.bonc.bdos.service.entity.*;
 import com.bonc.bdos.service.exception.ClusterException;
 import com.bonc.bdos.service.model.ExecProcess;
 import com.bonc.bdos.service.repository.*;
+import com.bonc.bdos.service.service.ClusterService;
 import com.bonc.bdos.service.service.ExecService;
 import com.bonc.bdos.service.tasks.TaskManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,12 +26,14 @@ public class ExecServiceImpl implements ExecService {
 	private final SysClusterHostRoleDevRepository clusterRoleDevDao;
 //	private final PlayExecFactory factory;
 
+	private final ClusterService clusterService;
+
 
 	@Autowired
 	public ExecServiceImpl(SysInstallPlayRepository installPlayDao,SysInstallPlaybookRepository installPlaybookDao,
 						   SysClusterHostRepository clusterHostDao,SysClusterHostRoleRepository clusterHostRoleDao,
 						   SysInstallPlayExecRepository installPlayExecDao, SysInstallHostControlRepository installHostControlDao,
-						   SysClusterHostRoleDevRepository clusterRoleDevDao) {
+						   SysClusterHostRoleDevRepository clusterRoleDevDao,ClusterService clusterService) {
 		this.installPlayDao = installPlayDao;
 		this.installPlaybookDao = installPlaybookDao;
 		this.clusterHostDao = clusterHostDao;
@@ -38,6 +41,8 @@ public class ExecServiceImpl implements ExecService {
 		this.installPlayExecDao = installPlayExecDao;
 		this.installHostControlDao = installHostControlDao;
 		this.clusterRoleDevDao = clusterRoleDevDao;
+
+		this.clusterService = clusterService;
 	}
 
 	/**
@@ -338,6 +343,26 @@ public class ExecServiceImpl implements ExecService {
 			return execList.get(0).getUuid();
 		}else{
 			throw new ClusterException(ReturnCode.CODE_CLUSTER_TASK_NOT_EXIST,"该任务不存在");
+		}
+	}
+
+	@Override
+	@Transactional
+	public void reset() {
+		// 暂停所有任务
+		TaskManager.destroys();
+
+		// 将所有运行中的PLAY状态置为失败
+		List<SysInstallPlayExec> execs = installPlayExecDao.findByStatus(SysInstallPlayExec.RUNNING);
+		for (SysInstallPlayExec exec:execs){
+			exec.setStatus(SysInstallPlayExec.FAILED);
+		}
+		installPlayExecDao.saveAll(execs);
+
+		// 解锁所有主机
+		List<SysClusterHost> hosts = clusterHostDao.findAll();
+		for(SysClusterHost host:hosts){
+			clusterService.unlockHost(host);
 		}
 	}
 

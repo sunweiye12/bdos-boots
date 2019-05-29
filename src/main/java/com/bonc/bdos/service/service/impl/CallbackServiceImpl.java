@@ -3,12 +3,11 @@ package com.bonc.bdos.service.service.impl;
 import com.bonc.bdos.service.Global;
 import com.bonc.bdos.service.entity.*;
 import com.bonc.bdos.service.repository.SysClusterHostRepository;
-import com.bonc.bdos.service.repository.SysClusterHostRoleRepository;
 import com.bonc.bdos.service.repository.SysClusterHostRoleDevRepository;
+import com.bonc.bdos.service.repository.SysClusterHostRoleRepository;
 import com.bonc.bdos.service.repository.SysInstallPlayExecRepository;
 import com.bonc.bdos.service.service.CallbackService;
 import com.bonc.bdos.service.service.ClusterService;
-import com.bonc.bdos.service.entity.*;
 import com.bonc.bdos.utils.DateUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,13 +49,6 @@ public class CallbackServiceImpl implements CallbackService{
 		installPlayExecDao.save(exec);
 	}
 
-	private void unlockHost(SysClusterHost host){
-		if (null!=host && host.getHostLock()){
-			host.setHostLock(false);
-			clusterHostDao.save(host);
-		}
-	}
-
 	@Override
 	@Transactional
 	public void finish(SysInstallPlayExec finish) {
@@ -66,24 +58,7 @@ public class CallbackServiceImpl implements CallbackService{
 		// 解锁主机
 		for(String ip:finish.getTargetIps()){
 			Optional<SysClusterHost> optional = clusterHostDao.findById(ip);
-			optional.ifPresent(this::unlockHost);
-		}
-	}
-
-	@Override
-	@Transactional
-	public void reset() {
-		// 将所有运行中的PLAY状态置为失败
-		List<SysInstallPlayExec> execs = installPlayExecDao.findByStatus(SysInstallPlayExec.RUNNING);
-		for (SysInstallPlayExec exec:execs){
-			exec.setStatus(SysInstallPlayExec.FAILED);
-		}
-		installPlayExecDao.saveAll(execs);
-
-		// 解锁所有主机
-		List<SysClusterHost> hosts = clusterHostDao.findAll();
-		for(SysClusterHost host:hosts){
-			unlockHost(host);
+			optional.ifPresent(clusterService::unlockHost);
 		}
 	}
 

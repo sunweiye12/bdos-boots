@@ -78,4 +78,5 @@ public interface ExecService {
 	 */
 	String getLatestUuid(String playCode);
 
+	void reset();
 }

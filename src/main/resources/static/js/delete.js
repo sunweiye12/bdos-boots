@@ -15,7 +15,7 @@ var DELETE_NODE = function (play_code) {
         
         $.ajax({
             type:"post",
-            url: "v1/cluster/exec/"+play_code,
+            url: "v1/exec/"+play_code,
             contentType: 'application/json',
             data:JSON.stringify(list.targets),
             async: false,
@@ -32,7 +32,7 @@ var DELETE_NODE = function (play_code) {
         
         $.ajax({
             type:"delete",
-            url: 'v1/cluster/callback/host',
+            url: 'v1/callback/host',
             contentType:'application/json',
             data:ip,
             success:function(data){

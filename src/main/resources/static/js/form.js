@@ -176,7 +176,7 @@ var HostForm = function (table) {
             var error = [];
             for(let ip of hosts){
                 $.ajax({
-                    url: 'v1/cluster/host',
+                    url: 'v1/host',
                     type:"post",
                     contentType:'application/json',
                     data: JSON.stringify({
@@ -202,7 +202,7 @@ var HostForm = function (table) {
     var upload  = function () {
         var template = new FormData(document.getElementById("template-form"));
         $.ajax({
-            url:  "v1/cluster/upload",
+            url:  "v1/upload",
             type: "post",
             data: template,
             processData:false,
