@@ -266,6 +266,15 @@ public class ClusterController {
     }
 
     /**
+     * 查询所有的任务列表
+     */
+    @RequestMapping(value = { "exec/tasks" },method = RequestMethod.GET)
+    @ApiOperation(value = "查询所有的任务列表", notes = "查询所有的任务列表")
+    public ApiResult tasks() {
+        return handle(TaskManager::tasks);
+    }
+
+    /**
      * 任务执行查询接口
      */
     @RequestMapping(value = { "exec/task" },method = RequestMethod.GET)

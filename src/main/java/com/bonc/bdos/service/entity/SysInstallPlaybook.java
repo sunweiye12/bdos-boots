@@ -1,6 +1,5 @@
 package com.bonc.bdos.service.entity;
 
-import com.bonc.bdos.api.v1.ClusterController;
 import com.bonc.bdos.consts.ReturnCode;
 import com.bonc.bdos.service.Global;
 import com.bonc.bdos.service.exception.ClusterException;
@@ -21,7 +20,7 @@ import java.util.HashMap;
 @Table(name = "`sys_install_playbook`")
 @Data
 public class SysInstallPlaybook implements Serializable {
-    private static final Logger LOG = LoggerFactory.getLogger(ClusterController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(SysInstallPlaybook.class);
 
     private static final long serialVersionUID = -2102082194607883083L;
 
