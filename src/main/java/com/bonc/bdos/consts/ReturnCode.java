@@ -165,4 +165,5 @@ public class ReturnCode {
     public static final int CODE_CLUSTER_DEV_IN_USERD = 1518; // 设备已被使用
     public static final int CODE_CLUSTER_SYSTEM_ERROR = 1519; // 系统错误
     public static final int CODE_CLUSTER_PLAY_NOT_RUNNING = 1520; // 当前任务未在运行中
+    public static final int CODE_CLUSTER_HOST_DIR_NOT_EXISTED= 1521; // 主机已经被锁住
 }

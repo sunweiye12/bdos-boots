@@ -49,6 +49,15 @@ public abstract class Global {
     }
 
     /**
+     * 获取 工作目录
+     *
+     * @return WORK_DIR_ANSIBLE
+     */
+    public static String getWorkDir() {
+        return Global.GLOBAL.get("SYSTEM_WORK_DIR").getCfgValue();
+    }
+
+    /**
      * 获取 ansible 安装包路径
      * 
      * @return WORK_DIR_ANSIBLE

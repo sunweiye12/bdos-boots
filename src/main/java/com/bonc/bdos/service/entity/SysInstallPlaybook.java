@@ -1,23 +1,31 @@
 package com.bonc.bdos.service.entity;
 
+import com.bonc.bdos.api.v1.ClusterController;
+import com.bonc.bdos.consts.ReturnCode;
+import com.bonc.bdos.service.Global;
+import com.bonc.bdos.service.exception.ClusterException;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.persistence.*;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 @Entity
 @Table(name = "`sys_install_playbook`")
 @Data
 public class SysInstallPlaybook implements Serializable {
+    private static final Logger LOG = LoggerFactory.getLogger(ClusterController.class);
 
     private static final long serialVersionUID = -2102082194607883083L;
 
-    private static final String HOST_PATH = SysInstallPlaybook.class.getResource("/").getPath() + File.separator + "hosts" + File.separator;
+    private static final String HOST_PATH = Global.getWorkDir() +File.separator +"hosts"+ File.separator + "hosts" + File.separator;
 
     @Id
     @Column(name = "`id`")
@@ -66,6 +74,11 @@ public class SysInstallPlaybook implements Serializable {
             buffer.append("\n");
         }
 
+        File dir = new File(HOST_PATH);
+        if(!dir.exists()&&!dir.mkdirs()){
+            LOG.error("主机目录不存在且创建失败！");
+            throw new ClusterException(ReturnCode.CODE_CLUSTER_HOST_DIR_NOT_EXISTED,  new ArrayList<>(),"主机host文件目录不存在，且无法创建");
+        }
         String invFilePath = HOST_PATH + taskName+ "-" + playbook + ".host";
         FileWriter invWriter = new FileWriter(invFilePath, false);
         invWriter.write(buffer.toString());
