@@ -1,21 +1,18 @@
 package com.bonc.bdos.service.cluster.entity;
 
+import lombok.Data;
+import org.apache.commons.lang3.StringUtils;
+
+import javax.persistence.*;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.HashMap;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Transient;
-
-import org.apache.commons.lang3.StringUtils;
-
 @Entity
 @Table(name = "`sys_install_playbook`")
+@Data
 public class SysInstallPlaybook implements Serializable {
 
     private static final long serialVersionUID = -2102082194607883083L;
@@ -53,66 +50,10 @@ public class SysInstallPlaybook implements Serializable {
     @Transient
     private HashMap<String, HashMap<String, SysClusterHost>> roles = new HashMap<>();
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getPlayCode() {
-        return playCode;
-    }
-
-    public void setPlayCode(String playCode) {
-        this.playCode = playCode;
-    }
-
-    public String getPlaybook() {
-        return playbook;
-    }
-
-    public void setPlaybook(String playbook) {
-        this.playbook = playbook;
-    }
-
-    public String getPlaybookName() {
-        return playbookName;
-    }
-
-    public void setPlaybookName(String playbookName) {
-        this.playbookName = playbookName;
-    }
-
-    public int getIndex() {
-        return index;
-    }
-
-    public void setIndex(int index) {
-        this.index = index;
-    }
-
     public void addRoles(SysInstallHostControl role) {
         if (null != role && !StringUtils.isEmpty(role.getRoleCode())) {
             roles.put(role.getRoleCode(), role.getHosts());
         }
-    }
-
-    public boolean getFlag() {
-        return flag;
-    }
-
-    public void setFlag(boolean flag) {
-        this.flag = flag;
-    }
-
-    public HashMap<String, HashMap<String, SysClusterHost>> getRoles() {
-        return roles;
-    }
-
-    public HashMap<String, SysClusterHost> getRoles(String roleCode) {
-        return roles.get(roleCode);
     }
 
     public String initPlaybookInv(String taskName) throws IOException {
@@ -133,14 +74,4 @@ public class SysInstallPlaybook implements Serializable {
         return invFilePath;
     }
 
-    /*
-     * public int getWeight() { return weight; } public void setWeight(int
-     * weight) { this.weight = weight; }
-     */
-
-    @Override
-    public String toString() {
-        return "SysInstallPlaybook [id=" + id + ", playCode=" + playCode + ", playBook=" + playbook + ", index=" + index
-                + "]";
-    }
 }

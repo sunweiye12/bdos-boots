@@ -2,7 +2,7 @@ package com.bonc.bdos.service.cluster.service;
 
 import com.bonc.bdos.service.cluster.entity.SysClusterHost;
 import com.bonc.bdos.service.cluster.entity.SysClusterHostRole;
-import com.bonc.bdos.service.cluster.entity.SysClusterRoleDev;
+import com.bonc.bdos.service.cluster.entity.SysClusterHostRoleDev;
 import com.bonc.bdos.service.cluster.entity.SysInstallPlayExec;
 
 import java.util.Map;
@@ -87,7 +87,7 @@ public interface CallbackService {
 
 	void saveHostRole(SysClusterHostRole hostRole);
 
-	void saveRoleDev(SysClusterRoleDev roleDev);
+	void saveRoleDev(SysClusterHostRoleDev roleDev);
 
 	void saveGlobal(Map<String,String> info);
 }

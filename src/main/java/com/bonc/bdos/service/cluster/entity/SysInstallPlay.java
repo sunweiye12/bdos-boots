@@ -1,16 +1,17 @@
 package com.bonc.bdos.service.cluster.entity;
 
-import java.io.Serializable;
+import lombok.Data;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "`sys_install_play`")
+@Data
 public class SysInstallPlay implements Serializable {
-
 
 	private static final long serialVersionUID = -2102082194607883083L;
 
@@ -39,50 +40,4 @@ public class SysInstallPlay implements Serializable {
 	@Column(name = "`status`")
 	private Boolean status;
 
-	public String getPlayCode() {
-		return playCode;
-	}
-
-	public void setPlayCode(String playCode) {
-		this.playCode = playCode;
-	}
-
-	public String getPlayName() {
-		return playName;
-	}
-
-	public void setPlayName(String playName) {
-		this.playName = playName;
-	}
-
-	public String getPlayDesc() {
-		return playDesc;
-	}
-
-	public void setPlayDesc(String playDesc) {
-		this.playDesc = playDesc;
-	}
-
-	public Boolean getLockType() {
-		return lockType;
-	}
-
-	public void setLockType(Boolean lockType) {
-		this.lockType = lockType;
-	}
-
-	public Boolean getStatus() {
-		return status;
-	}
-
-	public void setStatus(Boolean status) {
-		this.status = status;
-	}
-
-	@Override
-	public String toString() {
-		return "SysInstallPlay [playCode=" + playCode + ", playName=" + playName + ", playDesc="
-				+ playDesc + ", lockType=" + lockType + ", status=" + status + "]";
-	}
-	
 }

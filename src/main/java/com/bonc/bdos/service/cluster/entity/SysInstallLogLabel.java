@@ -1,6 +1,7 @@
 package com.bonc.bdos.service.cluster.entity;
 
 import com.alibaba.fastjson.JSON;
+import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.persistence.*;
@@ -10,6 +11,7 @@ import java.util.regex.Pattern;
 
 @Entity
 @Table(name = "`sys_install_log_label`")
+@Data
 public class SysInstallLogLabel implements Serializable {
 	private static final long serialVersionUID = -2102082194607883083L;
 
@@ -69,26 +71,6 @@ public class SysInstallLogLabel implements Serializable {
 	@Transient
 	private List<Integer> orders;
 
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getPlaybook() {
-		return playbook;
-	}
-
-	public void setPlaybook(String playbook) {
-		this.playbook = playbook;
-	}
-
-	public String getLabelRegex() {
-		return labelRegex;
-	}
-
 	public void setLabelRegex(String labelRegex) {
 		this.labelRegex = labelRegex;
 		if (null!=labelRegex){
@@ -96,51 +78,9 @@ public class SysInstallLogLabel implements Serializable {
 		}
 	}
 
-	public Pattern getPattern(){
-		return this.pattern;
-	}
-
-	public String getLabelHandle() {
-		return labelHandle;
-	}
-
-	public void setLabelHandle(String labelHandle) {
-		this.labelHandle = labelHandle;
-	}
-
-	public char getLabelType() {
-		return labelType;
-	}
-
-	public void setLabelType(char labelType) {
-		this.labelType = labelType;
-	}
-
-	public String getGroupOrder() {
-		return groupOrder;
-	}
-
 	public void setGroupOrder(String groupOrder) {
 		this.groupOrder = groupOrder;
 		// 通过json 将序号列表转化成为数组
 		this.orders = JSON.parseArray("["+(StringUtils.isEmpty(groupOrder) ?"0":groupOrder)+"]",Integer.class);
-	}
-
-	public List<Integer> getOrders(){
-		return this.orders;
-	}
-
-    public String getMemo() {
-        return memo;
-    }
-
-    public void setMemo(String memo) {
-        this.memo = memo;
-    }
-
-    @Override public String toString() {
-		return "SysInstallLogLabel{" + "id=" + id + ", playbook='" + playbook + '\'' + ", labelRegex='" + labelRegex
-				+ '\'' + ", labelHandle='" + labelHandle + '\'' + ", labelType=" + labelType + ", groupOrder='"
-				+ groupOrder + '\'' + ", pattern=" + pattern + ", orders=" + orders + '}';
 	}
 }

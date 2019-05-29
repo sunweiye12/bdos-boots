@@ -1,10 +1,11 @@
 package com.bonc.bdos.service.cluster.model;
 
 import com.bonc.bdos.service.cluster.entity.SysInstallPlayExec;
-import com.bonc.bdos.service.cluster.entity.SysInstallPlaybook;
+import lombok.Data;
 
 import java.util.List;
 
+@Data
 public  class ExecProcess{
     private char status;
     private String stdout;
@@ -12,30 +13,6 @@ public  class ExecProcess{
     private Integer size;
     private String msg;
     private List<String> targetIps;
-    
-    public char getStatus() {
-        return status;
-    }
-
-    public String getStdout() {
-        return stdout;
-    }
-
-    public Integer getPresent() {
-        return present;
-    }
-    
-    public Integer getSize() {
-        return size;
-    }
-    
-    public String getMsg() {
-        return msg;
-    }
-
-    public List<String> getTargetIps() {
-        return targetIps;
-    }
 
     public ExecProcess(SysInstallPlayExec exec) {
         // 设置执行状态

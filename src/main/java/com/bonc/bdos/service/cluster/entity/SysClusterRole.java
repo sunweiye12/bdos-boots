@@ -1,19 +1,20 @@
 package com.bonc.bdos.service.cluster.entity;
 
-import java.io.Serializable;
+import lombok.Data;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "`sys_cluster_role`")
+@Data
 public class SysClusterRole implements Serializable {
 
 	private static final long serialVersionUID = -2599707778227199288L;
 	public  static final String DEFAULT_ROLE = "default";
-
 
 	@Id
 	@Column(name = "`role_code`", length = 32)
@@ -29,34 +30,5 @@ public class SysClusterRole implements Serializable {
 	 */
 	@Column(name = "`role_type`")
 	private char roleType;
-
-	public String getRoleCode() {
-		return roleCode;
-	}
-
-	public void setRoleCode(String roleCode) {
-		this.roleCode = roleCode;
-	}
-
-	public String getRoleDesc() {
-		return roleDesc;
-	}
-
-	public void setRoleDesc(String roleDesc) {
-		this.roleDesc = roleDesc;
-	}
-
-	public char getRoleType() {
-		return roleType;
-	}
-
-	public void setRoleType(char roleType) {
-		this.roleType = roleType;
-	}
-
-	@Override
-	public String toString() {
-		return "SysClusterRole [roleCode=" + roleCode + ", roleDesc=" + roleDesc + ", roleType=" + roleType + "]";
-	}
 	
 }

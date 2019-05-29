@@ -4,7 +4,7 @@ import com.bonc.bdos.service.cluster.Global;
 import com.bonc.bdos.service.cluster.entity.*;
 import com.bonc.bdos.service.cluster.repository.SysClusterHostRepository;
 import com.bonc.bdos.service.cluster.repository.SysClusterHostRoleRepository;
-import com.bonc.bdos.service.cluster.repository.SysClusterRoleDevRepository;
+import com.bonc.bdos.service.cluster.repository.SysClusterHostRoleDevRepository;
 import com.bonc.bdos.service.cluster.repository.SysInstallPlayExecRepository;
 import com.bonc.bdos.service.cluster.service.CallbackService;
 import com.bonc.bdos.service.cluster.service.ClusterService;
@@ -26,14 +26,14 @@ public class CallbackServiceImpl implements CallbackService{
 	private final SysInstallPlayExecRepository installPlayExecDao;
 	private final SysClusterHostRepository clusterHostDao;
 	private final SysClusterHostRoleRepository clusterHostRoleDao;
-	private final SysClusterRoleDevRepository clusterRoleDevDao;
+	private final SysClusterHostRoleDevRepository clusterRoleDevDao;
 
 	private final ClusterService clusterService;
 
 	@Autowired
 	public CallbackServiceImpl(SysInstallPlayExecRepository installPlayExecDao,
-							   SysClusterHostRepository clusterHostDao,SysClusterHostRoleRepository clusterHostRoleDao,
-							   SysClusterRoleDevRepository clusterRoleDevDao,ClusterService clusterService) {
+							   SysClusterHostRepository clusterHostDao, SysClusterHostRoleRepository clusterHostRoleDao,
+							   SysClusterHostRoleDevRepository clusterRoleDevDao, ClusterService clusterService) {
 		this.installPlayExecDao = installPlayExecDao;
 		this.clusterHostDao = clusterHostDao;
 		this.clusterHostRoleDao = clusterHostRoleDao;
@@ -103,9 +103,9 @@ public class CallbackServiceImpl implements CallbackService{
 
 			SysClusterHostRole hostRole = clusterHostRoleDao.findByIpAndRoleCode(hostInfo.getIp(), SysClusterRole.DEFAULT_ROLE);
 
-			List<SysClusterRoleDev> roleDevList = clusterRoleDevDao.findByHostRoleId(hostRole.getId());
-			HashMap<String,SysClusterRoleDev> devMap = new HashMap<>();
-			for (SysClusterRoleDev roleDev:roleDevList){
+			List<SysClusterHostRoleDev> roleDevList = clusterRoleDevDao.findByHostRoleId(hostRole.getId());
+			HashMap<String, SysClusterHostRoleDev> devMap = new HashMap<>();
+			for (SysClusterHostRoleDev roleDev:roleDevList){
 				devMap.put(roleDev.getDevName(),roleDev);
 			}
 
@@ -119,7 +119,7 @@ public class CallbackServiceImpl implements CallbackService{
 
 			//保存设备信息
 			if (null!=host.getDevs()&&!host.getDevs().isEmpty()){
-				for (SysClusterRoleDev roleDev:host.getDevs()){
+				for (SysClusterHostRoleDev roleDev:host.getDevs()){
 					roleDev.setIp(hostInfo.getIp());
 					roleDev.setHostRoleId(hostRole.getId());
 
@@ -155,10 +155,10 @@ public class CallbackServiceImpl implements CallbackService{
 	 */
 	@Override
 	@Transactional
-	public void saveRoleDev(SysClusterRoleDev roleDev) {
-		Optional<SysClusterRoleDev> optional = clusterRoleDevDao.findById(roleDev.getId());
+	public void saveRoleDev(SysClusterHostRoleDev roleDev) {
+		Optional<SysClusterHostRoleDev> optional = clusterRoleDevDao.findById(roleDev.getId());
 		if (optional.isPresent()){
-			SysClusterRoleDev devInfo = optional.get();
+			SysClusterHostRoleDev devInfo = optional.get();
 			devInfo.setUpdateDate(new Timestamp(DateUtil.getCurrentTimeMillis()));
 			devInfo.setStatus(roleDev.getStatus());
 			devInfo.setDevSizeUsed(roleDev.getDevSizeUsed());

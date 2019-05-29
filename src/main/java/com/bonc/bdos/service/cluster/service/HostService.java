@@ -1,7 +1,7 @@
 package com.bonc.bdos.service.cluster.service;
 
 import com.bonc.bdos.service.cluster.entity.SysClusterHost;
-import com.bonc.bdos.service.cluster.entity.SysClusterRoleDev;
+import com.bonc.bdos.service.cluster.entity.SysClusterHostRoleDev;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -80,5 +80,5 @@ public interface HostService {
      *  查询主机的可用设备
      * @return 设备列表
      */
-    List<SysClusterRoleDev> findDev(String ip);
+    List<SysClusterHostRoleDev> findDev(String ip);
 }

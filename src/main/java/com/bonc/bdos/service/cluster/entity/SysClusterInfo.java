@@ -1,6 +1,7 @@
 package com.bonc.bdos.service.cluster.entity;
 
 import com.bonc.bdos.service.cluster.Global;
+import lombok.Data;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,6 +12,7 @@ import java.util.HashMap;
 
 @Entity
 @Table(name = "`sys_cluster_info`")
+@Data
 public class SysClusterInfo implements Serializable{
 
 	private static final long serialVersionUID = 1819099555348375258L;
@@ -34,42 +36,9 @@ public class SysClusterInfo implements Serializable{
 	@Column(name = "`memo`")
 	private String memo;
 
-	public String getCfgKey() {
-		return cfgKey;
-	}
-
-	public void setCfgKey(String cfgKey) {
-		this.cfgKey = cfgKey;
-	}
-
-	public String getCfgValue() {
-		return cfgValue;
-	}
-
 	public void setCfgValue(String cfgValue) {
 		this.cfgValue = cfgValue;
 		Global.updateGlobal(this);
-	}
-
-	public char getCfgType() {
-		return cfgType;
-	}
-
-	public void setCfgType(char cfgType) {
-		this.cfgType = cfgType;
-	}
-
-	public String getMemo() {
-		return memo;
-	}
-
-	public void setMemo(String memo) {
-		this.memo = memo;
-	}
-
-	@Override
-	public String toString() {
-		return "SysClusterInfoRepository [cfgKey=" + cfgKey + ", cfgValue=" + cfgValue + ", memo=" + memo + "]";
 	}
 
 	public boolean isEnable(char type) {

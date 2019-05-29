@@ -7,9 +7,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
-import com.bonc.bdos.service.cluster.entity.SysClusterRoleDev;
+import com.bonc.bdos.service.cluster.entity.SysClusterHostRoleDev;
 
-public interface SysClusterRoleDevRepository extends JpaRepository<SysClusterRoleDev, String> {
+public interface SysClusterHostRoleDevRepository extends JpaRepository<SysClusterHostRoleDev, String> {
 
 	/**
 	 * 
@@ -18,7 +18,7 @@ public interface SysClusterRoleDevRepository extends JpaRepository<SysClusterRol
 	 * @return
 	 * 		List<SysClusterRoleDev>
 	 */
-	public List<SysClusterRoleDev> findByHostRoleId(String roleId);
+	List<SysClusterHostRoleDev> findByHostRoleId(String roleId);
 	
 	
 	/**
@@ -29,7 +29,7 @@ public interface SysClusterRoleDevRepository extends JpaRepository<SysClusterRol
 	 * @return
 	 * 		SysClusterRoleDev
 	 */ 
-	public SysClusterRoleDev findByIdAndDevName(String id,String devName);
+	SysClusterHostRoleDev findByIdAndDevName(String id, String devName);
 
 
 	/**
@@ -55,12 +55,6 @@ public interface SysClusterRoleDevRepository extends JpaRepository<SysClusterRol
 	 * @param ip
 	 * @return
 	 */
-	List<SysClusterRoleDev> findByIp(String ip);
-	
-    @Modifying(clearAutomatically=true)
-	@Query(value ="INSERT INTO sys_cluster_role_dev "
-	        + "( id, create_date, dev_name, dev_size, dev_size_used, host_role_id, ip, name, status, update_date)"
-	        + " VALUES "
-	        + "( ?10,?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9)",nativeQuery = true)
-	void saveDev(Timestamp createDate,String devName,int devSize,int devSizeUsed,String hostRoleId,String ip,String name,char status,Timestamp updateDate,String uuid);
+	List<SysClusterHostRoleDev> findByIp(String ip);
+
 }

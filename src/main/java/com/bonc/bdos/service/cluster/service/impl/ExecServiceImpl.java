@@ -22,7 +22,7 @@ public class ExecServiceImpl implements ExecService{
 	private final SysClusterHostRoleRepository clusterHostRoleDao;
 	private final SysInstallPlayExecRepository installPlayExecDao;
 	private final SysInstallHostControlRepository installHostControlDao;
-	private final SysClusterRoleDevRepository clusterRoleDevDao;
+	private final SysClusterHostRoleDevRepository clusterRoleDevDao;
 //	private final PlayExecFactory factory;
 
 
@@ -30,7 +30,7 @@ public class ExecServiceImpl implements ExecService{
 	public ExecServiceImpl(SysInstallPlayRepository installPlayDao,SysInstallPlaybookRepository installPlaybookDao,
 						   SysClusterHostRepository clusterHostDao,SysClusterHostRoleRepository clusterHostRoleDao,
 						   SysInstallPlayExecRepository installPlayExecDao, SysInstallHostControlRepository installHostControlDao,
-						   SysClusterRoleDevRepository clusterRoleDevDao) {
+						   SysClusterHostRoleDevRepository clusterRoleDevDao) {
 		this.installPlayDao = installPlayDao;
 		this.installPlaybookDao = installPlaybookDao;
 		this.clusterHostDao = clusterHostDao;
@@ -107,17 +107,17 @@ public class ExecServiceImpl implements ExecService{
 				boolean flag = constructHosts(control);
 
 				// 如果主机控制不满足  设置playbook构造失败
-				if (!flag&&playbook.getFlag()) {playbook.setFlag(false);}
+				if (!flag&&playbook.isFlag()) {playbook.setFlag(false);}
 
 				// 将主机控制对象添加到playbook里面
 				playbook.addRoles(control);
 			}
 
-			return playbook.getFlag();
+			return playbook.isFlag();
 		}
 		
 		private SysClusterHost constructHost (SysClusterHostRole hostRole) {
-		    List<SysClusterRoleDev> devs = clusterRoleDevDao.findByHostRoleId(hostRole.getId());
+		    List<SysClusterHostRoleDev> devs = clusterRoleDevDao.findByHostRoleId(hostRole.getId());
 		    SysClusterHost host = null;
             try {
                 host = hostMap.get(hostRole.getIp()).clone();

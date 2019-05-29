@@ -6,11 +6,11 @@ import com.bonc.bdos.consts.ReturnCode;
 import com.bonc.bdos.service.cluster.entity.SysClusterHost;
 import com.bonc.bdos.service.cluster.entity.SysClusterHostRole;
 import com.bonc.bdos.service.cluster.entity.SysClusterRole;
-import com.bonc.bdos.service.cluster.entity.SysClusterRoleDev;
+import com.bonc.bdos.service.cluster.entity.SysClusterHostRoleDev;
 import com.bonc.bdos.service.cluster.exception.ClusterException;
 import com.bonc.bdos.service.cluster.repository.SysClusterHostRepository;
 import com.bonc.bdos.service.cluster.repository.SysClusterHostRoleRepository;
-import com.bonc.bdos.service.cluster.repository.SysClusterRoleDevRepository;
+import com.bonc.bdos.service.cluster.repository.SysClusterHostRoleDevRepository;
 import com.bonc.bdos.service.cluster.service.HostService;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
@@ -32,10 +32,10 @@ public class HostServiceImpl implements HostService{
 	
 	private final SysClusterHostRepository clusterHostDao;
 	private final SysClusterHostRoleRepository clusterHostRoleDao;
-	private final SysClusterRoleDevRepository clusterRoleDevDao;
+	private final SysClusterHostRoleDevRepository clusterRoleDevDao;
 
 	@Autowired
-	public HostServiceImpl(SysClusterHostRepository clusterHostDao, SysClusterHostRoleRepository clusterHostRoleDao, SysClusterRoleDevRepository clusterRoleDevDao) {
+	public HostServiceImpl(SysClusterHostRepository clusterHostDao, SysClusterHostRoleRepository clusterHostRoleDao, SysClusterHostRoleDevRepository clusterRoleDevDao) {
 		this.clusterHostDao = clusterHostDao;
 		this.clusterHostRoleDao = clusterHostRoleDao;
 		this.clusterRoleDevDao = clusterRoleDevDao;
@@ -109,7 +109,7 @@ public class HostServiceImpl implements HostService{
 			
 			//3.遍历所有角色
 			for(SysClusterHostRole hostRole: hostRoles) {
-				List<SysClusterRoleDev> devList = clusterRoleDevDao.findByHostRoleId(hostRole.getId());
+				List<SysClusterHostRoleDev> devList = clusterRoleDevDao.findByHostRoleId(hostRole.getId());
 				// 3.1 role == default  将设备添加到主机信息里        
 				if(SysClusterRole.DEFAULT_ROLE.equals(hostRole.getRoleCode())) {
 					host.setDevs(devList);
@@ -127,12 +127,12 @@ public class HostServiceImpl implements HostService{
 	@Transactional
 	public void enableDev(String id, boolean enable)  {
 		// 检查设备是否存在
-		Optional<SysClusterRoleDev> optional = clusterRoleDevDao.findById(id);
+		Optional<SysClusterHostRoleDev> optional = clusterRoleDevDao.findById(id);
 		if (!optional.isPresent()) {
 			throw  new ClusterException(ReturnCode.CODE_CLUSTER_DEV_NOT_EXIST,"设备不存在！");
 		}
 
-		SysClusterRoleDev dev = optional.get();
+		SysClusterHostRoleDev dev = optional.get();
 		
 		if (dev.isUsed()&&!enable) {
 			throw  new ClusterException(ReturnCode.CODE_CLUSTER_DEV_IN_USERD," 设备已经被使用");
@@ -205,7 +205,7 @@ public class HostServiceImpl implements HostService{
     }
 
 	@Override
-	public List<SysClusterRoleDev> findDev(String ip) {
+	public List<SysClusterHostRoleDev> findDev(String ip) {
 		SysClusterHostRole hostRole = clusterHostRoleDao.findByIpAndRoleCode(ip,SysClusterRole.DEFAULT_ROLE);
 		if (null!=hostRole){
 			return clusterRoleDevDao.findByHostRoleId(hostRole.getId());

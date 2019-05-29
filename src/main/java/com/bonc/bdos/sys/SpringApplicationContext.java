@@ -1,4 +1,4 @@
-package com.bonc.bdos.service.component.util;
+package com.bonc.bdos.sys;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;

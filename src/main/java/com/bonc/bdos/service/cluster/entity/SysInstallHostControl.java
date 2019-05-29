@@ -1,6 +1,7 @@
 package com.bonc.bdos.service.cluster.entity;
 
 import com.bonc.bdos.utils.StringUtils;
+import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -9,8 +10,8 @@ import java.util.HashMap;
 
 @Entity
 @Table(name = "`sys_install_host_control`")
+@Data
 public class SysInstallHostControl implements Serializable {
-
 
 	private static final long serialVersionUID = -2102082194607883083L;
 	
@@ -46,57 +47,6 @@ public class SysInstallHostControl implements Serializable {
 	@Transient
     private HashMap<String,SysClusterHost> hosts = new HashMap<>();
 
-	public Long getPlaybookId() {
-		return playbookId;
-	}
-
-	public void setPlaybookId(Long playbookId) {
-		this.playbookId = playbookId;
-	}
-
-	public String getRoleCode() {
-		return roleCode;
-	}
-
-	public void setRoleCode(String roleCode) {
-		this.roleCode = roleCode;
-	}
-
-	public char getStatus() {
-		return status;
-	}
-
-	public void setStatus(char status) {
-		this.status = status;
-	}
-
-	public Boolean getTargetEnable() {
-		return targetEnable;
-	}
-
-	public void setTargetEnable(Boolean targetEnable) {
-		this.targetEnable = targetEnable;
-	}
-
-	public String getControl() {
-		return control;
-	}
-
-	public void setControl(String control) {
-		this.control = control;
-	}
-
-	public Boolean getFlag() {
-		return flag;
-	}
-
-	public void setFlag(Boolean flag) {
-		this.flag = flag;
-	}
-
-    public HashMap<String, SysClusterHost> getHosts() {
-		return hosts;
-	}
 
 	public void addHost(SysClusterHost host) {
 		if (null!=host && !StringUtils.isEmpty(host.getIp())) {	hosts.put(host.getIp(),host);}
@@ -104,20 +54,6 @@ public class SysInstallHostControl implements Serializable {
 
 	public void clearHosts(){
 		this.hosts.clear();
-	}
-	
-	public String getId() {
-	    return id;
-	}
-
-	public void setId(String id) {
-	    this.id = id;
-	}
-	
-
-	@Override
-	public String toString() {
-	    return "SysInstallHostControl [id=" + id + ", playbookId=" + playbookId + ", RoleCode=" + roleCode + ", status=" + status + ", targetEnable=" + targetEnable + ", control=" + control + "]";
 	}
 
 	String getConstructMsg() {

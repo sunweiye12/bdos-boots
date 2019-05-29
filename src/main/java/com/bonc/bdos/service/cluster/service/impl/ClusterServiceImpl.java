@@ -23,7 +23,7 @@ public class ClusterServiceImpl extends Global implements ClusterService{
 	private final SysClusterHostRepository clusterHostDao;
 	private final SysClusterRoleRepository clusterRoleDao;
 	private final SysClusterHostRoleRepository clusterHostRoleDao;
-	private final SysClusterRoleDevRepository clusterRoleDevDao;
+	private final SysClusterHostRoleDevRepository clusterRoleDevDao;
 	private final SysClusterStoreCfgRepository clusterStoreCfgDao;
 	private EntityManager em;
 
@@ -31,8 +31,8 @@ public class ClusterServiceImpl extends Global implements ClusterService{
 
 	@Autowired
 	public ClusterServiceImpl(SysClusterInfoRepository clusterInfoDao, SysClusterHostRepository clusterHostDao, SysClusterHostRoleRepository clusterHostRoleDao,
-							  SysClusterRoleDevRepository clusterRoleDevDao, SysClusterStoreCfgRepository clusterStoreCfgDao,
-							  HostService hostService,SysClusterRoleRepository clusterRoleDao) {
+							  SysClusterHostRoleDevRepository clusterRoleDevDao, SysClusterStoreCfgRepository clusterStoreCfgDao,
+							  HostService hostService, SysClusterRoleRepository clusterRoleDao) {
 		this.clusterInfoDao = clusterInfoDao;
 		this.clusterHostDao = clusterHostDao;
 		this.clusterRoleDao = clusterRoleDao;
@@ -164,11 +164,11 @@ public class ClusterServiceImpl extends Global implements ClusterService{
 	class StoreAllocation{
 
 		// 提供存储资源的数据
-		private HashMap<String,SysClusterRoleDev> provides = new HashMap<>();
+		private HashMap<String, SysClusterHostRoleDev> provides = new HashMap<>();
 		// 使用资源的需求配置
 		private List<SysClusterStoreCfg> consumeCfg = new ArrayList<>();
 		// 计算结果
-		private List<SysClusterRoleDev> consumes = new ArrayList<>();
+		private List<SysClusterHostRoleDev> consumes = new ArrayList<>();
 
 		private HashMap<String,SysClusterHostRole> roleMap = new HashMap<>();
 
@@ -184,7 +184,7 @@ public class ClusterServiceImpl extends Global implements ClusterService{
 		StoreAllocation(SysClusterHost host){
 
 			// 设置主机设备的提供者
-			for (SysClusterRoleDev dev : host.getDevs()){
+			for (SysClusterHostRoleDev dev : host.getDevs()){
 				if (dev.isEnable()){
 					this.provides.put(dev.getDevName(),dev);
 					this.provides.get(dev.getDevName()).setDevSizeUsed(dev.getDevSizeUsed()+5);
@@ -194,7 +194,7 @@ public class ClusterServiceImpl extends Global implements ClusterService{
 			// 调整主机设备的使用量，并设置角色消费配置  以及主机角色关系
 			for(SysClusterHostRole hostRole : host.getRoles().values()){
 				if (hostRole.isInstalled()){
-					for(SysClusterRoleDev dev:hostRole.getDevs()){
+					for(SysClusterHostRoleDev dev:hostRole.getDevs()){
 						//linux磁盘设备名    默认为8位    如 /dev/sd[a-p]  /dev/vd[a-p]   此次操作是在default角色集合中，记录已安装角色已使用的磁盘大小，方便计算磁盘可用量
 						this.provides.get(dev.getDevName().substring(0,8)).setDevSizeUsed(dev.getDevSize()+this.provides.get(dev.getDevName().substring(0,8)).getDevSizeUsed());
 					}
@@ -206,7 +206,7 @@ public class ClusterServiceImpl extends Global implements ClusterService{
 			}
 
 			// 计算总存储资源量
-			for(SysClusterRoleDev provide:this.provides.values()){
+			for(SysClusterHostRoleDev provide:this.provides.values()){
 				allSize = allSize+provide.getDevSize() - provide.getDevSizeUsed();
 			}
 
@@ -224,7 +224,7 @@ public class ClusterServiceImpl extends Global implements ClusterService{
 			    return false;
 			 }
 			int index = 0;
-			List<SysClusterRoleDev> provideList = new ArrayList<>(provides.values());
+			List<SysClusterHostRoleDev> provideList = new ArrayList<>(provides.values());
 			
 			//取出type为2的角色
 			
@@ -258,7 +258,7 @@ public class ClusterServiceImpl extends Global implements ClusterService{
 					
 					if (size>0){
 						//组装消费者（安装角色）所使用的磁盘情况  如 [{sdb  10G},{sdc  20G}],一对多     new SysClusterRoleDev(SysClusterHostRole,devName,devSize,vgName)
-						this.consumes.add(new SysClusterRoleDev(roleMap.get(cfg.getRoleCode()),provideList.get(i).getDevName(),provideList.get(i).getPartType(),size,cfg.getName()));
+						this.consumes.add(new SysClusterHostRoleDev(roleMap.get(cfg.getRoleCode()),provideList.get(i).getDevName(),provideList.get(i).getPartType(),size,cfg.getName()));
 					}
 					allocSize -= size;
 				}
@@ -272,20 +272,20 @@ public class ClusterServiceImpl extends Global implements ClusterService{
 		}
 		
 		@SuppressWarnings("unchecked")
-        boolean calspectype(List<SysClusterStoreCfg> cfgList,List<SysClusterRoleDev> provideList) {
-            List<HashMap<SysClusterStoreCfg, SysClusterRoleDev>> result = new ArrayList<>();
+        boolean calspectype(List<SysClusterStoreCfg> cfgList,List<SysClusterHostRoleDev> provideList) {
+            List<HashMap<SysClusterStoreCfg, SysClusterHostRoleDev>> result = new ArrayList<>();
             
             //优先对type=2的角色进行分配     分出所有的组合   总数量为  磁盘个数的角色次幂     
             for(SysClusterStoreCfg rolecfg : cfgList) {
-                List<HashMap<SysClusterStoreCfg, SysClusterRoleDev>> tmp = new ArrayList<>();
-                HashMap<SysClusterStoreCfg, SysClusterRoleDev> tMap = new HashMap<>();
-                for(SysClusterRoleDev provide:provideList) {
+                List<HashMap<SysClusterStoreCfg, SysClusterHostRoleDev>> tmp = new ArrayList<>();
+                HashMap<SysClusterStoreCfg, SysClusterHostRoleDev> tMap = new HashMap<>();
+                for(SysClusterHostRoleDev provide:provideList) {
                     if(result.size()<=0) {
                         tMap.put(rolecfg, provide);
-                        tmp.add((HashMap<SysClusterStoreCfg, SysClusterRoleDev>) tMap.clone());
+                        tmp.add((HashMap<SysClusterStoreCfg, SysClusterHostRoleDev>) tMap.clone());
                     }else {
-                        for(HashMap<SysClusterStoreCfg, SysClusterRoleDev> remap:result) {
-                            HashMap<SysClusterStoreCfg, SysClusterRoleDev> clonemap = (HashMap<SysClusterStoreCfg, SysClusterRoleDev>) remap.clone();
+                        for(HashMap<SysClusterStoreCfg, SysClusterHostRoleDev> remap:result) {
+                            HashMap<SysClusterStoreCfg, SysClusterHostRoleDev> clonemap = (HashMap<SysClusterStoreCfg, SysClusterHostRoleDev>) remap.clone();
                             clonemap.put(rolecfg, provide);
                             tmp.add(clonemap);
                         }
@@ -295,12 +295,12 @@ public class ClusterServiceImpl extends Global implements ClusterService{
             }
             
             // 在所有磁盘角色组合中，拿出满足要求的组合      磁盘的大小需要满足角色所需存储的最小要求
-            for(HashMap<SysClusterStoreCfg, SysClusterRoleDev> remap:result) {
+            for(HashMap<SysClusterStoreCfg, SysClusterHostRoleDev> remap:result) {
                 //组装比较数据           HashMap<磁盘大小,角色需求量>
-                HashMap<SysClusterRoleDev, Integer> comparelist = new HashMap<>();
-                for(Entry<SysClusterStoreCfg, SysClusterRoleDev> entry:remap.entrySet()) {
+                HashMap<SysClusterHostRoleDev, Integer> comparelist = new HashMap<>();
+                for(Entry<SysClusterStoreCfg, SysClusterHostRoleDev> entry:remap.entrySet()) {
                     SysClusterStoreCfg rolecfg = entry.getKey();
-                    SysClusterRoleDev roleDev = entry.getValue();
+                    SysClusterHostRoleDev roleDev = entry.getValue();
                     roleDev = provides.get(roleDev.getDevName());
                     if(comparelist.get(roleDev)==null) {
                         comparelist.put(roleDev, rolecfg.getMinSize());
@@ -311,13 +311,13 @@ public class ClusterServiceImpl extends Global implements ClusterService{
                 
                 //比较磁盘大小是否满足就是需求量   磁盘大小小于需求量则不满足 剔除该组合
                 if(compareSize(comparelist)) {
-                    for(Entry<SysClusterStoreCfg, SysClusterRoleDev> entry:remap.entrySet()) {
+                    for(Entry<SysClusterStoreCfg, SysClusterHostRoleDev> entry:remap.entrySet()) {
                         SysClusterStoreCfg rolecfg = entry.getKey();
-                        SysClusterRoleDev roleDev = entry.getValue();
+                        SysClusterHostRoleDev roleDev = entry.getValue();
                         
                         roleDev = provides.get(roleDev.getDevName());
                         roleDev.setDevSizeUsed(roleDev.getDevSizeUsed()+rolecfg.getMinSize());
-                        this.consumes.add(new SysClusterRoleDev(roleMap.get(rolecfg.getRoleCode()),roleDev.getDevName(),roleDev.getPartType(),rolecfg.getMinSize(),rolecfg.getName()));
+                        this.consumes.add(new SysClusterHostRoleDev(roleMap.get(rolecfg.getRoleCode()),roleDev.getDevName(),roleDev.getPartType(),rolecfg.getMinSize(),rolecfg.getName()));
                     }
                     return true;
                 }
@@ -325,8 +325,8 @@ public class ClusterServiceImpl extends Global implements ClusterService{
             return false;
         }
 		
-		boolean compareSize(HashMap<SysClusterRoleDev, Integer> comparelist) {
-		    for(Entry<SysClusterRoleDev, Integer> entry : comparelist.entrySet()) {
+		boolean compareSize(HashMap<SysClusterHostRoleDev, Integer> comparelist) {
+		    for(Entry<SysClusterHostRoleDev, Integer> entry : comparelist.entrySet()) {
                 if((entry.getKey().getDevSize()-entry.getKey().getDevSizeUsed()) < entry.getValue()) {
                     return false;
                 }
@@ -334,7 +334,7 @@ public class ClusterServiceImpl extends Global implements ClusterService{
 		    return true;
 		}
 
-		List<SysClusterRoleDev> getConsumes(){
+		List<SysClusterHostRoleDev> getConsumes(){
 			return this.consumes;
 		}
 
@@ -368,7 +368,7 @@ public class ClusterServiceImpl extends Global implements ClusterService{
 	}
 
 	private boolean checkHost(SysClusterHost host,Collection<String> msg){
-		if (!host.isLocked()&&host.check()){
+		if (!host.getHostLock()&&host.check()){
 			return true;
 		}
 		if (host.getHostLock()){
@@ -426,7 +426,7 @@ public class ClusterServiceImpl extends Global implements ClusterService{
 		    em.clear();
 			for(StoreAllocation sa: saList){
 			    
-			    for(SysClusterRoleDev  roleDev:sa.getConsumes()) {
+			    for(SysClusterHostRoleDev roleDev:sa.getConsumes()) {
 			        //删除设备状态为初始状态的磁盘         保持数据库数据一致
 			        if(roleDev.getStatus()=='0') {
 		                 clusterRoleDevDao.deleteByHostRoleIdAndStatus(roleDev.getHostRoleId(),roleDev.getStatus());

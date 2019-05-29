@@ -1,7 +1,8 @@
 package com.bonc.bdos.service.cluster.entity;
 
 import com.alibaba.fastjson.annotation.JSONField;
-import com.bonc.bdos.service.component.util.DateUtil;
+import com.bonc.bdos.utils.DateUtil;
+import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -13,6 +14,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "`sys_cluster_host_role`")
+@Data
 public class SysClusterHostRole implements Serializable {
 
 	private static final long serialVersionUID = 3627389863587969194L;
@@ -74,76 +76,7 @@ public class SysClusterHostRole implements Serializable {
 	private char status;
 
 	@Transient
-	private List<SysClusterRoleDev> devs = new ArrayList<>();
-	
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
-
-	public String getHostname() {
-        return hostname;
-    }
-
-    public void setHostname(String hostname) {
-        this.hostname = hostname;
-    }
-
-    public String getRoleCode() {
-		return roleCode;
-	}
-
-	public void setRoleCode(String roleCode) {
-		this.roleCode = roleCode;
-	}
-
-	public String getIp() {
-		return ip;
-	}
-
-	public void setIp(String ip) {
-		this.ip = ip;
-	}
-
-	public Timestamp getCreateDate() {
-		return createDate;
-	}
-
-	public void setCreateDate(Timestamp createDate) {
-		this.createDate = createDate;
-	}
-	
-	public void setUpdateDate(Timestamp updateDate) {
-        this.updateDate = updateDate;
-    }
-
-	public Timestamp getUpdateDate() {
-		return updateDate;
-	}
-	public char getStatus() {
-		return status;
-	}
-
-	public void setStatus(char status) {
-		this.status = status;
-	}
-
-    public List<SysClusterRoleDev> getDevs() {
-		return devs;
-	}
-
-	public void setDevs(List<SysClusterRoleDev> devs) {
-		this.devs = devs;
-	}
-	
-	@Override
-    public String toString() {
-        return "SysClusterHostRole [id=" + id + ", roleCode=" + roleCode + ", ip=" + ip + ", hostname=" + hostname
-                + ", createDate=" + createDate + ", updateDate=" + updateDate + ", status=" + status+ ", devs=" + devs + "]";
-    }
+	private List<SysClusterHostRoleDev> devs = new ArrayList<>();
 
     public boolean isInstalled() {
 		return this.status == SysClusterHostRole.INSTALLED;

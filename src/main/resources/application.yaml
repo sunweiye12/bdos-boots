@@ -14,7 +14,7 @@ spring:
       max-file-size: 100MB
       max-request-size: 200MB
   datasource:
-    url: jdbc:mysql://172.16.3.80:3306/bdos?useUnicode=true&characterEncoding=UTF-8&useSSL=true
+    url: jdbc:mysql://172.16.3.80:3306/boots?useUnicode=true&characterEncoding=UTF-8&useSSL=true
     username: root
     password: 123456
     driver-class-name: com.mysql.jdbc.Driver

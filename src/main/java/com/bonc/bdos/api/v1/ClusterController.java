@@ -7,7 +7,7 @@ import com.bonc.bdos.consts.ReturnCode;
 import com.bonc.bdos.service.cluster.Global;
 import com.bonc.bdos.service.cluster.entity.SysClusterHost;
 import com.bonc.bdos.service.cluster.entity.SysClusterHostRole;
-import com.bonc.bdos.service.cluster.entity.SysClusterRoleDev;
+import com.bonc.bdos.service.cluster.entity.SysClusterHostRoleDev;
 import com.bonc.bdos.service.cluster.exception.ClusterException;
 import com.bonc.bdos.service.cluster.service.CallbackService;
 import com.bonc.bdos.service.cluster.service.ClusterService;
@@ -321,7 +321,7 @@ public class ClusterController {
     @ApiOperation(value = "回调保存设备信息", notes = "回调保存设备信息")
     public ApiResult callbackDev(@RequestParam String roleDev) {
         return handle(() -> {
-            callbackService.saveRoleDev(JSON.parseObject(roleDev,SysClusterRoleDev.class));
+            callbackService.saveRoleDev(JSON.parseObject(roleDev, SysClusterHostRoleDev.class));
             return new ArrayList<>();
         });
     }

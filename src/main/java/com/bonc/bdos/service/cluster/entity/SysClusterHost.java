@@ -4,6 +4,7 @@ import com.alibaba.fastjson.annotation.JSONField;
 import com.bonc.bdos.utils.DateUtil;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -19,6 +20,7 @@ import java.util.List;
 @ApiModel(value = "主机信息")
 @Entity
 @Table(name = "`sys_cluster_host`")
+@Data
 public class SysClusterHost implements Serializable,Cloneable {
 
 	public static final char NO_CHECK = '0';
@@ -50,7 +52,7 @@ public class SysClusterHost implements Serializable,Cloneable {
         this.password = String.valueOf(reqhost.get("password"));
     }
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 3053015296950705164L;
 
@@ -68,11 +70,11 @@ public class SysClusterHost implements Serializable,Cloneable {
 	@ApiModelProperty(value = "sshPort", required = true, example = "22", dataType = "int")
     @Max(value = 65536)
 	private Integer sshPort;
-	
+
 	@Column(name = "`memory`")
 	@ApiModelProperty(value = "memory", example = "32", dataType = "int")
 	private Integer memory;
-	
+
 	@Column(name = "`cpu`")
 	@ApiModelProperty(value = "cpu", example = "8", dataType = "int")
 	private Integer cpu;
@@ -107,7 +109,7 @@ public class SysClusterHost implements Serializable,Cloneable {
 
 	/**
 	 * 主要维护主机的状态
-	 * 
+	 *
 	 * 0: 主机要加入进群，但是还没验证，初始状态 1: 校验成功 2: 校验失败
 	 */
 	@Column(name = "`status`")
@@ -123,127 +125,11 @@ public class SysClusterHost implements Serializable,Cloneable {
 
 	@Transient
     @ApiModelProperty(hidden = true)
-	private List<SysClusterRoleDev> devs = new ArrayList<>();
+	private List<SysClusterHostRoleDev> devs = new ArrayList<>();
 
 	@Transient
     @ApiModelProperty(hidden = true)
 	private HashMap<String,SysClusterHostRole> roles = new HashMap<>();
-
-	public String getIp() {
-		return ip;
-	}
-
-	public void setIp(String ip) {
-		this.ip = ip;
-	}
-
-	public String getHostname() {
-		return hostname;
-	}
-
-	public void setHostname(String hostname) {
-		this.hostname = hostname;
-	}
-
-	public Integer getSshPort() {
-		return sshPort;
-	}
-
-	public void setSshPort(Integer sshPort) {
-		this.sshPort = sshPort;
-	}
-	
-	public Integer getMemory() {
-		return memory;
-	}
-
-	public void setMemory(Integer memory) {
-		this.memory = memory;
-	}
-	
-	public Integer getCpu() {
-		return cpu;
-	}
-
-	public void setCpu(Integer cpu) {
-		this.cpu = cpu;
-	}
-
-	public String getUsername() {
-		return username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public Timestamp getCreateDate() {
-		return createDate;
-	}
-
-	public void setCreateDate(Timestamp createDate) {
-		this.createDate = createDate;
-	}
-
-	public Timestamp getUpdateDate() {
-		return updateDate;
-	}
-
-	public void setUpdateDate(Timestamp updateDate) {
-		this.updateDate = updateDate;
-	}
-
-	public char getStatus() {
-		return status;
-	}
-
-	public void setStatus(char status) {
-		this.status = status;
-	}
-
-	public Boolean getHostLock() {
-		return hostLock;
-	}
-
-	public Boolean setHostLock() {
-		return hostLock;
-	}
-
-	public void setHostLock(Boolean hostLock) {
-		this.hostLock = hostLock;
-	}
-
-	public List<SysClusterRoleDev> getDevs() {
-		return devs;
-	}
-
-	public void setDevs(List<SysClusterRoleDev> devs) {
-		this.devs = devs;
-	}
-
-	public String getRoleId() {
-        return roleId;
-    }
-
-    public void setRoleId(String roleId) {
-        this.roleId = roleId;
-    }
-
-	public String getMessage() {
-		return message;
-	}
-
-	public void setMessage(String message) {
-		this.message = message;
-	}
 
 	public HashMap<String, SysClusterHostRole> getRoles() {
 		return roles;
@@ -254,7 +140,7 @@ public class SysClusterHost implements Serializable,Cloneable {
 			this.roles.put(hostRole.getRoleCode(),hostRole);
 		}
 	}
-	
+
 	@Override
 	public SysClusterHost clone() throws CloneNotSupportedException {
         return   (SysClusterHost) super.clone();
@@ -274,21 +160,8 @@ public class SysClusterHost implements Serializable,Cloneable {
 				append("' this_hostname=").append(ip.replace(".","-")).append(" this_ip=").append(ip).append("\n");
 	}
 
-	@Override
-	public String toString() {
-		return "SysClusterHost [ip=" + ip + ", hostname=" + hostname + ", sshPort=" + sshPort + ", memory=" + memory + ", cpu=" + cpu
-				+ ", username=" + username + ", password=" + password + ", createDate=" + createDate + ", updateDate="
-				+ updateDate + ", status=" + status + ", hostLock=" + hostLock + ", devs=" + devs + "]";
-	}
-
 	public boolean check() {
 		return this.status == SysClusterHost.SUCCESS;
 	}
-
-    @ApiModelProperty(hidden = true)
-	public boolean isLocked() {
-		return this.hostLock;
-	}
-
 
 }

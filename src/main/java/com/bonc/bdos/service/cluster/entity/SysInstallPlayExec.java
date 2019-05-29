@@ -5,6 +5,7 @@ import com.alibaba.fastjson.annotation.JSONField;
 import com.bonc.bdos.utils.DateUtil;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -18,6 +19,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "`sys_install_play_exec`")
 @ApiModel(value = "任务信息",description = "执行任务的详细信息")
+@Data
 public class SysInstallPlayExec implements Serializable {
 
 	private static final long serialVersionUID = -2102082194607883083L;
@@ -127,132 +129,8 @@ public class SysInstallPlayExec implements Serializable {
 	@ApiModelProperty(hidden = true)
 	private List<SysInstallPlaybook> playbooks = new ArrayList<>();
 
-	public String getUuid() {
-		return uuid;
-	}
-
-	public void setUuid(String uuid) {
-		this.uuid = uuid;
-	}
-
-	public String getPlayCode() {
-		return playCode;
-	}
-
-	public void setPlayCode(String playCode) {
-		this.playCode = playCode;
-	}
-
-	public String getPlayName() {
-		return playName;
-	}
-
-	public void setPlayName(String playName) {
-		this.playName = playName;
-	}
-
-	public int getCurIndex() {
-		return curIndex;
-	}
-
-	public void setCurIndex(int curIndex) {
-		this.curIndex = curIndex;
-	}
-
-	public int getPercent() {
-		return percent;
-	}
-
-	public void setPercent(int percent) {
-		this.percent = percent;
-	}
-
-	public String getCmd() {
-		return cmd;
-	}
-
-	public void setCmd(String cmd) {
-		this.cmd = cmd;
-	}
-
-	public String getMessage() {
-		return message;
-	}
-
-	public void setMessage(String message) {
-		this.message = message;
-	}
-
-	public Timestamp getCreateDate() {
-		return createDate;
-	}
-
-	public void setCreateDate(Timestamp createDate) {
-		this.createDate = createDate;
-	}
-
-	public Timestamp getBeginDate() {
-		return beginDate;
-	}
-
-	public void setBeginDate(Timestamp beginDate) {
-		this.beginDate = beginDate;
-	}
-
-	public Timestamp getEndDate() {
-		return endDate;
-	}
-
-	public void setEndDate(Timestamp endDate) {
-		this.endDate = endDate;
-	}
-
-	public String getTargets() {
-		return targets;
-	}
-
-	public void setTargets(String targets) {
-		this.targets = targets;
-	}
-
-	public char getStatus() {
-		return status;
-	}
-
-	public void setStatus(char status) {
-		this.status = status;
-	}
-
-	public Boolean getFlag() {
-		return flag;
-	}
-
-	public void setFlag(Boolean flag) {
-		this.flag = flag;
-	}
-
-    @Override
-	public String toString() {
-		return "SysInstallPlayExec [uuid=" + uuid +  ", playCode=" + playCode + ", curIndex=" + curIndex
-				+ ", cmd=" + cmd +  ", createDate=" + createDate + ", beginDate="
-				+ beginDate + ", endDate=" + endDate + ", status=" + status + "]";
-	}
-
-	public List<SysInstallPlaybook> getPlaybooks() {
-		return playbooks;
-	}
-
 	public void addPlaybook(SysInstallPlaybook playbook) {
 		this.playbooks.add(playbook);
-	}
-
-	public void setPlaybooks(List<SysInstallPlaybook> playbooks){
-		this.playbooks = playbooks;
-	}
-
-	@ApiModelProperty(hidden = true)
-	public String getStatusDesc(){
-		return this.playName+SysInstallPlayExec.STATUS_DESC.get(this.status);
 	}
 
 	@ApiModelProperty(hidden = true)
@@ -287,10 +165,6 @@ public class SysInstallPlayExec implements Serializable {
 
 	public String getStdout() {
 		return stdout==null?"":stdout;
-	}
-
-	public void setStdout(String stdout) {
-		this.stdout = stdout;
 	}
 
 }
