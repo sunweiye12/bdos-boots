@@ -72,7 +72,7 @@ public class SysInstallPlaybook implements Serializable {
             buffer.append("\n");
         }
 
-        String hostPath = Global.getWorkDir() +File.separator +"hosts"+ File.separator + "hosts" + File.separator;
+        String hostPath = Global.getWorkDir() +File.separator +"boots"+ File.separator + "hosts" + File.separator;
         File dir = new File(hostPath);
         if(!dir.exists()&&!dir.mkdirs()){
             LOG.error("主机目录不存在且创建失败！");
