@@ -5,9 +5,7 @@ server:
 
 spring:
   mvc:
-    view:
-      prefix: /WEB-INF/views/
-      suffix: .jsp
+    static-path-pattern: /**
   servlet:
     multipart:
       enabled: true
