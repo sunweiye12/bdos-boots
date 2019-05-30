@@ -11,7 +11,7 @@ import java.sql.Timestamp;
 import java.util.HashMap;
 
 @Entity
-@Table(name = "`sys_cluster_role_dev`")
+@Table(name = "`sys_cluster_host_role_dev`")
 @Data
 public class SysClusterHostRoleDev implements Serializable {
 
@@ -84,6 +84,9 @@ public class SysClusterHostRoleDev implements Serializable {
 	 */
 	@Column(name = "`status`")
 	private char status;
+
+	@Column(name = "`running`")
+	private Boolean running;
 
 	public boolean isEnable(){
 		return SysClusterHostRoleDev.DISABLED != this.status;
