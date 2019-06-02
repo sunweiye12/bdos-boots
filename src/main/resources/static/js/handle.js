@@ -46,6 +46,11 @@ var HostHandle = function (table,play_code) {
     };
     
     this.handleAll = function () {
+        var hosts = _table.getSelectHosts();
+        if (hosts.length === 0){
+            alert(" 请选择要操作的主机节点！主机操作请谨慎");
+            return;
+        }
         for (let host of _table.getSelectHosts()){
             _this.handle([host.ip]);
         }
