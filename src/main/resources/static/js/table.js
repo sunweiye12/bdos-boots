@@ -282,7 +282,7 @@ var Table = function () {
             delete row.roles[roleCode]
         }
 
-        updateHost(row);
+        _this._policy.policyRole(_this.getHosts());
     };
 
     var updateHost = function (row) {
