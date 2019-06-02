@@ -21,7 +21,7 @@ public interface ApiHandle {
             Object data = proxy.handle();
             return new ApiResult(ReturnCode.CODE_SUCCESS,data,"操作成功！");
         }catch (ClusterException e){
-            log.error("业务异常：{}",e);
+            log.error("业务异常：编码：{},  信息：{}，详情：{}",e.getCode(),e.getMsg(),e.getDetail());
             return new ApiResult(e.getCode(),e.getDetail(),e.getMsg());
         }catch (Exception e){
             e.printStackTrace();

@@ -63,27 +63,8 @@ public class ClusterServiceImpl extends Global implements ClusterService {
 	@Override
 	@Transactional
 	public void saveRoles(HashMap<String, Set<String>> roleSet) {
-		List<SysClusterHost> hosts = clusterHostDao.findAll();
-		HashMap<String,SysClusterHost> hostMap = new HashMap<>();
-		for (SysClusterHost host : hosts){
-			hostMap.put(host.getIp(),host);
-		}
-
 		// 1.涉及的主机状态必须都校验通过     (1)判断传入的ip是否存在于数据表中      (2)ip对应的主机是否已经校验通过    (3)ip是否已经锁住
 		List<String> errorMsgs = new ArrayList<>();
-//		for (Set<String> ipSet:roleSet.values()){
-//			for (String ip:ipSet){
-//				SysClusterHost host = hostMap.get(ip);
-//				if (null == host){
-//					errorMsgs.add(ip+"不存在！");
-//					continue;
-//				}
-//				if (!host.check())		{errorMsgs.add(ip+host.getStatusDesc());}
-//
-//				if(host.getHostLock())		{errorMsgs.add(ip+"已锁住");}
-//			}
-//		}
-//		if (!errorMsgs.isEmpty())		{throw  new ClusterException(ReturnCode.CODE_CLUSTER_HOST_CHECK,errorMsgs,"主机校验不合法");}
 
 		// (4)判断需要操作的角色主机是否包含已经安装好的主机     如果已安装好则不能进行操作
 		HashMap<String,HashMap<String, SysClusterHostRole>> roleMap = new HashMap<>();
@@ -101,7 +82,6 @@ public class ClusterServiceImpl extends Global implements ClusterService {
 		if (!errorMsgs.isEmpty())		{throw new ClusterException(ReturnCode.CODE_CLUSTER_HOST_CHECK,errorMsgs,"已经安装的好的角色不可删除");}
 
 		// 2.根据数据表中角色集合roleMap和 传入的参数角色集合roleSet，参数集合中与表角色集合相比有新节点，则比较出哪个节点是新增的，哪个节点是需要废弃掉的，并且处理对应的设备信息
-		Set<String> diffIps = new HashSet<>();
 		for (String roleCode: roleSet.keySet()){
 			Set<String> newIps = roleSet.get(roleCode);
 			Set<String> oldIps = (roleMap.get(roleCode)!=null)?roleMap.get(roleCode).keySet():new HashSet<>();
@@ -109,7 +89,6 @@ public class ClusterServiceImpl extends Global implements ClusterService {
 			// 添加新增主机角色对应关系
 			Set<String> addIps = new HashSet<>(newIps);
 			addIps.removeAll(oldIps);
-			diffIps.addAll(addIps);
 			for(String ip:addIps){
 				clusterHostRoleDao.save(new SysClusterHostRole(ip,roleCode));
 			}
@@ -118,24 +97,11 @@ public class ClusterServiceImpl extends Global implements ClusterService {
 			Set<String> delIps = new HashSet<>(oldIps);
 			//dqy   后面循环删除的集合，应该与此次保持一致  delIps
 			delIps.removeAll(newIps);
-			
-			diffIps.addAll(delIps);
+
 			for(String ip:delIps){
 				clusterHostRoleDao.deleteById(roleMap.get(roleCode).get(ip).getId());
 			}
 		}
-		
-		Set<String> targets = new HashSet<>();
-
-		// 清理受到影响主机所有未安装设备的角色
-		for (SysClusterHostRole role: roles){
-			if (diffIps.contains(role.getIp())&&!role.isInstalled()&&!role.getRoleCode().equals(SysClusterRole.DEFAULT_ROLE)){
-				//clusterRoleDevDao.deleteByHostRoleId(role.getId());
-				targets.add(role.getIp());
-			}
-		}
-		
-//		calculateDev(targets);
 	}
 
 	@Override

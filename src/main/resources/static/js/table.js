@@ -25,7 +25,7 @@ var Table = function () {
     var init = function () {
         // 创建策略对象
         $check_btn.on('click',_this._check.handleAll);
-        $clean_cluster.on('click',_this._delete.handleAll);
+        $clean_cluster.on('click',_this._clean.handleAll);
         _this.dynamic_columns=[];
         var role_extend = _this._policy.roles_extend();
         var role_show = _this._policy.roles_show();
