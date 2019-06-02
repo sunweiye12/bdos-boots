@@ -149,13 +149,13 @@ var Table = function () {
         $install_btn.on('click',function () {
             var targets;
             if (_this.install_flag){
-                targets = _this.getFields("ip") ;
-            }else{
                 targets = _this.getSelectFields("ip") ;
                 if (targets.length===0){
                     alert("请选择拓展的主机节点");
                     return;
                 }
+            }else{
+                targets = _this.getFields("ip") ;
             }
             $.ajax({
                 url: "v1/dev/calculate",
