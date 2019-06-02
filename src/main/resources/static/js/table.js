@@ -88,11 +88,11 @@ var Table = function () {
                 field: "roles",
                 title: "安装角色",
                 align: 'center',
-                colspan: role_extend.length+1
+                colspan: _this.role_extend.length+1
             }
         ];
 
-        for (let role of role_extend){
+        for (let role of _this.role_extend){
             var visible=role_show.indexOf(role.roleCode)!==-1;
             _this.dynamic_columns.push({
                 field: role.roleCode,
