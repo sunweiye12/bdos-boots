@@ -27,7 +27,7 @@ var Table = function () {
         $check_btn.on('click',_this._check.handleAll);
         $clean_cluster.on('click',_this._clean.handleAll);
         _this.dynamic_columns=[];
-        var role_extend = _this._policy.roles_extend();
+        _this.role_extend = _this._policy.roles_extend();
         var role_show = _this._policy.roles_show();
         var show_columns = [
             {
@@ -223,7 +223,7 @@ var Table = function () {
     };
 
     var delEvent = function (e, value, row, index) {
-        for (let roleCode of role_extend){
+        for (let roleCode of _this.role_extend){
             var role = row.roles[roleCode];
             if (role!==undefined && role.status==='2'){
                 alert(roleCode+"核心节点已安装，删除后集群将不可用！");
