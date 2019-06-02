@@ -8,9 +8,7 @@
 
 
 var Play = function (play_code,opt) {
-
     Play.OPT_DEFAULTS = {
-        targets: [],
         read_last:false,
         interval_time: 1000,
         // 启动的回掉函数
@@ -48,7 +46,7 @@ var Play = function (play_code,opt) {
                 url :   "v1/exec/task?playCode="+task_name,
                 async: false,
                 success : function(result) {
-                    if(result.code===200){
+                    if(result.code===200&&result.data!==""){
                         task_id = result.data;
                         _this.status(true);
                         _opt.start(_this,result);
@@ -95,10 +93,6 @@ var Play = function (play_code,opt) {
     this.uuid = function () {
         return task_id;
     };
-    
-    this.targets = function () {
-        return _opt.targets;
-    };
 
     this.status = function (status) {
         if (status!==undefined){
@@ -136,7 +130,7 @@ var Play = function (play_code,opt) {
         return task_status;
     };
 
-    this.start = function () {
+    this.start = function (targets) {
         // 如果有任务在执行，直接调出执行窗体
         if (task_status){
             _opt.start(_this,{code:200});
@@ -147,7 +141,7 @@ var Play = function (play_code,opt) {
             type:"post",
             url: "v1/exec/"+task_name,
             contentType: 'application/json',
-            data:JSON.stringify(_opt.targets),
+            data: JSON.stringify(targets),
             async: false,
             success:function(result){
                 _this.status(result.code===200) ;

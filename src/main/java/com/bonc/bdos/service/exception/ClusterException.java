@@ -1,9 +1,14 @@
 package com.bonc.bdos.service.exception;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+@EqualsAndHashCode(callSuper = false)
+@Data
 public class ClusterException extends RuntimeException {
 
     private int code;
@@ -26,29 +31,5 @@ public class ClusterException extends RuntimeException {
     public ClusterException(int code, String errorMsgs, String msg) {
         this(code,msg);
         this.detail.add(errorMsgs);
-    }
-
-    public int getCode() {
-        return code;
-    }
-
-    public void setCode(int code) {
-        this.code = code;
-    }
-
-    public String getMsg() {
-        return msg;
-    }
-
-    public void setMsg(String msg) {
-        this.msg = msg;
-    }
-
-    public Collection<String> getDetail() {
-        return detail;
-    }
-
-    public void setDetail(Collection<String> detail) {
-        this.detail = new ArrayList<>(detail);
     }
 }

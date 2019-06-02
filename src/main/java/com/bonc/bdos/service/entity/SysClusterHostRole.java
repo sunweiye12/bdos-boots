@@ -17,7 +17,6 @@ import java.util.List;
 @Data
 public class SysClusterHostRole implements Serializable {
 
-	private static final long serialVersionUID = 3627389863587969194L;
 	public static final char UNINSTALL = '0';
 	public static final char ALLOCATED = '1';
 	public static final char INSTALLED = '2';

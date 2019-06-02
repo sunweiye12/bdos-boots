@@ -1352,7 +1352,7 @@
           }
 
           if (o.showColumns) {
-            html.push('<div class="keep-open ' + this.constants.classes.buttonsDropdown + '" title="' + o.formatColumns() + '">\n          <button class="' + this.constants.buttonsClass + ' dropdown-toggle" type="button" data-toggle="dropdown"\n          aria-label="Columns" title="' + o.formatFullscreen() + '">\n          ' + Utils.sprintf(this.constants.html.icon, o.iconsPrefix, o.icons.columns) + '\n          ' + this.constants.html.dropdownCaret + '\n          </button>\n          ' + this.constants.html.toobarDropdow[0]);
+            html.push('<div class="keep-open ' + this.constants.classes.buttonsDropdown + '" title="' + o.formatColumns() + '">\n          <button class="' + this.constants.buttonsClass + ' dropdown-toggle" type="button" data-toggle="dropdown"\n          aria-label="Columns" title="' + o.formatColumns() + '">\n          ' + Utils.sprintf(this.constants.html.icon, o.iconsPrefix, o.icons.columns) + '\n          ' + this.constants.html.dropdownCaret + '\n          </button>\n          ' + this.constants.html.toobarDropdow[0]);
 
             this.columns.forEach(function (column, i) {
               if (column.radio || column.checkbox) {

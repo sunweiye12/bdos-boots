@@ -96,12 +96,13 @@ public class SysClusterHostRoleDev implements Serializable {
 		return SysClusterHostRoleDev.IN_USED == this.status;
 	}
 
-	public int getEnableSpace(){
-		return this.devSize - this.devSizeUsed;
-	}
-
+	/**
+	 *  从当前设备中分配一块size 大小空间 ,返回能分到的空间
+	 * @param size 需要分配空间大小
+	 * @return  实际分配空间大小
+	 */
 	public int accessAlloc( int size){
-		int allocSpace = getEnableSpace() >= size ? size:getEnableSpace();
+		int allocSpace = getEnableSize() >= size ? size:getEnableSize();
 		setDevSizeUsed(getDevSizeUsed()+allocSpace);
 		return allocSpace;
 	}
@@ -119,5 +120,9 @@ public class SysClusterHostRoleDev implements Serializable {
 			return this.devName+ SysClusterHostRoleDev.statusDesc.get(this.status);
 		}
 		return this.devName+"未知的设备状态";
+	}
+
+	public int getEnableSize() {
+		return devSize-devSizeUsed;
 	}
 }

@@ -1,284 +1,260 @@
 var Table = function () {
     var _this = this;
     var $table = $('#host_table');
+    var $check_btn = $('#host_check');
     var $install_btn = $("#install_cluster");
+    var $clean_cluster = $("#clean_cluster");
 
-    var host_num = 0;
+    var host_status_class={'1':"text-danger",'2':"text-success",'0':"text-secondary"};
+    var dev_status_class={'0':"btn-success",'1':"btn-secondary",'2':"btn-primary"};
+    var role_status_class={'-1':'change btn-secondary','0':'change btn-success','1':'change btn-success','2':'btn-primary'};
+    var host_lock_class={true:'fa-pulse',false:'check'};
+    var cluster_opt={true:{title: '拓展节点',code: 'install_cluster'},false:{title: '安装集群',code:'extend_node'}};
 
-    this._form = undefined;
-    this._check = undefined;
-    this._policy = undefined;
-    this._install = undefined;
+    _this._policy = new Policy(_this);
+    _this.install_flag = _this._policy.isInstalled();
+
+    _this._form = new HostForm(_this);
+    _this._check = new HostHandle(_this,"host_check");
+    _this._delete = new HostHandle(_this,"delete_node");
+    _this._clean = new HostHandle(_this,"host_clean");
+    _this._install = new InstallCluster("install_cluster");
+    _this._extend = new InstallCluster("extend_node");
 
     // 初始化样式
     var init = function () {
-
         // 创建策略对象
-        _this._policy = new Policy(_this);
-
-        $table.bootstrapTable('changeLocale', 'zh-CN');
-        $table.bootstrapTable({
-            url: "v1/host",
-            showRefresh:true,
-            classes: "table",
-            search:true,
-            buttonsAlign:'left',
-            searchAlign:'left',
-            toolbar:"#toolbar",
-            toolbarAlign:'right',
-            uniqueId:"ip",
-            responseHandler:function(res){
-                if(res.code===200){
-                    host_num = res.data.length;
-                    if (_this._policy.getCfg("COMPOSE_K8S_INSTALL_FLAG") !== "true" && host_num>=3){
-                        _this._policy.policyRole(res.data);
-                    }
-                    return res.data;
-                }else{
-                    return [];
+        $check_btn.on('click',_this._check.handleAll);
+        $clean_cluster.on('click',_this._delete.handleAll);
+        _this.dynamic_columns=[];
+        var role_extend = _this._policy.roles_extend();
+        var role_show = _this._policy.roles_show();
+        var show_columns = [
+            {
+                field: "isSelect",
+                checkbox: true,
+                rowspan: 2,
+                switchable:false,
+                valign: "middle"
+            },{
+                field: "ip",
+                title: "主机IP",
+                rowspan: 2,
+                switchable:false,
+                valign: "middle",
+                formatter:IPFormatter
+            },{
+                field: "username",
+                rowspan: 2,
+                switchable:false,
+                valign: "middle",
+                title: "用户名"
+            },{
+                field: "password",
+                rowspan: 2,
+                switchable:false,
+                valign: "middle",
+                title: "密码"
+            },{
+                field: "cpu",
+                rowspan: 2,
+                switchable:false,
+                valign: "middle",
+                title: "CPU核数"
+            },{
+                field: "memory",
+                rowspan: 2,
+                switchable:false,
+                valign: "middle",
+                title: "内存/GB"
+            },{
+                field: "devs",
+                rowspan: 2,
+                switchable:false,
+                valign: "middle",
+                title: "设备选择",
+                formatter: devFormatter,
+                events: {
+                    'click .change-dev': changeDevEvent
                 }
-            },
-            pageList:[5, 10, 20, 50, 100, 200],
-            columns: [
-                {
-                    field: "isSelect",
-                    checkbox: true,
-                    formatter: stateFormatter,
-                    events:{
-                        'click .message': messageEvent
-                    }
-                },{
-                    field: "ip",
-                    title: "主机IP",
-                    formatter:IPFormatter
-                },{
-                    field: "username",
-                    title: "用户名"
-                },{
-                    field: "password",
-                    title: "密码"
-                },{
-                    field: "devs",
-                    title: "选择设备",
-                    formatter: devFormatter,
-                    events: {
-                        'click .change-dev': changeDevEvent
-                    }
-                },{
-                    field: "cpu",
-                    title: "CPU核数"
-                },{
-                    field: "memory",
-                    title: "内存/GB"
-                },{
-                    field: "allSpace",
-                    title: "可使用空间/GB",
-                    formatter: spaceFormatter
-                },{
-                    field: "roles",
-                    title: "选择角色",
-                    formatter: roleFormatter,
-                    events: {
-                        'click .change': changeRoleEvent
-                    }
-                },{
-                    field: "minSize",
-                    title: "最小需要空间",
-                    formatter: minSizeFormatter
-                },{
-                    field: "operator",
-                    title: "操作",
-                    width:120,
-                    align: 'center',
-                    events: {
-                        'click .edit': editEvent,
-                        'click .check': checkEvent,
-                        'click .delete': delEvent
-                    },
-                    formatter:optFormatter
-                }
-            ],
-            onLoadSuccess: function () {
-                $('[data-toggle="tooltip"]').tooltip();
+            },{
+                field: "allSpace",
+                rowspan: 2,
+                switchable:false,
+                valign: "middle",
+                title: "可使存储",
+                formatter: spaceFormatter
+            },{
+                field: "roles",
+                title: "安装角色",
+                align: 'center',
+                colspan: role_extend.length+1
             }
-        });
+        ];
 
-        // 针对主机保存做的类控制器并初始化
-        _this._form = new HostForm(_this);
-
-        _this._check = new HostCheck(_this);
-
-        _this.check = _this._check.check;
-
-
-        // 集群安装或者拓展功能
-        if (_this._policy.getCfg("COMPOSE_K8S_INSTALL_FLAG")==="false"){
-            _this._install = new InstallCluster("install_cluster");
-            $install_btn.html(' 安装集群 <i title="安装集群" class="fa fa-power-off"></i>');
-            $install_btn.on('click',function () {
-                if (!_this._install.status()){
-                    var result = _this._policy.savePolicy(_this.getHosts());
-                    if (!result){
-                        return;
-                    }
-                }
-
-                var status = _this._install.start();
-                if(!status){
-                    alert("创建安装任务失败！");
-                }
-            });
-        }else{
-            
-            $install_btn.html(' 拓展节点 <i title="拓展节点" class="fa fa-power-off"></i>');
-            $install_btn.on('click',function () {
-            	
-            	var req = $table.bootstrapTable('getData');
-            	
-            	var result = _this._policy.savePolicyToNode(req);
-            	if (!result){
-                    return;
-                }
-            	
-            	//-----------------循环查出需要扩展node的 主机ip
-            	var targets = [];
-            	for(let host of req){
-            		var flag = true;
-        			for(var key in host.roles){
-        				if(host.roles[key].status === '2'){
-        					flag = false;
-        				}
-        			}
-        			if(flag){
-        				targets[targets.length] = host.ip;
-        			}
-        		}
-            	_this._install = new InstallCluster("extend_node",targets);
-                var status = _this._install.start();
-                if(!status){
-                    alert("创建安装任务失败！"); 
+        for (let role of role_extend){
+            var visible=role_show.indexOf(role.roleCode)!==-1;
+            _this.dynamic_columns.push({
+                field: role.roleCode,
+                title: role.roleDesc,
+                visible: visible,
+                formatter: roleFormatter,
+                width: "55px",
+                align: 'center',
+                events: {
+                    'click .change': changeRoleEvent
                 }
             });
         }
-    };
+        _this.dynamic_columns.push({
+            field: "operator",
+            title: "操作",
+            width:120,
+            switchable:false,
+            height: "32px",
+            align: 'center',
+            formatter:optFormatter,
+            events: {
+                'click .edit': function (e, value, row, index) {
+                    _this._form.editHost(row);
+                },
+                'click .check': function (e, value, row, index) {
+                    _this._check.handle([row.ip]);
+                },
+                'click .delete': delEvent
+            }
+        });
 
-    /**
-     *
-     *
-     */
-    var stateFormatter = function (value, row, index) {
-        // for (var role in row.roles){
-        //     if (row.roles[role].status==='2' && role === 'default'){
-        //         return false;
-        //     }
-        // }
-        // return true;
+        $table.bootstrapTable({
+            url: "v1/host",
+            classes: "table",
+            minimumCountColumns: 2,
+            buttonsAlign:'right',
+            searchAlign:'right',
+            toolbar:"#toolbar",
+            exportTypes: ['json', 'xml', 'csv', 'txt', 'sql', 'excel'],
+            toolbarAlign:'left',
+            uniqueId:"ip",
+            pageList:[5, 10, 20, 50, 100, 200],
+            columns: [show_columns,_this.dynamic_columns],
+            formatSearch: function () { return "搜索"; },
+            formatFullscreen: function(){ return "全屏"; },
+            formatColumns: function(){ return "角色"; },
+            responseHandler:function(res){ return res.code===200?res.data:[]; },
+            onLoadSuccess: function () {$('[data-toggle="tooltip"]').tooltip();}
+        });
+
+        clusterBtnReset();
+
+        $install_btn.on('click',function () {
+            var targets;
+            if (_this.install_flag){
+                targets = _this.getFields("ip") ;
+            }else{
+                targets = _this.getSelectFields("ip") ;
+                if (targets.length===0){
+                    alert("请选择拓展的主机节点");
+                    return;
+                }
+            }
+            $.ajax({
+                url: "v1/dev/calculate",
+                type:"post",
+                async: false,
+                contentType:'application/json',
+                data: JSON.stringify(targets),
+                success:function(data){
+                    if (data.code === 200 ){
+                        var status = _this.install_flag?_this._extend.start(targets):_this._install.start(targets);
+                        if(!status){
+                            alert("创建任务失败！");
+                        }
+                    }else{
+                        alert("存储分配失败！"+data.message);
+                    }
+                }
+            });
+        });
+    };
+    
+    var clusterBtnReset = function () {
+        $install_btn.html(' '+cluster_opt[_this.install_flag].title+'  <i title="集群操作请慎重！" class="fa fa-power-off"></i>');
     };
 
     /**
      * @return {string}
      */
     var IPFormatter = function (value,row,index) {
-        var color,popover='';
-
-        if (row.status==='2'){
-            color = "text-success";
-        }else if(row.status ==='1'){
-            color = 'text-danger';
-//            popover = 'data-container="body" data-toggle="popover" data-placement="right" data-content="'+row.message+'"';
-            popover = '<span class="host-style" >'+row.message+'</span>'
-            
-        }else if (row.status === '0'){
-            color = 'text-secondary';
-        }else {
-            color = "text-primary";
-        }
-        return ['<span class="message ',color,'" id="',value.replace(/\./g,'_'),'" ><i title="校验主机" class="fa fa-desktop" ></i> ',value,'</span>',popover].join('');
+        return ['<span class="message ',host_status_class[row.status],'" id="',value.replace(/\./g,'_'),'" ',
+                            'data-container="body" data-toggle="popover" data-placement="right" data-content="'+row.message+'"','>',
+                        '<i title="校验主机" class="fa fa-desktop" ></i> ', value,
+                    '</span>'].join('');
     };
-    
     // 设备格式化展示
     var devFormatter = function(value,row,index){
-        var devButton = " ";
+        var dev_html = [];
+        row.enableSize=0;
         for (let dev of row.devs){
-            var btn_class = dev.status==='0'?' btn-success ':dev.status==='1'?' btn-secondary ':' btn-primary ';
-            var str = ' <button type="button" data-trigger="hover" data-toggle="tooltip" data-placement="top" title="可用大小 【'+dev.enableSpace+' GB】" class="change-dev btn btn-sm ' + btn_class + '" data-id="'+dev.id+'" > <i class="fa fa-hdd" > ' + dev.devName.substr(5,3) +' </i>'+' </button> ';
-            devButton = str+devButton;
+            dev_html.push(' <button type="button" data-trigger="hover" data-toggle="tooltip" data-placement="top" title="可用大小 【'+dev.enableSize+' GB】" class="change-dev btn btn-sm ' + dev_status_class[dev.status] + '" data-id="'+dev.id+'" > ');
+            dev_html.push('     <i class="fa fa-hdd" > ' + dev.devName.substr(5,3) +' </i>');
+            dev_html.push(' </button> ');
+            if (dev.status !== '1'){row.enableSize += dev.enableSize;}
         }
-        return devButton;
+        return dev_html.join('');
     };
-
     // 可用空间格式化展示
     var spaceFormatter = function (value,row,index) {
-        row.enableSpace = 0;
-        for (let dev  of row.devs){
-            if (dev.status !== '1'){row.enableSpace += dev.enableSpace;}
-        }
-        return ['<span>',row.enableSpace," (GB)",'</span>'].join("");
+        return ['<span>',row.enableSize," (GB)",'</span>'].join("");
     };
-
     // 角色格式化展示
-    var roleFormatter = function (value,row,index) {
-        var str = "";
-        for(let role of _this._policy.roles_show()){
-            var show_class = row.roles[role] === undefined ? "btn-secondary":row.roles[role].status==='2'?"btn-primary":"btn-success";
-
-            // 集群安装好之后就不展示没安装的角色。
-            if(_this._policy.getCfg("COMPOSE_K8S_INSTALL_FLAG") === "true" ){
-                str += '<button type="button" class="btn '+show_class+' btn-sm " data-role-code="'+role+'" ><i class="fa fa-cogs"> '+role+'</i></button> '
-            }
-            if (_this._policy.getCfg("COMPOSE_K8S_INSTALL_FLAG") !== "true" ){
-                str += '<button type="button" class="btn '+show_class+' btn-sm change" data-role-code="'+role+'" ><i class="fa fa-cogs"> '+role+'</i></button> '
-            }
+    var roleFormatter = function (value,row,index,field) {
+        var role = row.roles[field];
+        if(role === undefined){
+            role={'status':'-1'};
         }
-        return str;
+        return  '<button type="button" class="btn btn-sm '+role_status_class[role.status]+' " data-role-code="'+field+'" ><i class="fa fa-cogs"> </i></button> '
     };
-    
-    var minSizeFormatter = function (value,row,index) {
-        return _this._policy.getMinSize(row)+ " (GB)";
-    };
-
     // 操作选项格式化展示
     var optFormatter = function (value,row,index) {
-        var str = " ";
-        var check_fa;
-        if (row.status==='3'){ // 校验成功
-            check_fa = '<i title="校验主机" class="fa fa-sync fa-pulse"></i>';
-        }else{ // 未校验
-            check_fa = '<i title="校验主机" class="fa fa-sync check"></i>';
-        }
+        return ['<a class="col-sm-offset-1 edit"  href="javascript:void(0)" data-toggle="modal" data-target="#host-add" ><i title="编辑主机" class="fa fa-edit " ></i></a>',
+            '<a class="col-sm-offset-1 " href="javascript:void(0)" ><i title="执行中..." class="fa fa-sync '+host_lock_class[row.hostLock]+'"></i></a> ',
+            '<a class="col-sm-offset-1 delete"  href="javascript:void(0)" ><i title="删除主机" class="fa fa-trash "></i></a> '
+        ].join(' ');
+    };
 
-        str += '<a class="col-sm-offset-1 edit"  href="javascript:void(0)" data-toggle="modal" data-target="#host-add" ><i title="编辑主机" class="fa fa-edit" ></i></a> ';
-        if(row.hostLock){
-            str += '<a class="col-sm-offset-1 " href="javascript:void(0)" ><i title="主机有任务正在执行" class="fa fa-lock"></i></a> ';
+    var delEvent = function (e, value, row, index) {
+        for (let roleCode of role_extend){
+            var role = row.roles[roleCode];
+            if (role!==undefined && role.status==='2'){
+                alert(roleCode+"核心节点已安装，删除后集群将不可用！");
+                return;
+            }
+        }
+        var docker = row.roles.docker;
+        if (docker !==undefined && docker.status==='2'){
+            _this._delete.handle([row.ip],function (data) {
+                if (data.status==='2'){
+                    deleteHost(row);
+                }else{
+                    alert("节点卸载任务失败！");
+                }
+            });
         }else{
-            str += '<a class="col-sm-offset-1" href="javascript:void(0)" >'+check_fa+'</a> ';
+            deleteHost(row);
         }
-        str += '<a class="col-sm-offset-1 delete"  href="javascript:void(0)" ><i title="删除主机" class="fa fa-trash"></i></a> ';
-        return str+" ";
     };
-    
-    var messageEvent = function (e, value, row, index) {
-        var $this = $(e.target);
-        if ($this[0].type !== "span"){
-            $this = $this.parents("span");
-        }
-        $this.popover("hide")
-    };
-    
-    var editEvent = function (e, value, row, index) {
-        _this._form.editHost(row);
-    };
+
 
     // 删除主机事件
-    var delTableEvent= function (row) {
-        $.ajax({
+    var deleteHost= function (row) {
+         $.ajax({
             type:"delete",
             url: 'v1/host',
             contentType:'application/json',
             data:row.ip,
             success:function(data){
                 if (data.code === 200){
-                    _this.refresh();
+                    _this.delete(row.ip);
                 }else {
                     console.log(data.code);
                 }
@@ -286,79 +262,29 @@ var Table = function () {
         });
     };
 
-    // 清理node
-    var delEvent= function (e, value, row, index) {
-    	
-    	var flag = false;
-    	for(var i in row.roles){
-	    	if(row.roles[i].status==='2'){
-	    		flag=true;
-	    	}
-    	}
-    	
-    	if(flag){
-    		_this._delete = new DELETE_NODE("delete_node");
-        	
-        	console.info(row);
-        	if(row.locked === true){
-        		alert("主机"+row.ip+"处于锁状态！");
-        		return;
-        	}
-        	
-        	if((row.roles.harbor !== undefined && row.roles.harbor.status === '2') 
-        		|| (row.roles.master !== undefined && row.roles.master.status === '2') 
-        		|| (row.roles.etcd !== undefined && row.roles.etcd.status === '2')
-        		|| (row.roles.ceph_mon !== undefined && row.roles.ceph_mon.status === '2')
-        		|| (row.roles.ceph_osd !== undefined && row.roles.ceph_osd.status === '2')){
-        		
-        		alert("主机"+row.ip+"存在系统角色，不能清理！");
-        		return;
-        	}
-        	
-        	_this._delete.delete_node(row.ip);
-    	}else{
-    		delTableEvent(row);
-    	}
-    	
-    	
-    }
-    
-    // 检查主机事件
-    var checkEvent = function (e, value, row, index) {
-        if(_this.check === undefined){
-            alert("主机检查模块加载失败！");
-        }else{
-            _this.check(row.ip);
-        }
-    };
-
     // 调整角色事件
     var changeRoleEvent = function (e, value, row, index) {
-        if (_this._policy.getCfg("COMPOSE_K8S_INSTALL_FLAG") === "true" ){
+        if (_this.install_flag){
             return;
         }
 
+        // 找到对应的角色节点
         var $this = $(e.target);
         if ($this[0].type !== "button"){
             $this = $this.parents("button");
         }
 
+        //更新对应的角色节点
         var roleCode = $this.data('role-code');
         if (row.roles[roleCode]===undefined){
-            row.roles[roleCode] = {}
+            row.roles[roleCode] = {status: '0'}
         }else{
             delete row.roles[roleCode]
         }
 
-        var hosts = _this.getHosts();
-        if (hosts.length>=3){
-            _this._policy.policyRole(hosts);
-            $table.bootstrapTable("load",hosts);
-        }else{
-            updateHost(row);
-        }
+        updateHost(row);
     };
-    
+
     var updateHost = function (row) {
         $table.bootstrapTable('updateByUniqueId', {ip: row.ip, row: row});
         $('[data-toggle="tooltip"]').tooltip();
@@ -366,7 +292,7 @@ var Table = function () {
             $("#"+row.ip.replace(/\./g,'_')).popover('show');
         }
     };
-    
+
     var changeDevEvent = function (e, value, row, index) {
         if (row.devs===undefined){
             return
@@ -406,7 +332,7 @@ var Table = function () {
                 break;
             }
         }
-        
+
         var hosts = _this.getHosts();
         if (hosts.length>=3){
             _this._policy.policyRole(hosts);
@@ -420,37 +346,34 @@ var Table = function () {
     this.refresh = function () {
         $table.bootstrapTable('refresh');
     };
+    
+    this.reload = function (data) {
+        $table.bootstrapTable('load',data);
+    };
+
+    this.getSelectHosts = function () {
+        return $table.bootstrapTable('getAllSelections');
+    };
 
     this.getHosts = function () {
         return $table.bootstrapTable('getData');
     };
     
-    this.getIps = function () {
-        var hosts  = $table.bootstrapTable('getSelections');
-        var ips = [];
-        for (let host of hosts){
-            ips[ips.length] = host.ip;
-        }
-        return ips;
-    };
-
-    this.updateHostStatus = function (_host) {
-        var host = $table.bootstrapTable("getRowByUniqueId",_host.ip);
-        if (host.status !== _host.status){
-            // 如果任务失败，将更新数据库的状态
-            if (status==='1'){
-                $.ajax({
-                    url:  "v1/callback/host",
-                    type: "post",
-                    data: {host: encodeURI(JSON.stringify(_host))}
-                });
-            }
-            host.status = _host.status;
-            host.message = _host.message;
-            host.devs = _host.devs;
-            updateHost(host);
-        }
+    this.delete = function (ip) {
+        $table.bootstrapTable('removeByUniqueId',ip);
     };
     
+    this.getSelectFields = function (field) {
+        return _this.getSelectHosts().map(function (row) {
+            return row[field];
+        });
+    };
+
+    this.getFields = function (field) {
+        return _this.getHosts().map(function (row) {
+            return row[field];
+        });
+    };
+
     return init();
 };

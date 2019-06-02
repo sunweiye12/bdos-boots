@@ -17,8 +17,14 @@ public class SysClusterRole implements Serializable {
 	public  static final String DEFAULT_ROLE = "default";
 
 	@Id
+	@Column(name = "`id`")
+	private Integer id;
+
 	@Column(name = "`role_code`", length = 32)
 	private String roleCode;
+
+	@Column(name = "`icon`" , length = 32)
+	private String icon;
 
 	@Column(name = "`role_desc`")
 	private String roleDesc;
@@ -30,5 +36,5 @@ public class SysClusterRole implements Serializable {
 	 */
 	@Column(name = "`role_type`")
 	private char roleType;
-	
+
 }

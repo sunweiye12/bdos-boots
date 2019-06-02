@@ -116,8 +116,8 @@ public class HostServiceImpl implements HostService {
 				} else {
 					//3.2   查询角色对应的设备 添加到角色中
 					hostRole.setDevs(devList);
-					host.addRole(hostRole);
 				}
+				host.addRole(hostRole);
 			}
 		}
 		return hosts;

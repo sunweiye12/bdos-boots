@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Set;
 
 @RestController
@@ -140,5 +141,14 @@ public class ClusterController {
             hostService.saveTemplate(template.getInputStream());
             return new ArrayList<>();
         });
+    }
+
+    /**
+     * 角色查询接口
+     */
+    @RequestMapping(value = {"/policy"}, method = RequestMethod.POST)
+    @ApiOperation(value = "查询角色策略", notes = "角色查询接口")
+    public ApiResult rolePolicy(@RequestBody List<SysClusterHost> hosts) {
+        return ApiHandle.handle(() -> clusterService.rolePolicy(hosts));
     }
 }

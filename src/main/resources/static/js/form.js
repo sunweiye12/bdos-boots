@@ -8,6 +8,7 @@ ipRegex = /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.
 
 var HostForm = function (table) {
     var _this = this;
+    _this._policy = table._policy;
 
     var $hostForm = $("#host_form");
     var $host_save = $("#save_host");
@@ -46,7 +47,6 @@ var HostForm = function (table) {
 
         $host_add.on('click',function () {
             change(flag);
-
             if ($isGroup.parent().hasClass('d-none')){
                 $isGroup.parent().removeClass('d-none');
             }
@@ -170,7 +170,9 @@ var HostForm = function (table) {
                     hosts[hosts.length] = int2ip(startIp);
                 }
             }else{
-                hosts[hosts.length] = data.ip;
+                for (let ip of data.ip.split(",")){
+                    hosts[hosts.length] = ip;
+                }
             }
 
             var error = [];
@@ -180,14 +182,14 @@ var HostForm = function (table) {
                     type:"post",
                     contentType:'application/json',
                     data: JSON.stringify({
-                        ip: ip,
-                        username: data.username,
-                        password: data.password,
-                        sshPort: data.sshPort
+                        ip: ip.trim(),
+                        username: data.username.trim(),
+                        password: data.password.trim(),
+                        sshPort: data.sshPort.trim()
                     }),
                     success:function(data) {
                         if (ip === hosts[hosts.length-1]){
-                            table.refresh();
+                            table._policy.policyRole();
                         }
                         if (data.code !== 200){
                             alert(error.join(",")+" 主机保存失败！");
@@ -213,6 +215,7 @@ var HostForm = function (table) {
                     $template.replaceWith($template.prop("outerHTML"));
                     $template = $("#template");
                     $template.on('change',upload);
+                    table._policy.policyRole();
                 }else{
                     alert("文件解析失败！");
                     console.log(data.message);
@@ -231,7 +234,6 @@ var HostForm = function (table) {
         $username.val(row.username);
         $password.val(row.password);
         $sshPort.val(row.sshPort);
-
     };
 
     return init();

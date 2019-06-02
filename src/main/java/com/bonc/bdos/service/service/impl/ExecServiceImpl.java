@@ -342,7 +342,7 @@ public class ExecServiceImpl implements ExecService {
 		if (execList.size()>0){
 			return execList.get(0).getUuid();
 		}else{
-			throw new ClusterException(ReturnCode.CODE_CLUSTER_TASK_NOT_EXIST,"该任务不存在");
+			return  "";
 		}
 	}
 

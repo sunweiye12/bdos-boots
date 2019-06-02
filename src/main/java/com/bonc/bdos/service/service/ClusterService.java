@@ -98,4 +98,6 @@ public interface ClusterService {
     List<SysClusterRole> roleCfg();
 
 	void unlockHost(SysClusterHost host);
+
+	List<SysClusterHost> rolePolicy(List<SysClusterHost> hosts);
 }
