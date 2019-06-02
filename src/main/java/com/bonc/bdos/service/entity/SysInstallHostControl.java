@@ -16,9 +16,8 @@ public class SysInstallHostControl implements Serializable {
 	private static final long serialVersionUID = -2102082194607883083L;
 	
 	@Id
-	@GenericGenerator(name = "uuidGenerator", strategy = "uuid")
-	@GeneratedValue(generator = "uuidGenerator")
-	private String id;
+	@Column(name = "`id`")
+	private Long id;
 	
 	@Column(name = "`playbook_id`",length = 32)
 	private Long playbookId;
