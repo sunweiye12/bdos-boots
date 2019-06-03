@@ -23,6 +23,7 @@ public class SysInstallPlaybook implements Serializable {
     private static final Logger LOG = LoggerFactory.getLogger(SysInstallPlaybook.class);
 
     private static final long serialVersionUID = -2102082194607883083L;
+    private static final String PLAYBOOK_BIN="ansible-playbook";
 
     @Id
     @Column(name = "`id`")
@@ -33,6 +34,9 @@ public class SysInstallPlaybook implements Serializable {
 
     @Column(name = "`playbook`", length = 32)
     private String playbook;
+
+    @Column(name = "`filename`", length = 32)
+    private String filename;
 
     @Column(name = "`playbook_name`", length = 32)
     private String playbookName;
@@ -61,7 +65,7 @@ public class SysInstallPlaybook implements Serializable {
         }
     }
 
-    public String initPlaybookInv(String taskName) throws IOException {
+    private String initPlaybookInv(String taskName) throws IOException {
         StringBuffer buffer = new StringBuffer();
         for (String roleName : getRoles().keySet()) {
             buffer.append("[").append(roleName).append("]").append("\n");
@@ -85,4 +89,7 @@ public class SysInstallPlaybook implements Serializable {
         return invFilePath;
     }
 
+    public String generateCmd(String uuid, String paramStr) throws IOException {
+        return PLAYBOOK_BIN + " " + filename + " -i " + initPlaybookInv(uuid) + " -e " + "'" + paramStr + "'";
+    }
 }

@@ -7,7 +7,7 @@ import com.bonc.bdos.common.ApiResult;
 import com.bonc.bdos.service.entity.SysClusterHost;
 import com.bonc.bdos.service.entity.SysClusterHostRole;
 import com.bonc.bdos.service.entity.SysClusterHostRoleDev;
-import com.bonc.bdos.service.service.CallbackService;
+import com.bonc.bdos.service.service.CallService;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,57 +25,58 @@ import java.util.HashMap;
 public class CallbackController {
     private static final Logger LOG = LoggerFactory.getLogger(CallbackController.class);
 
-    private final CallbackService callbackService;
+    private final CallService callService;
 
     @Autowired
-    public CallbackController(CallbackService callbackService) {
-        this.callbackService = callbackService;
+    public CallbackController(CallService callService) {
+        this.callService = callService;
     }
 
     /**
-     *  用户 执行脚本curl回调主机信息，保存主机的校验状态
+     * 用户 执行脚本curl回调主机信息，保存主机的校验状态
+     *
      * @param host 主机信息，里面可以有设备信息
      */
-    @RequestMapping(value = { "/host" }, method = RequestMethod.POST)
+    @RequestMapping(value = {"/host"}, method = RequestMethod.POST)
     @ApiOperation(value = "回调保存主机信息", notes = "回调保存主机信息")
     public ApiResult callbackHost(@RequestParam String host) {
         return ApiHandle.handle(() -> {
-            callbackService.saveHost(JSON.parseObject(host, SysClusterHost.class));
+            callService.saveHost(JSON.parseObject(host, SysClusterHost.class));
             return new ArrayList<>();
-        },LOG);
+        }, LOG);
     }
 
-    @RequestMapping(value = { "/role" }, method = RequestMethod.POST)
+    @RequestMapping(value = {"/role"}, method = RequestMethod.POST)
     @ApiOperation(value = "回调保存角色信息", notes = "回调保存角色信息")
     public ApiResult callbackRole(@RequestParam String hostRole) {
         return ApiHandle.handle(() -> {
-            callbackService.saveHostRole(JSON.parseObject(hostRole, SysClusterHostRole.class));
+            callService.saveHostRole(JSON.parseObject(hostRole, SysClusterHostRole.class));
             return new ArrayList<>();
-        },LOG);
+        }, LOG);
     }
 
-    @RequestMapping(value = { "/dev" }, method = RequestMethod.POST)
+    @RequestMapping(value = {"/dev"}, method = RequestMethod.POST)
     @ApiOperation(value = "回调保存设备信息", notes = "回调保存设备信息")
     public ApiResult callbackDev(@RequestParam String roleDev) {
         return ApiHandle.handle(() -> {
-            callbackService.saveRoleDev(JSON.parseObject(roleDev, SysClusterHostRoleDev.class));
+            callService.saveRoleDev(JSON.parseObject(roleDev, SysClusterHostRoleDev.class));
             return new ArrayList<>();
-        },LOG);
+        }, LOG);
     }
 
-    @RequestMapping(value = { "/global" }, method = RequestMethod.POST)
+    @RequestMapping(value = {"/global"}, method = RequestMethod.POST)
     @ApiOperation(value = "回调保存全局信息", notes = "回调保存全局信息")
     public ApiResult callbackGlobal(@RequestParam String global) {
         return ApiHandle.handle(() -> {
             JSONObject json = JSON.parseObject(global);
-            HashMap<String,String> map = new HashMap<>();
-            if (null!=json){
-                for (String key:json.keySet()){
-                    map.put(key,json.get(key).toString());
+            HashMap<String, String> map = new HashMap<>();
+            if (null != json) {
+                for (String key : json.keySet()) {
+                    map.put(key, json.get(key).toString());
                 }
             }
-            callbackService.saveGlobal(map);
+            callService.saveGlobal(map);
             return new ArrayList<>();
-        },LOG);
+        }, LOG);
     }
 }

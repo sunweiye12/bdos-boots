@@ -1,5 +1,16 @@
 package com.bonc.bdos.service.tasks;
 
+import com.alibaba.fastjson.JSON;
+import com.bonc.bdos.service.Global;
+import com.bonc.bdos.service.entity.SysInstallLogLabel;
+import com.bonc.bdos.service.entity.SysInstallPlayExec;
+import com.bonc.bdos.service.entity.SysInstallPlaybook;
+import com.bonc.bdos.service.service.CallService;
+import com.bonc.bdos.utils.DateUtil;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -11,18 +22,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Matcher;
 
-import com.bonc.bdos.service.Global;
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.alibaba.fastjson.JSON;
-import com.bonc.bdos.service.entity.SysInstallLogLabel;
-import com.bonc.bdos.service.entity.SysInstallPlayExec;
-import com.bonc.bdos.service.entity.SysInstallPlaybook;
-import com.bonc.bdos.service.service.CallbackService;
-import com.bonc.bdos.utils.DateUtil;
-
 /**
  * 主要负责调用OS CMD任务的执行
  */
@@ -33,19 +32,22 @@ public class CmdExecutor extends Thread {
     private static final String SHELL_PARAM = "-c";
     private static String RUN_PATH;
 
-    private static CallbackService CALL_BACK;
-    private static final HashMap<String, List<SysInstallLogLabel>> LABEL_MAP = new HashMap<>();
+    private static CallService CALL_BACK;
+
+    // 缓存标签
+    private static final HashMap<String, List<SysInstallLogLabel>> LABEL_CACHE = new HashMap<>();
     private static final List<SysInstallLogLabel> DEFAULT_LABEL = new ArrayList<>();
 
-    public static void init(CallbackService callback, List<SysInstallLogLabel> labelList,
-            List<SysInstallPlaybook> playbooks) {
+    public static void init(CallService callback, List<SysInstallLogLabel> labelList,
+                            List<SysInstallPlaybook> playbooks) {
+
         // 设置回调类
         CmdExecutor.CALL_BACK = callback;
 
         // 初始化playbook 标签空缓存
         for (SysInstallPlaybook playbook : playbooks) {
-            if (!CmdExecutor.LABEL_MAP.containsKey(playbook.getPlaybook())) {
-                CmdExecutor.LABEL_MAP.put(playbook.getPlaybook(), new ArrayList<>());
+            if (!CmdExecutor.LABEL_CACHE.containsKey(playbook.getFilename())) {
+                CmdExecutor.LABEL_CACHE.put(playbook.getFilename(), new ArrayList<>());
             }
         }
 
@@ -57,8 +59,8 @@ public class CmdExecutor extends Thread {
             // 有限加载默认标签
             if (SysInstallLogLabel.DEFAULT_PLAYBOOK.equals(label.getPlaybook())) {
                 DEFAULT_LABEL.add(label);
-            } else if (LABEL_MAP.containsKey(label.getPlaybook())) {
-                LABEL_MAP.get(label.getPlaybook()).add(label);
+            } else if (LABEL_CACHE.containsKey(label.getPlaybook())) {
+                LABEL_CACHE.get(label.getPlaybook()).add(label);
             }
         }
 
@@ -106,20 +108,19 @@ public class CmdExecutor extends Thread {
             if (exec.getCurIndex() > playbook.getIndex()) {
                 continue;
             }
-            List<SysInstallLogLabel> playbookLabel = LABEL_MAP.get(playbook.getPlaybook());
+            List<SysInstallLogLabel> playbookLabel = LABEL_CACHE.get(playbook.getFilename());
             handleLine(playbookLabel, "开始执行子任务模块： " + playbook.getPlaybookName());
 
             // 设置当前执行的playbook标识
             exec.setCurIndex(playbook.getIndex());
             LOG.info("当前任务索引: {}", exec.getCurIndex());
 
+            HashMap<String, Object> param = new HashMap<>();
+            param.put("bdos_global", Global.getCfgMap());
+            param.put("bdos_roles", playbook.getRoles());
+
             // 根据任务生成playbook 的host文件
-            String invName = playbook.initPlaybookInv(exec.getUuid());
-            HashMap<String, Object> data = new HashMap<>();
-            data.put("bdos_global", Global.getCfgMap());
-            data.put("bdos_roles", playbook.getRoles());
-            String cmd = "ansible-playbook " + playbook.getPlaybook() + " -i " + invName + " -e " + "'"
-                    + JSON.toJSONString(data) + "'";
+            String cmd = playbook.generateCmd(exec.getUuid(),JSON.toJSONString(param));
 
             LOG.info("执行命令: {}", cmd);
             cmdList.add(cmd);

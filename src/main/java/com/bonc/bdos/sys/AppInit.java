@@ -3,7 +3,7 @@ package com.bonc.bdos.sys;
 import com.bonc.bdos.service.Global;
 import com.bonc.bdos.service.repository.SysInstallLogLabelRepository;
 import com.bonc.bdos.service.repository.SysInstallPlaybookRepository;
-import com.bonc.bdos.service.service.CallbackService;
+import com.bonc.bdos.service.service.CallService;
 import com.bonc.bdos.service.service.ExecService;
 import com.bonc.bdos.service.tasks.CmdExecutor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,13 +20,13 @@ import org.springframework.stereotype.Component;
 public class AppInit implements CommandLineRunner{
 
     private final Global global;
-    private final CallbackService callbackService;
+    private final CallService callbackService;
     private final ExecService execService;
     private final SysInstallLogLabelRepository labelDao;
     private final SysInstallPlaybookRepository playbookDao;
 
     @Autowired
-    public AppInit(Global global, CallbackService callbackService, ExecService execService, SysInstallLogLabelRepository labelDao, SysInstallPlaybookRepository playbookDao) {
+    public AppInit(Global global, CallService callbackService, ExecService execService, SysInstallLogLabelRepository labelDao, SysInstallPlaybookRepository playbookDao) {
         this.global = global;
 
         this.callbackService = callbackService;

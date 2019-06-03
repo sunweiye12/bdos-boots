@@ -47,9 +47,6 @@ public class SysClusterHostRole implements Serializable {
 
 	@Column(name = "`ip`", length = 15)
 	private String ip;
-	
-	@Column(name = "`hostname`", length = 32)
-    private String hostname;
 
 	@Column(name = "`create_date`")
 	@JSONField(format = "yyyy-MM-dd HH:mm:ss")
@@ -73,6 +70,12 @@ public class SysClusterHostRole implements Serializable {
 	 */
 	@Column(name = "`status`")
 	private char status;
+
+	/**
+	 *  主机角色是不是正常在运行
+	 */
+	@Column(name = "`running`")
+	private Boolean running;
 
 	@Transient
 	private List<SysClusterHostRoleDev> devs = new ArrayList<>();

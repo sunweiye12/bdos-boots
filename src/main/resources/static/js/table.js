@@ -18,6 +18,7 @@ var Table = function () {
     _this._check = new HostHandle(_this,"host_check");
     _this._delete = new HostHandle(_this,"delete_node");
     _this._clean = new HostHandle(_this,"host_clean");
+
     _this._install = new InstallCluster("install_cluster");
     _this._extend = new InstallCluster("extend_node");
 
@@ -98,7 +99,11 @@ var Table = function () {
                 field: role.roleCode,
                 title: role.roleDesc,
                 visible: visible,
-                formatter: roleFormatter,
+                formatter: function (value,row,index,field) {
+                    var host_role = row.roles[field];
+                    if(host_role === undefined){  host_role={'status':'-1'}; }
+                    return  '<button type="button" class="btn btn-sm '+role_status_class[host_role.status]+' " data-role-code="'+field+'" ><i class="fa '+role.icon+'"> </i></button> '
+                },
                 width: "55px",
                 align: 'center',
                 events: {
@@ -132,7 +137,7 @@ var Table = function () {
             buttonsAlign:'right',
             searchAlign:'right',
             toolbar:"#toolbar",
-            exportTypes: ['json', 'xml', 'csv', 'txt', 'sql', 'excel'],
+            exportTypes: ['json', 'csv', 'txt', 'sql', 'excel'],
             toolbarAlign:'left',
             uniqueId:"ip",
             pageList:[5, 10, 20, 50, 100, 200],
@@ -158,7 +163,7 @@ var Table = function () {
                 targets = _this.getFields("ip") ;
             }
             $.ajax({
-                url: "v1/dev/calculate",
+                url: "v1/dev/allocate",
                 type:"post",
                 async: false,
                 contentType:'application/json',
@@ -205,14 +210,6 @@ var Table = function () {
     // 可用空间格式化展示
     var spaceFormatter = function (value,row,index) {
         return ['<span>',row.enableSize," (GB)",'</span>'].join("");
-    };
-    // 角色格式化展示
-    var roleFormatter = function (value,row,index,field) {
-        var role = row.roles[field];
-        if(role === undefined){
-            role={'status':'-1'};
-        }
-        return  '<button type="button" class="btn btn-sm '+role_status_class[role.status]+' " data-role-code="'+field+'" ><i class="fa fa-cogs"> </i></button> '
     };
     // 操作选项格式化展示
     var optFormatter = function (value,row,index) {

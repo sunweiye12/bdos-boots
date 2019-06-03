@@ -30,6 +30,9 @@ public class SysInstallLogLabel implements Serializable {
 	@Column(name = "`id`")
 	private Long id;
 
+	/**
+	 *  对应的 playbook 制定的文件名
+	 */
 	@Column(name = "`playbook`",length = 32,nullable = false)
 	private String playbook;
 

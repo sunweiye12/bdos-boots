@@ -75,24 +75,6 @@ public interface ClusterService {
 	 */
 	HashMap<String,String> findGlobal();
 
-	/**
-	 * 对主机做设备分配,支持对集群全部主机做设备分配和对指定主机做设备分配
-	 * 主要解决 主机 与 角色 之间存储的供需问题 通过角色状态感知需要分配存储的主机  
-	 * 角色状态 
-	 * 
-	 * 每次计算完成存储之后重新计算一下磁盘使用量，加加减减的容易对不上
-	 * 
-	 * 1.判断targets是否为空   为空则对全量主机进行操作     不为空则对targets进行操作
-	 * 2.设置设备的提供者  每一块磁盘都是一个提供者，直到把一块磁盘分完
-	 * 3.设置主机的消费者，每一个角色都是一个消费者，调整主机设备的使用量，并设置角色消费配置  以及主机角色关系，
-	 *     （已安装过的角色在提供者中减去），未安装的角色加入到消费者中
-	 * 4.根据消费者集合，计算每个角色在那个磁盘上使用多少存储
-	 * 5.修改角色表和设备表
-	 * 
-	 * @param targets 目标主机
-	 */
-	void calculateDev(Set<String> targets) ;
-
     List<SysClusterStoreCfg> storeCfg();
 
     List<SysClusterRole> roleCfg();

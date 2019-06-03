@@ -7,7 +7,7 @@ import com.bonc.bdos.service.entity.SysInstallPlayExec;
 
 import java.util.Map;
 
-public interface CallbackService {
+public interface CallService {
 
 	/**
 	 * 逻辑：

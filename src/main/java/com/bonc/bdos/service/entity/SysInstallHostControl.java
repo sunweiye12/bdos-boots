@@ -19,8 +19,8 @@ public class SysInstallHostControl implements Serializable {
 	@Column(name = "`id`")
 	private Long id;
 	
-	@Column(name = "`playbook_id`",length = 32)
-	private Long playbookId;
+	@Column(name = "`playbook`",length = 32)
+	private String playbook;
 
 	@Column(name = "`role_code`",length = 32)
 	private String roleCode;
@@ -33,6 +33,9 @@ public class SysInstallHostControl implements Serializable {
 	
 	@Column(name = "`control`",length = 32)
 	private String control;
+
+	@Column(name = "`memo`",length = 32)
+	private String memo;
 
 	/**
 	 *  hostControl 主机组装标识，默认是true，如果主机组装失败则设置未false

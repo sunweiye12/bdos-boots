@@ -54,21 +54,6 @@ public interface HostService {
 	 * }]
 	 */
 	List<SysClusterHost> findHosts();
-	
-	/**
-	 * 逻辑：
-	 * 1.检查节点ip是否存在
-	 * 2.检查节点ip对应的状态是否需要更新  
-	 *  0 未使用     1 已禁用     2 已使用
-	 *  0->1   0->2   1->0   2->0
-	 * 
-	 * 主机设备状态更新接口(default角色对应的设备),是否启用主机的设备可以被使用
-	 * @param id 主机设备ID
-	 * @param enable  true  启用 false  停用
-	 * 
-	 * 已经
-	 */
-	void enableDev(String id, boolean enable) ;
 
 	/**
 	 *  根据模板文件上传主机信息
@@ -76,9 +61,4 @@ public interface HostService {
 	 */
     void saveTemplate(InputStream template) throws IOException;
 
-    /**
-     *  查询主机的可用设备
-     * @return 设备列表
-     */
-    List<SysClusterHostRoleDev> findDev(String ip);
 }

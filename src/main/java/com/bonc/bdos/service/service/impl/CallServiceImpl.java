@@ -6,7 +6,7 @@ import com.bonc.bdos.service.repository.SysClusterHostRepository;
 import com.bonc.bdos.service.repository.SysClusterHostRoleDevRepository;
 import com.bonc.bdos.service.repository.SysClusterHostRoleRepository;
 import com.bonc.bdos.service.repository.SysInstallPlayExecRepository;
-import com.bonc.bdos.service.service.CallbackService;
+import com.bonc.bdos.service.service.CallService;
 import com.bonc.bdos.service.service.ClusterService;
 import com.bonc.bdos.utils.DateUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -21,7 +21,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @Service("callbackService")
-public class CallbackServiceImpl implements CallbackService{
+public class CallServiceImpl implements CallService {
 
 	private final SysInstallPlayExecRepository installPlayExecDao;
 	private final SysClusterHostRepository clusterHostDao;
@@ -31,9 +31,9 @@ public class CallbackServiceImpl implements CallbackService{
 	private final ClusterService clusterService;
 
 	@Autowired
-	public CallbackServiceImpl(SysInstallPlayExecRepository installPlayExecDao,
-							   SysClusterHostRepository clusterHostDao, SysClusterHostRoleRepository clusterHostRoleDao,
-							   SysClusterHostRoleDevRepository clusterRoleDevDao, ClusterService clusterService) {
+	public CallServiceImpl(SysInstallPlayExecRepository installPlayExecDao,
+						   SysClusterHostRepository clusterHostDao, SysClusterHostRoleRepository clusterHostRoleDao,
+						   SysClusterHostRoleDevRepository clusterRoleDevDao, ClusterService clusterService) {
 		this.installPlayExecDao = installPlayExecDao;
 		this.clusterHostDao = clusterHostDao;
 		this.clusterHostRoleDao = clusterHostRoleDao;
@@ -90,7 +90,6 @@ public class CallbackServiceImpl implements CallbackService{
 
 			// 保存默认角色的状态
 			hostRole.setStatus(hostInfo.getStatus());
-			hostRole.setHostname(hostInfo.getHostname());
 			clusterHostRoleDao.save(hostRole);
 
 			//保存设备信息

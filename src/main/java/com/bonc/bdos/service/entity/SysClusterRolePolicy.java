@@ -14,7 +14,7 @@ import java.io.Serializable;
 public class SysClusterRolePolicy implements Serializable {
     @Id
     @Column(name = "`id`")
-    private Long id;
+    private Integer id;
 
     /**
      *  需要推荐的角色
@@ -39,4 +39,7 @@ public class SysClusterRolePolicy implements Serializable {
      */
     @Column(name = "`force`")
     private Boolean force;
+
+    @Column(name = "`memo`")
+    private String memo;
 }

@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface SysInstallHostControlRepository extends JpaRepository<SysInstallHostControl, String> {
 
-    List<SysInstallHostControl> findByPlaybookId(Long id);
+    List<SysInstallHostControl> findByPlaybook(String id);
 }

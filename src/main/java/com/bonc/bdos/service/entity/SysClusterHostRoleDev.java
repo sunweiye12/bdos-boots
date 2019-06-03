@@ -85,9 +85,6 @@ public class SysClusterHostRoleDev implements Serializable {
 	@Column(name = "`status`")
 	private char status;
 
-	@Column(name = "`running`")
-	private Boolean running;
-
 	public boolean isEnable(){
 		return SysClusterHostRoleDev.DISABLED != this.status;
 	}

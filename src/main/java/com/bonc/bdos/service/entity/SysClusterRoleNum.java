@@ -25,7 +25,7 @@ public class SysClusterRoleNum implements Serializable {
 
     @Id
     @Column(name = "`id`")
-    private Long id;
+    private Integer id;
 
     @Column(name = "`role_code`",length = 32)
     private String roleCode;
@@ -41,4 +41,7 @@ public class SysClusterRoleNum implements Serializable {
 
     @Column(name = "`role_num`")
     private Integer roleNum;
+
+    @Column(name = "`memo`")
+    private String memo;
 }

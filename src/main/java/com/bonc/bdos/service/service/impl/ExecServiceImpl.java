@@ -104,7 +104,7 @@ public class ExecServiceImpl implements ExecService {
 
 		private boolean constructPlaybook(SysInstallPlaybook playbook) {
 		    // 构造playbook
-			List<SysInstallHostControl> controls = installHostControlDao.findByPlaybookId(playbook.getId());
+			List<SysInstallHostControl> controls = installHostControlDao.findByPlaybook(playbook.getPlaybook());
 
 			// 构造主机控制列表
 			for (SysInstallHostControl control:controls){
@@ -212,7 +212,7 @@ public class ExecServiceImpl implements ExecService {
                     ips.append("-");
                     ips.append(ip);
                 }
-                errorMsg.add("SysInstallHostControl表id为："+con.getPlaybookId()+"，状态为："+con.getStatus()+" 的"+con.getRoleCode()+"主机列表"+ips+"不满足执行条件！");
+                errorMsg.add("SysInstallHostControl表id为："+con.getPlaybook()+"，状态为："+con.getStatus()+" 的"+con.getRoleCode()+"主机列表"+ips+"不满足执行条件！");
             }
             return errorMsg;
         }

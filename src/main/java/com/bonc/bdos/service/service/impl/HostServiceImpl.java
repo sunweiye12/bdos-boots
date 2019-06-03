@@ -123,30 +123,6 @@ public class HostServiceImpl implements HostService {
 		return hosts;
 	}
 
-	@Override
-	@Transactional
-	public void enableDev(String id, boolean enable)  {
-		// 检查设备是否存在
-		Optional<SysClusterHostRoleDev> optional = clusterRoleDevDao.findById(id);
-		if (!optional.isPresent()) {
-			throw  new ClusterException(ReturnCode.CODE_CLUSTER_DEV_NOT_EXIST,"设备不存在！");
-		}
-
-		SysClusterHostRoleDev dev = optional.get();
-		
-		if (dev.isUsed()&&!enable) {
-			throw  new ClusterException(ReturnCode.CODE_CLUSTER_DEV_IN_USERD," 设备已经被使用");
-		}
-		//状态为可用  0 1
-		if (dev.isEnable()){
-		    dev.disable();
-		}else {
-		    dev.enable();
-		}
-		//  启停设备
-		clusterRoleDevDao.save(dev);
-	}
-
     @Override
     @Transactional
     public void saveTemplate(InputStream is) throws IOException {
@@ -204,13 +180,4 @@ public class HostServiceImpl implements HostService {
         }
     }
 
-	@Override
-	public List<SysClusterHostRoleDev> findDev(String ip) {
-		SysClusterHostRole hostRole = clusterHostRoleDao.findByIpAndRoleCode(ip,SysClusterRole.DEFAULT_ROLE);
-		if (null!=hostRole){
-			return clusterRoleDevDao.findByHostRoleId(hostRole.getId());
-		}else{
-			return new ArrayList<>();
-		}
-	}
 }
