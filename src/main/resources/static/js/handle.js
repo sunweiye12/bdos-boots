@@ -18,7 +18,7 @@ var HostHandle = function (table,play_code) {
     var host_msg = {};
 
     this.handle  = function (targets,finish) {
-        var flag = true;
+        var index = true;
         var play = new Play(play_code,{
             read_last:false,
             interval_time: 1000,
@@ -33,11 +33,11 @@ var HostHandle = function (table,play_code) {
                     }
                     host_msg[ip]=msgs;
                 }
-                if (flag){
+                if (index!==data.data.size){
                     $.get("v1/host", function(result){
                         _table.reload(result.data);
                     });
-                    flag = false;
+                    index = data.data.size;
                 }
                 if (data.data.status==='2'||data.data.status==='3'){
                     $.get("v1/host", function(result){
