@@ -264,7 +264,7 @@ public class CmdExecutor extends Thread {
                 exec.setEndDate(new Timestamp(DateUtil.getCurrentTimeMillis()));
                 CALL_BACK.finish(exec);
             }
-            TaskManager.remove(exec.getUuid());
+            TaskManager.remove(exec.getUuid(),exec.isFailed()?"任务执行失败":"任务执行完成");
         }
     }
 

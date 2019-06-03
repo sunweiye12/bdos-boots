@@ -98,7 +98,7 @@ public class ExecController {
     @ApiOperation(value = "任务ID查询接口", notes = "任务ID查询接口")
     @ApiImplicitParams({@ApiImplicitParam(name = "playCode",value = "任务编码",required = true)})
     public ApiResult task(@RequestParam String playCode) {
-        return ApiHandle.handle(() -> execService.getLatestUuid(playCode),LOG);
+        return ApiHandle.handle(() -> execService.getLatestUuid(playCode),playCode,LOG);
     }
 
     /**
@@ -108,7 +108,7 @@ public class ExecController {
     @ApiOperation(value = "任务执行查询接口", notes = "任务执行查询接口")
     @ApiImplicitParams({@ApiImplicitParam(name = "uuid",value = "任务ID,通过任务执行接口获取",required = true)})
     public ApiResult query(@RequestParam String uuid) {
-        return ApiHandle.handle(() -> execService.query(uuid),LOG);
+        return ApiHandle.handle(() -> execService.query(uuid),uuid,LOG);
     }
 
     /**

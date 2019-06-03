@@ -42,7 +42,7 @@ public class ClusterController {
         return ApiHandle.handle(() -> {
             hostService.saveHost(host);
             return new ArrayList<>();
-        });
+        },host);
     }
 
     /**
@@ -55,7 +55,7 @@ public class ClusterController {
         return ApiHandle.handle(() -> {
             hostService.deleteHost(ip, false);
             return new ArrayList<>();
-        });
+        },ip);
     }
 
     /**
@@ -95,7 +95,7 @@ public class ClusterController {
         return ApiHandle.handle(() -> {
             clusterService.saveRoles(roles);
             return new ArrayList<>();
-        });
+        },roles);
     }
 
     /**
@@ -117,7 +117,7 @@ public class ClusterController {
         return ApiHandle.handle(() -> {
             clusterService.saveGlobal(global, Global.OUTER_SET);
             return new ArrayList<>();
-        });
+        },global);
     }
 
     /**

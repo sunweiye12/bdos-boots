@@ -32,9 +32,9 @@ public class TaskManager {
     /**
      *  删除所有任务
      */
-    public static void destroys(){
+    public static void destroys(String message){
         for (String uuid: taskMap.keySet()){
-            destroy(uuid);
+            destroy(uuid,message);
         }
     }
 
@@ -42,11 +42,11 @@ public class TaskManager {
      *  删除一个任务，从内存里面删除任务
      * @param uuid 任务ID
      */
-    public static void destroy(String uuid){
+    public static void destroy(String uuid,String message){
         if(taskMap.containsKey(uuid)){
             CmdExecutor cm = taskMap.get(uuid);
             cm.destroyTask();
-            remove(uuid);
+            remove(uuid,message);
         }
     }
 
@@ -58,8 +58,8 @@ public class TaskManager {
         return null;
     }
 
-    public static void remove(String uuid) {
-        LOG.info("任务ID {} 将要移除掉任务清单",uuid);
+    public static void remove(String uuid,String message) {
+        LOG.info("{} ;任务 {} 将要移除掉任务清单",message,uuid);
         taskMap.remove(uuid);
     }
 

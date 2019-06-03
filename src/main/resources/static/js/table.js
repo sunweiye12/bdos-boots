@@ -154,12 +154,15 @@ var Table = function () {
         $install_btn.on('click',function () {
             var targets;
             if (_this.install_flag){
-                targets = _this.getSelectFields("ip") ;
+                targets = _this.getSelectFields("ip");
                 if (targets.length===0){
                     alert("请选择拓展的主机节点");
                     return;
                 }
             }else{
+                if(!_this._policy.saveGlobal()){
+                    return;
+                }
                 targets = _this.getFields("ip") ;
             }
             $.ajax({
@@ -181,7 +184,7 @@ var Table = function () {
             });
         });
     };
-    
+
     var clusterBtnReset = function () {
         $install_btn.html(' '+cluster_opt[_this.install_flag].title+'  <i title="集群操作请慎重！" class="fa fa-power-off"></i>');
     };

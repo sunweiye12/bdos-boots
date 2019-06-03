@@ -14,7 +14,6 @@ var Policy = function (table) {
     var global = undefined;
     var _this = this;
     var _table = table;
-    var store_min = {};
     // 存储每个角色对应的主机
     var roles_all = [];
 
@@ -25,12 +24,12 @@ var Policy = function (table) {
             success: function (data) {
                 if (data.code===200){
                     global = data.data;
+                    $vip.val(global.COMPOSE_K8S_VIRTUAL_IP);
                 }else{
                     console.log("全局配置加载失败！")
                 }
             }
         });
-
         $.ajax({
             url:  "v1/roles_cfg",
             async: false,
@@ -56,27 +55,6 @@ var Policy = function (table) {
                 }
             }
         });
-
-        // 初始化存储配置表
-        $.ajax({
-            url:  "v1/store",
-            async: false,
-            success: function (data) {
-                if (data.code===200){
-                    for (let store of data.data){
-                        if (store_min[store.roleCode] === undefined){
-                            store_min[store.roleCode] = store.minSize;
-                        }else{
-                            store_min[store.roleCode] = store.minSize + store_min[store.roleCode];
-                        }
-                    }
-                }else{
-                    console.log("存储配置加载失败！")
-                }
-            }
-        });
-
-
     };
 
     // 角色格式化展示
@@ -114,6 +92,39 @@ var Policy = function (table) {
                 }
             }
         });
+    };
+
+    this.saveGlobal = function(){
+        var masterNum = 0;
+        _table.getFields("roles").forEach(function (roles) {
+            if (roles.master!==undefined){
+                masterNum++;
+            }
+        });
+
+        if (masterNum>1&&$vip.val()===""){
+            alert("多节点master 请设置VIP！");
+            return false;
+        }
+
+        var flag = true;
+        var vip =_this.getCfg("COMPOSE_K8S_VIRTUAL_IP");
+        $.ajax({
+            url: "v1/dev/allocate",
+            type:"post",
+            async: false,
+            contentType:'application/json',
+            data: JSON.stringify({
+                COMPOSE_K8S_VIRTUAL_IP: vip
+            }),
+            success:function(data){
+                if (data.code !== 200 ){
+                    flag = false;
+                    alert("存储分配失败！"+data.message);
+                }
+            }
+        });
+        return flag;
     };
 
     return init();

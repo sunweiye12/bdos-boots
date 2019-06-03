@@ -314,7 +314,7 @@ public class ExecServiceImpl implements ExecService {
 
         if (!exec.isRun())					{throw new ClusterException(ReturnCode.CODE_CLUSTER_PLAY_NOT_RUNNING,"当前任务未在运行中");}
 
-		TaskManager.destroy(uuid);
+		TaskManager.destroy(uuid,"任务暂停");
 	}
 
 	@Override
@@ -350,7 +350,7 @@ public class ExecServiceImpl implements ExecService {
 	@Transactional
 	public void reset() {
 		// 暂停所有任务
-		TaskManager.destroys();
+		TaskManager.destroys("系统状态重置");
 
 		// 将所有运行中的PLAY状态置为失败
 		List<SysInstallPlayExec> execs = installPlayExecDao.findByStatus(SysInstallPlayExec.RUNNING);

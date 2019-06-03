@@ -286,9 +286,10 @@ public class DevServiceImpl implements DevService {
             }
 
             // 基于实际数据计算浮动系数，在使用设备上面，如果没有超出最大浮动系数可以使用完整个盘都用上,不考虑磁盘预留,  如果超过1 将设置1
-            floatRatio=(allSize-minSize)*100/(maxSize);
-            floatRatio=floatRatio>100?100:floatRatio;
-
+            if (maxSize>0){
+                floatRatio=(allSize-minSize)*100/(maxSize);
+                floatRatio=floatRatio>100?100:floatRatio;
+            }
             LOG.info("主机{} 磁盘分配浮动系数：{}",ip,floatRatio);
         }
 
