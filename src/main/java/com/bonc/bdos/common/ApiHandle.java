@@ -13,15 +13,23 @@ public interface ApiHandle {
     Object handle() throws ClusterException, IOException;
 
     static ApiResult handle(ApiHandle proxy){
-        return handle(proxy,LOG);
+        return handle(proxy,"",LOG);
     }
 
     static ApiResult handle(ApiHandle proxy,Logger log){
+        return handle(proxy,"",LOG);
+    }
+
+    static ApiResult handle(ApiHandle proxy,Object param){
+        return handle(proxy,param,LOG);
+    }
+
+    static ApiResult handle(ApiHandle proxy,Object param,Logger log){
         try {
             Object data = proxy.handle();
             return new ApiResult(ReturnCode.CODE_SUCCESS,data,"操作成功！");
         }catch (ClusterException e){
-            log.error("业务异常：编码：{},  信息：{}，详情：{}",e.getCode(),e.getMsg(),e.getDetail());
+            log.error("业务异常：请求参数:{} 编码：{},  信息：{}，详情：{}",param,e.getCode(),e.getMsg(),e.getDetail());
             return new ApiResult(e.getCode(),e.getDetail(),e.getMsg());
         }catch (Exception e){
             e.printStackTrace();

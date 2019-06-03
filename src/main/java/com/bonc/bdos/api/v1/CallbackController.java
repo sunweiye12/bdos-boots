@@ -43,7 +43,7 @@ public class CallbackController {
         return ApiHandle.handle(() -> {
             callService.saveHost(JSON.parseObject(host, SysClusterHost.class));
             return new ArrayList<>();
-        }, LOG);
+        }, host,LOG);
     }
 
     @RequestMapping(value = {"/role"}, method = RequestMethod.POST)
@@ -52,7 +52,7 @@ public class CallbackController {
         return ApiHandle.handle(() -> {
             callService.saveHostRole(JSON.parseObject(hostRole, SysClusterHostRole.class));
             return new ArrayList<>();
-        }, LOG);
+        }, hostRole,LOG);
     }
 
     @RequestMapping(value = {"/dev"}, method = RequestMethod.POST)
@@ -61,7 +61,7 @@ public class CallbackController {
         return ApiHandle.handle(() -> {
             callService.saveRoleDev(JSON.parseObject(roleDev, SysClusterHostRoleDev.class));
             return new ArrayList<>();
-        }, LOG);
+        }, roleDev,LOG);
     }
 
     @RequestMapping(value = {"/global"}, method = RequestMethod.POST)
@@ -77,6 +77,6 @@ public class CallbackController {
             }
             callService.saveGlobal(map);
             return new ArrayList<>();
-        }, LOG);
+        },global, LOG);
     }
 }
