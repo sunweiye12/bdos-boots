@@ -12,11 +12,11 @@
  * @constructor
  */
 
+// 存储全局 配置信息
+host_msg = {};
 var HostHandle = function (table,play_code) {
     var _this = this;
     var _table = table;
-    var host_msg = {};
-
     this.handle  = function (targets,finish) {
         var index = true;
         var play = new Play(play_code,{

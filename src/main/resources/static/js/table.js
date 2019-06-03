@@ -194,7 +194,7 @@ var Table = function () {
      */
     var IPFormatter = function (value,row,index) {
         return ['<span class="message ',host_status_class[row.status],'" id="',value.replace(/\./g,'_'),'" ',
-                            'data-container="body" data-toggle="popover" data-placement="right" data-content="'+row.message+'"','>',
+                            'data-container="body" data-toggle="popover" data-placement="right" data-content="'+_this._check.getHostMsg(ip)+'"','>',
                         '<i title="校验主机" class="fa fa-desktop" ></i> ', value,
                     '</span>'].join('');
     };
