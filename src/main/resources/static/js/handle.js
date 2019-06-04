@@ -19,6 +19,10 @@ var HostHandle = function (table,play_code) {
     var _table = table;
     this.handle  = function (targets,finish) {
         var index = true;
+        // 清空对应的消息内容
+        targets.forEach(function (ip) {
+            delete host_msg[ip];
+        });
         var play = new Play(play_code,{
             read_last:false,
             interval_time: 1000,
@@ -31,7 +35,7 @@ var HostHandle = function (table,play_code) {
                             msgs+=msg
                         }
                     }
-                    host_msg[ip]=msgs;
+                    host_msg[ip]=host_msg[ip]+msgs;
                 }
                 if (index!==data.data.size){
                     $.get("v1/host", function(result){
@@ -64,9 +68,7 @@ var HostHandle = function (table,play_code) {
     };
     
     this.getHostMsg = function (ip) {
-        var msg = host_msg[ip];
-        delete host_msg[ip];
-        return msg;
+        return host_msg[ip];
     };
 
 };
