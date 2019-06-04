@@ -19,9 +19,9 @@ var HostHandle = function (table,play_code) {
     var _table = table;
     this.handle  = function (targets,finish) {
         var index = true;
-        // 清空对应的消息内容
+        // 初始化消息对象
         targets.forEach(function (ip) {
-            delete host_msg[ip];
+            host_msg[ip]='';
         });
         var play = new Play(play_code,{
             read_last:false,
@@ -35,7 +35,7 @@ var HostHandle = function (table,play_code) {
                             msgs+=msg
                         }
                     }
-                    host_msg[ip]=host_msg[ip]+msgs;
+                    host_msg[ip]=host_msg[ip]+";"+msgs;
                 }
                 if (index!==data.data.size){
                     $.get("v1/host", function(result){

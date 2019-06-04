@@ -9,6 +9,7 @@ var Table = function () {
     var dev_status_class={'0':"btn-success",'1':"btn-secondary",'2':"btn-primary"};
     var role_status_class={'-1':'change btn-secondary','0':'change btn-success','1':'change btn-success','2':'btn-primary'};
     var host_lock_class={true:'fa-pulse',false:'check'};
+    var pop_msg_class={true:'data-toggle="popover" data-placement="right"',false:''};
     var cluster_opt={true:{title: '拓展节点',code: 'install_cluster'},false:{title: '安装集群',code:'extend_node'}};
 
     _this._policy = new Policy(_this);
@@ -193,8 +194,10 @@ var Table = function () {
      * @return {string}
      */
     var IPFormatter = function (value,row,index) {
+        var msg = pop_msg_class[_this._check.getHostMsg(value)];
+        var has_msg = msg===undefined ||  msg==='';
         return ['<span class="message ',host_status_class[row.status],'" id="',value.replace(/\./g,'_'),'" ',
-                            'data-container="body" data-toggle="popover" data-placement="right" data-content="'+_this._check.getHostMsg(value)+'"','>',
+                            'data-container="body" '+pop_msg_class[has_msg]+' data-content="'+msg+'"','>',
                         '<i title="校验主机" class="fa fa-desktop" ></i> ', value,
                     '</span>'].join('');
     };
