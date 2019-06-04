@@ -9,7 +9,7 @@ var Table = function () {
     var dev_status_class={'0':"btn-success",'1':"btn-secondary",'2':"btn-primary"};
     var role_status_class={'-1':'change btn-secondary','0':'change btn-success','1':'change btn-success','2':'btn-primary'};
     var host_lock_class={true:'fa-pulse',false:'check'};
-    var pop_msg_class={true:'data-toggle="popover" data-placement="right"',false:''};
+    var pop_msg_class={true:'data-toggle="popover" data-container="body" data-placement="right"',false:''};
     var cluster_opt={true:{title: '拓展节点',code: 'install_cluster'},false:{title: '安装集群',code:'extend_node'}};
 
     _this._policy = new Policy(_this);
