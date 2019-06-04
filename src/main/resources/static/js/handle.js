@@ -48,6 +48,7 @@ var HostHandle = function (table,play_code) {
                 if (data.data.status==='2'||data.data.status==='3'){
                     $.get("v1/host", function(result){
                         _table.reload(result.data);
+                        $('.popover').remove();
                         $('[data-toggle="popover"]').popover('show');
                     });
                     if (typeof finish === "function"){
