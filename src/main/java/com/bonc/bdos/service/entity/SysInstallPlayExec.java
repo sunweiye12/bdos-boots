@@ -73,7 +73,7 @@ public class SysInstallPlayExec implements Serializable {
 	@ApiModelProperty(hidden = true)
 	private String cmd;
 	
-	@Column(name = "`message`",length = 512)
+	@Column(name = "`message`",columnDefinition="LONGTEXT")
 	@ApiModelProperty(hidden = true)
 	private String message;
 	
