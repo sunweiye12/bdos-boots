@@ -27,20 +27,19 @@ var HostHandle = function (table,play_code) {
             read_last:false,
             interval_time: 1000,
             callback: function (play,data) {
-                JSON.parse(data.data.msg).forEach(function (message) {
-                    var ip_json=JSON.parse(message);
-                    host_msg[ip_json.ip].push(ip_json.message);
-                });
-
-                if (index!==data.data.size){
+                // 当执行下一个playbook 或者任务接数的时候，需要刷新一下表格
+                if (index!==data.data.size||!play.status()){
                     _table.reload();
                     index = data.data.size;
+                    JSON.parse(data.data.msg).forEach(function (message) {
+                        var ip_json=JSON.parse(message);
+                        if (host_msg[ip_json.ip].indexOf(ip_json.message)===-1){
+                            host_msg[ip_json.ip].push(ip_json.message);
+                        }
+                    });
                 }
-                if (data.data.status==='2'||data.data.status==='3'){
-                    _table.reload();
-                    if (typeof finish === "function"){
-                        finish(data.data);
-                    }
+                if (!play.status() && typeof finish === "function"){
+                    finish(data.data);
                 }
             }
         });
