@@ -313,12 +313,14 @@ var Table = function () {
         if (data === undefined){
             $.get("v1/host", function(result){
                 $table.bootstrapTable('load',result.data);
+                $('.tooltip').remove();
                 $('[data-toggle="tooltip"]').tooltip();
                 $('.popover').remove();
                 $('[data-toggle="popover"]').popover('show');
             });
         }else{
             $table.bootstrapTable('load',data);
+            $('.tooltip').remove();
             $('[data-toggle="tooltip"]').tooltip();
             $('.popover').remove();
             $('[data-toggle="popover"]').popover('show');
