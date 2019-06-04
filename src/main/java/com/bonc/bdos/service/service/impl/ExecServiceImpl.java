@@ -122,7 +122,7 @@ public class ExecServiceImpl implements ExecService {
 		}
 		
 		private SysClusterHost constructHost (SysClusterHostRole hostRole) {
-		    List<SysClusterHostRoleDev> devs = clusterRoleDevDao.findByHostRoleId(hostRole.getId());
+		    List<SysClusterHostRoleDev> devs = clusterRoleDevDao.findByHostRoleIdOrderByDevName(hostRole.getId());
 		    SysClusterHost host = null;
             try {
                 host = hostMap.get(hostRole.getIp()).clone();

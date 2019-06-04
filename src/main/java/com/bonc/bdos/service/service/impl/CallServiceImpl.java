@@ -79,7 +79,7 @@ public class CallServiceImpl implements CallService {
 
 			SysClusterHostRole hostRole = clusterHostRoleDao.findByIpAndRoleCode(hostInfo.getIp(), SysClusterRole.DEFAULT_ROLE);
 
-			List<SysClusterHostRoleDev> roleDevList = clusterRoleDevDao.findByHostRoleId(hostRole.getId());
+			List<SysClusterHostRoleDev> roleDevList = clusterRoleDevDao.findByHostRoleIdOrderByDevName(hostRole.getId());
 			HashMap<String, SysClusterHostRoleDev> devMap = new HashMap<>();
 			for (SysClusterHostRoleDev roleDev:roleDevList){
 				devMap.put(roleDev.getDevName(),roleDev);

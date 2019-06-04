@@ -47,7 +47,7 @@ public class DevServiceImpl implements DevService {
     public List<SysClusterHostRoleDev> findDev(String ip) {
         SysClusterHostRole hostRole = clusterHostRoleDao.findByIpAndRoleCode(ip, SysClusterRole.DEFAULT_ROLE);
         if (null!=hostRole){
-            return clusterRoleDevDao.findByHostRoleId(hostRole.getId());
+            return clusterRoleDevDao.findByHostRoleIdOrderByDevName(hostRole.getId());
         }else{
             return new ArrayList<>();
         }

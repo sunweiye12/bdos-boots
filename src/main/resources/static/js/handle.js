@@ -21,7 +21,7 @@ var HostHandle = function (table,play_code) {
         var index = true;
         // 初始化消息对象
         targets.forEach(function (ip) {
-            host_msg[ip]='';
+            host_msg[ip]=[];
         });
         var play = new Play(play_code,{
             read_last:false,
@@ -29,28 +29,20 @@ var HostHandle = function (table,play_code) {
             callback: function (play,data) {
                 var msg_json=JSON.parse(data.data.msg);
                 for (let ip of targets){
-                    var msgs = "";
                     if (msg_json!==undefined){
                         for (let msg of msg_json){
-                            msgs+=msg
+                            if (host_msg[ip].indexOf(msg)===-1){
+                                host_msg[ip].push(msg);
+                            }
                         }
-                    }
-                    if (msgs!==""){
-                        host_msg[ip]=msgs+host_msg[ip]+";";
                     }
                 }
                 if (index!==data.data.size){
-                    $.get("v1/host", function(result){
-                        _table.reload(result.data);
-                    });
+                    _table.reload();
                     index = data.data.size;
                 }
                 if (data.data.status==='2'||data.data.status==='3'){
-                    $.get("v1/host", function(result){
-                        _table.reload(result.data);
-                        $('.popover').remove();
-                        $('[data-toggle="popover"]').popover('show');
-                    });
+                    _table.reload();
                     if (typeof finish === "function"){
                         finish(data.data);
                     }

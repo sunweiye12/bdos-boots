@@ -9,8 +9,9 @@ var Table = function () {
     var dev_status_class={'0':"btn-success",'1':"btn-secondary",'2':"btn-primary"};
     var role_status_class={'-1':'change btn-secondary','0':'change btn-success','1':'change btn-success','2':'btn-primary'};
     var host_lock_class={true:'fa-pulse',false:'check'};
-    var pop_msg_class={true:'data-toggle="popover" data-trigger="focus" data-container="body" data-placement="right"',false:''};
+    var pop_msg_data={true:'data-toggle="popover" data-trigger="focus" data-container="body" data-placement="right"',false:''};
     var cluster_opt={true:{title: '拓展节点',code: 'install_cluster'},false:{title: '安装集群',code:'extend_node'}};
+    var dev_enable_swatch={'1':{status:'0',url: 'disable'},'0':{status: '1',url: 'enable'}};
 
     _this._policy = new Policy(_this);
     _this.install_flag = _this._policy.isInstalled();
@@ -108,7 +109,19 @@ var Table = function () {
                 width: "55px",
                 align: 'center',
                 events: {
-                    'click .change': changeRoleEvent
+                    'click .change': function (e, value, row, index) {
+                        if (_this.install_flag){
+                            return;
+                        }
+                        //更新对应的角色节点
+                        var roleCode = role.roleCode;
+                        if (row.roles[roleCode]===undefined){
+                            row.roles[roleCode] = {status: '0'}
+                        }else{
+                            delete row.roles[roleCode]
+                        }
+                        _this._policy.policyRole(_this.getHosts());
+                    }
                 }
             });
         }
@@ -195,9 +208,8 @@ var Table = function () {
      */
     var IPFormatter = function (value,row,index) {
         var msg = _this._check.getHostMsg(value);
-        var has_msg = msg!==undefined && msg!=='';
-        return ['<span class="message ',host_status_class[row.status],'" id="',value.replace(/\./g,'_'),'" ',
-                            'data-container="body" '+pop_msg_class[has_msg]+' data-content="'+msg+'"','>',
+        var has_msg = msg!==undefined && msg.length>0;
+        return [' <span class="',host_status_class[row.status],'" ', pop_msg_data[has_msg] ,' data-container="body" data-content="',has_msg?msg.join(' ; '):'','" > ',
                         '<i title="校验主机" class="fa fa-desktop" ></i> ', value,
                     '</span>'].join('');
     };
@@ -265,84 +277,31 @@ var Table = function () {
         });
     };
 
-    // 调整角色事件
-    var changeRoleEvent = function (e, value, row, index) {
-        if (_this.install_flag){
-            return;
-        }
-
-        // 找到对应的角色节点
-        var $this = $(e.target);
-        if ($this[0].type !== "button"){
-            $this = $this.parents("button");
-        }
-
-        //更新对应的角色节点
-        var roleCode = $this.data('role-code');
-        if (row.roles[roleCode]===undefined){
-            row.roles[roleCode] = {status: '0'}
-        }else{
-            delete row.roles[roleCode]
-        }
-
-        _this._policy.policyRole(_this.getHosts());
-    };
-
-    var updateHost = function (row) {
-        $table.bootstrapTable('updateByUniqueId', {ip: row.ip, row: row});
-        $('[data-toggle="tooltip"]').tooltip();
-        if (row.status === '1'){
-            $("#"+row.ip.replace(/\./g,'_')).popover('show');
-        }
-    };
-
     var changeDevEvent = function (e, value, row, index) {
-        if (row.devs===undefined){
-            return
-        }
-
         var $this = $(e.target);
         if ($this[0].type !== "button"){
             $this = $this.parents("button");
         }
 
-        $this.tooltip('hide');
-        for (let dev of row.devs){
-            if( dev.id === $this.data("id")){
-                if (dev.status === '0'){
-                    dev.status='1';
-                }else if(dev.status === '1'){
-                    dev.status='0';
-                }else{
-                    return;
-                }
-
+        // $this.tooltip('hide');
+        row.devs.forEach(function (dev) {
+            if( dev.id === $this.data("id") ){
+                dev.status = dev_enable_swatch[dev.status].status;
                 $.ajax({
                     type:"post",
-                    url: 'v1/dev/' + (dev.status === '1'?'disable':'enable'),
+                    url: 'v1/dev/' + dev_enable_swatch[dev.status].url,
                     contentType:'application/json',
                     data: dev.id,
                     success:function(data){
-                        if (data.code === 200){
-
-                        }else {
+                        if (data.code !== 200){
                             console.log(data.code)
                         }
                     }
                 });
-
-                updateHost(index,row);
-                break;
             }
-        }
+        });
 
-        var hosts = _this.getHosts();
-        if (hosts.length>=3){
-            _this._policy.policyRole(hosts);
-            $table.bootstrapTable("load",hosts);
-        }else{
-            updateHost(row);
-        }
+        _this.reload();
     };
 
 
@@ -351,7 +310,19 @@ var Table = function () {
     };
     
     this.reload = function (data) {
-        $table.bootstrapTable('load',data);
+        if (data === undefined){
+            $.get("v1/host", function(result){
+                $table.bootstrapTable('load',result.data);
+                $('[data-toggle="tooltip"]').tooltip();
+                $('.popover').remove();
+                $('[data-toggle="popover"]').popover('show');
+            });
+        }else{
+            $table.bootstrapTable('load',data);
+            $('[data-toggle="tooltip"]').tooltip();
+            $('.popover').remove();
+            $('[data-toggle="popover"]').popover('show');
+        }
     };
 
     this.getSelectHosts = function () {

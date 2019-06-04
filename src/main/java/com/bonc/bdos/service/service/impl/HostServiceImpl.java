@@ -109,7 +109,7 @@ public class HostServiceImpl implements HostService {
 			
 			//3.遍历所有角色
 			for(SysClusterHostRole hostRole: hostRoles) {
-				List<SysClusterHostRoleDev> devList = clusterRoleDevDao.findByHostRoleId(hostRole.getId());
+				List<SysClusterHostRoleDev> devList = clusterRoleDevDao.findByHostRoleIdOrderByDevName(hostRole.getId());
 				// 3.1 role == default  将设备添加到主机信息里        
 				if(SysClusterRole.DEFAULT_ROLE.equals(hostRole.getRoleCode())) {
 					host.setDevs(devList);
