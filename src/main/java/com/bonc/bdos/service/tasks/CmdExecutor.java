@@ -250,10 +250,6 @@ public class CmdExecutor extends Thread {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            // 设置失败
-            if (message.size() <= 0) {
-                message.add("系统执行异常！");
-            }
             exec.setStatus(SysInstallPlayExec.FAILED);
         } finally {
             // 设置保存信息
@@ -283,7 +279,6 @@ public class CmdExecutor extends Thread {
         process.destroy();
 
         // 2.设置保存信息
-        message.add("暂停安装");
         exec.setStatus(SysInstallPlayExec.PAUSE);
         exec.setCmd(String.join("\n", cmdList));
         exec.setStdout(buffer.toString());

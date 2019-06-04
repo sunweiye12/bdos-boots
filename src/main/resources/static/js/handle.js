@@ -27,16 +27,11 @@ var HostHandle = function (table,play_code) {
             read_last:false,
             interval_time: 1000,
             callback: function (play,data) {
-                var msg_json=JSON.parse(data.data.msg);
-                for (let ip of targets){
-                    if (msg_json!==undefined){
-                        for (let msg of msg_json){
-                            if (host_msg[ip].indexOf(msg)===-1){
-                                host_msg[ip].push(msg);
-                            }
-                        }
-                    }
-                }
+                JSON.parse(data.data.msg).forEach(function (message) {
+                    var ip_json=JSON.parse(message);
+                    host_msg[ip_json.ip].push(ip_json.message);
+                });
+
                 if (index!==data.data.size){
                     _table.reload();
                     index = data.data.size;
@@ -58,9 +53,7 @@ var HostHandle = function (table,play_code) {
             alert(" 请选择要操作的主机节点！主机操作请谨慎");
             return;
         }
-        for (let host of _table.getSelectHosts()){
-            _this.handle([host.ip]);
-        }
+        _this.handle(_table.getSelectHosts());
     };
     
     this.getHostMsg = function (ip) {
