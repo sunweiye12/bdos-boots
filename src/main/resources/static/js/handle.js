@@ -35,7 +35,9 @@ var HostHandle = function (table,play_code) {
                             msgs+=msg
                         }
                     }
-                    host_msg[ip]=host_msg[ip]+";"+msgs;
+                    if (msgs!==""){
+                        host_msg[ip]=host_msg[ip]+";"+msgs;
+                    }
                 }
                 if (index!==data.data.size){
                     $.get("v1/host", function(result){
