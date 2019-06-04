@@ -194,7 +194,7 @@ var Table = function () {
      * @return {string}
      */
     var IPFormatter = function (value,row,index) {
-        var msg = pop_msg_class[_this._check.getHostMsg(value)];
+        var msg = _this._check.getHostMsg(value);
         var has_msg = msg===undefined ||  msg==='';
         return ['<span class="message ',host_status_class[row.status],'" id="',value.replace(/\./g,'_'),'" ',
                             'data-container="body" '+pop_msg_class[has_msg]+' data-content="'+msg+'"','>',
