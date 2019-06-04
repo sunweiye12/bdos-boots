@@ -36,7 +36,7 @@ var HostHandle = function (table,play_code) {
                         }
                     }
                     if (msgs!==""){
-                        host_msg[ip]=host_msg[ip]+";"+msgs;
+                        host_msg[ip]=msgs+host_msg[ip]+";";
                     }
                 }
                 if (index!==data.data.size){
@@ -48,7 +48,7 @@ var HostHandle = function (table,play_code) {
                 if (data.data.status==='2'||data.data.status==='3'){
                     $.get("v1/host", function(result){
                         _table.reload(result.data);
-                        $('[data-toggle="popover"]').popover();
+                        $('[data-toggle="popover"]').popover('show');
                     });
                     if (typeof finish === "function"){
                         finish(data.data);
