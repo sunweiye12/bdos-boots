@@ -25,6 +25,9 @@ public class SysClusterStoreCfg implements Serializable {
 	public static final char TYPE_PART='2';
 
 	@Id
+	@Column(name = "`id`")
+	private Integer id;
+
 	@Column(name = "`name`",length = 32)
 	private String name;
 
