@@ -101,7 +101,7 @@ var Table = function () {
             }
         ];
 
-        for (let role of _this.role_extend){
+        _this.role_extend.forEach(function (role) {
             var visible=role_show.indexOf(role.roleCode)!==-1;
             _this.dynamic_columns.push({
                 field: role.roleCode,
@@ -130,7 +130,8 @@ var Table = function () {
                     }
                 }
             });
-        }
+        });
+
         _this.dynamic_columns.push({
             field: "operator",
             title: "操作",
@@ -228,13 +229,13 @@ var Table = function () {
     var devFormatter = function(value,row,index){
         var dev_html = [];
         row.enableSize=0;
-        for (let dev of row.devs){
+        row.devs.forEach(function (dev) {
             dev_html.push(' <button type="button" data-trigger="hover" data-toggle="tooltip" data-placement="top" title="可用大小 【'+dev.enableSize+' GB】" class="change-dev btn btn-sm ' + dev_status_class[dev.status] + '" data-id="'+dev.id+'" > ');
             dev_html.push('     <i class="fa fa-hdd" > ' + dev.devName.substr(5,3) +' </i>');
             dev_html.push(' </button> ');
             if (dev.status !== '1'){row.enableSize += dev.enableSize;}
-        }
-        return dev_html.join('');
+        });
+        return dev_html.join(' ');
     };
     // 可用空间格式化展示
     var spaceFormatter = function (value,row,index) {
