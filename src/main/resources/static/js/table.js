@@ -59,6 +59,12 @@ var Table = function () {
                 valign: "middle",
                 title: "密码"
             },{
+                field: "user",
+                rowspan: 2,
+                switchable:false,
+                valign: "middle",
+                title: "负责人"
+            },{
                 field: "cpu",
                 rowspan: 2,
                 switchable:false,

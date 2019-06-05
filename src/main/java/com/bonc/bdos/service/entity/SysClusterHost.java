@@ -87,6 +87,14 @@ public class SysClusterHost implements Serializable,Cloneable {
 	@ApiModelProperty(value = "password", required = true, example = "root", dataType = "String")
 	private String password;
 
+	@Column(name = "`user`", length = 32)
+	@ApiModelProperty(value = "user", required = true, example = "高阳", dataType = "String")
+	private String user;
+
+	@Column(name = "`phone`", length = 32)
+	@ApiModelProperty(value = "phone", required = true, example = "18611754986", dataType = "String")
+	private String phone;
+
     @Column(name = "`create_date`")
     @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     @ApiModelProperty(hidden = true)

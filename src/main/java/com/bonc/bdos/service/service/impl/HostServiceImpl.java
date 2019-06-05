@@ -128,7 +128,7 @@ public class HostServiceImpl implements HostService {
     public void saveTemplate(InputStream is) throws IOException {
         //HSSFWorkbook代表整个Excle
         HSSFWorkbook hssfWorkbook = new HSSFWorkbook(is);
-        String[] cols = new String[]{"ip","username","password","sshPort"};
+        String[] cols = new String[]{"ip","username","password","sshPort","user","password"};
 
         //循环每一页，并处理当前页
         for(int sheetCur=0,sheetNum=hssfWorkbook.getNumberOfSheets(); sheetCur<sheetNum ; sheetCur++){

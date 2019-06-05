@@ -22,6 +22,8 @@ var HostForm = function (table) {
     var $username = $("#username");
     var $password = $("#password");
     var $sshPort = $("#sshPort");
+    var $user= $("#user");
+    var $phone = $("#phone");
 
     // 是否是连续主机,初始化之后默认调用了一次切换
     var flag = false;
@@ -29,6 +31,18 @@ var HostForm = function (table) {
     var init = function () {
         var valid_ip = function (ip) {
             return ipRegex.test(ip);
+        };
+        var valid_ips = function (ip) {
+            var ips = ip.split(",");
+            var ip_valid = true;
+            if (ips.length>0){
+                ips.forEach(function (cur_ip) {
+                    ip_valid = ip_valid && ipRegex.test(polishIp(ips[0],cur_ip));
+                });
+            }else{
+                ip_valid = false;
+            }
+            return ip_valid;
         };
         var valid_len = function (value) {
             return  value.length<32&&value.length>3;
@@ -38,7 +52,7 @@ var HostForm = function (table) {
         };
 
         // 为input 绑定校验控制
-        bind_valid($IP,"主机IP不合法",valid_ip);
+        bind_valid($IP,"主机IP不合法",valid_ips);
         bind_valid($startIp,"起始IP不合法",valid_ip);
         bind_valid($endIp,"结束IP不合法",valid_ip);
         bind_valid($username,"用户名长度范围[4-31]",valid_len);
@@ -97,13 +111,22 @@ var HostForm = function (table) {
         str = String(tt[0]) + "." + String(tt[1]) + "." + String(tt[2]) + "." + String(tt[3]);
         return str;
     };
+
+    // 根据第一个ip 段补齐剩余的ip
+    var polishIp = function(example,ip) {
+        if (example.split(".").length!==4){
+            return example;
+        }
+        var ip_seg = example.split(".").slice(0,4-ip.split(".").length);
+        ip_seg.push(ip);
+        return ip_seg.join(".");
+    };
     
     var formJson = function () {
-        var array = $hostForm.serializeArray();
         var data = {};
-        for (let row of array){
+        $hostForm.serializeArray().forEach(function (row) {
             data[row.name] = row.value.trim();
-        }
+        });
         return data;
     };
 
@@ -136,7 +159,7 @@ var HostForm = function (table) {
     };
 
     // 提交表单用于检查输入
-    var doCheck = function (data){
+    var doValid = function (data){
         if (data === undefined){
             data = formJson();
         }
@@ -163,20 +186,21 @@ var HostForm = function (table) {
     // 提交保存主机信息
     var save = function () {
         var data = formJson();
-        if (doCheck(data)){
+        if (doValid(data)){
             var hosts = [];
             if (flag){
-                for (var startIp = ip2int(data.startIp),endIp=ip2int(data.endIp);startIp<=endIp;startIp++){
-                    hosts[hosts.length] = int2ip(startIp);
+                for (var curIp = ip2int(data.startIp),endIp=ip2int(data.endIp);curIp<=endIp;curIp++){
+                    hosts.push(int2ip(curIp));
                 }
             }else{
-                for (let ip of data.ip.split(",")){
-                    hosts[hosts.length] = ip;
-                }
+                var ips = data.ip.split(",");
+                ips.forEach(function (curIp) {
+                    hosts.push(polishIp(ips[0],curIp));
+                });
             }
 
             var error = [];
-            for(let ip of hosts){
+            hosts.forEach(function (ip) {
                 $.ajax({
                     url: 'v1/host',
                     type:"post",
@@ -185,7 +209,9 @@ var HostForm = function (table) {
                         ip: ip.trim(),
                         username: data.username.trim(),
                         password: data.password.trim(),
-                        sshPort: data.sshPort.trim()
+                        sshPort: data.sshPort.trim(),
+                        user: data.user.trim(),
+                        phone: data.phone.trim()
                     }),
                     success:function(data) {
                         if (ip === hosts[hosts.length-1]){
@@ -196,7 +222,8 @@ var HostForm = function (table) {
                         }
                     }
                 })
-            }
+            });
+
             checkReset();
         }
     };
@@ -234,6 +261,8 @@ var HostForm = function (table) {
         $username.val(row.username);
         $password.val(row.password);
         $sshPort.val(row.sshPort);
+        $user.val(row.user);
+        $phone.val(row.phone);
     };
 
     return init();
