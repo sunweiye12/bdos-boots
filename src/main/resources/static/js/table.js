@@ -165,8 +165,13 @@ var Table = function () {
             formatSearch: function () { return "搜索"; },
             formatFullscreen: function(){ return "全屏"; },
             formatColumns: function(){ return "角色"; },
-            responseHandler:function(res){ return res.code===200?res.data:[]; },
-            onLoadSuccess: function () {$('[data-toggle="tooltip"]').tooltip();}
+            responseHandler:function(res){
+                return res.code===200?res.data:[];
+            },
+            onLoadSuccess: function () {
+                $('[data-toggle="tooltip"]').tooltip();
+                $('.popover').remove();
+            }
         });
 
         clusterBtnReset();
