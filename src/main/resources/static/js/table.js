@@ -168,7 +168,7 @@ var Table = function () {
             responseHandler:function(res){
                 return res.code===200?res.data:[];
             },
-            onLoadSuccess: function () {
+            onResetView: function () {
                 $('.tooltip').remove();
                 $('[data-toggle="tooltip"]').tooltip();
                 $('.popover').remove();
