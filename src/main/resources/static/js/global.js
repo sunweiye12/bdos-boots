@@ -169,7 +169,7 @@ var Global = function (table) {
         }
         checkReset();
         var check_flag = true;
-        for (var key in global){
+        for (var key in data){
             check_flag = checkActive($("#"+key),data[key])&&check_flag;
         }
         return check_flag;
