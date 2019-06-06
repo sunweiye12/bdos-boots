@@ -136,9 +136,7 @@ var Global = function (table) {
             type:"post",
             async: false,
             contentType:'application/json',
-            data: JSON.stringify({
-                COMPOSE_K8S_VIRTUAL_IP: vip
-            }),
+            data: JSON.stringify(data),
             success:function(data){
                 if (data.code !== 200 ){
                     flag = false;
@@ -180,7 +178,9 @@ var Global = function (table) {
     var saveAllGlobal = function () {
         var data = formJson($global_form);
         if (doValid(data)){
-            if(!submitGlobal(data)){
+            if(submitGlobal(data)){
+                alert("全局配置保存成功！");
+            }else{
                 alert("全局配置保存失败！");
             }
             checkReset();
