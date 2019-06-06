@@ -163,15 +163,16 @@ var Table = function () {
             uniqueId:"ip",
             pageList:[5, 10, 20, 50, 100, 200],
             columns: [show_columns,_this.dynamic_columns],
-            formatSearch: function () { return "搜索"; },
             formatFullscreen: function(){ return "全屏"; },
             formatColumns: function(){ return "角色"; },
             responseHandler:function(res){
                 return res.code===200?res.data:[];
             },
             onLoadSuccess: function () {
+                $('.tooltip').remove();
                 $('[data-toggle="tooltip"]').tooltip();
                 $('.popover').remove();
+                $('[data-toggle="popover"]').popover('show');
             }
         });
 
@@ -325,17 +326,9 @@ var Table = function () {
         if (data === undefined){
             $.get("v1/host", function(result){
                 $table.bootstrapTable('load',result.data);
-                $('.tooltip').remove();
-                $('[data-toggle="tooltip"]').tooltip();
-                $('.popover').remove();
-                $('[data-toggle="popover"]').popover('show');
             });
         }else{
             $table.bootstrapTable('load',data);
-            $('.tooltip').remove();
-            $('[data-toggle="tooltip"]').tooltip();
-            $('.popover').remove();
-            $('[data-toggle="popover"]').popover('show');
         }
     };
 
