@@ -66,8 +66,10 @@ checkActive = function($this,value){
     if(value === undefined){
         value = $this.val();
     }
-    var valid = $this.valid_invoke(value);
-
+    var valid = true;
+    if ($this.valid_invoke==='function'){
+        valid = $this.valid_invoke(value);
+    }
     if (valid&&!$this.hasClass("is-valid")){
         $this.addClass("is-valid");
     }
