@@ -38,12 +38,30 @@
             <a class="btn btn-primary" href="javascript:void(0);"  data-toggle="modal" data-target="#host-add"  id="add_btn" title="添加主机"><i  class="fa fa-plus"></i> 添加主机</a>
             <a class="btn btn-primary" href="javascript:void(0);" onclick="$('#template').click()" title="参照左侧下载模板规范" ><i class="fas fa-upload" type="file" ></i> 导入主机模板</a>
             <input type="file" id="template" name="template" class="d-none" />
+            <a class="btn btn-primary" href="javascript:void(0);"  data-toggle="modal" data-target="#global"  id="save_global_model" title="全局配置"><i  class="fa fa-cog"></i> 全局配置</a>
             <a class="btn btn-primary" href="javascript:void(0);"  id="host_check" data-loading-text="校验中...." title="校验完成角色将自动补齐"><i  class="fa fa-sync"></i> 集群校验</a>
             <a class="btn btn-warning" href="javascript:void(0);" id="clean_cluster" title="清理集群"><i  class="fa fa-trash"></i> 清理集群 </a>
             <a class="btn btn-danger" href="javascript:void(0);" id="install_cluster" title="安装集群"> 安装集群 <i  class="fa fa-power-off"></i></a>
         </form>
     </div>
 </nav>
+<div class="modal" id="global" role="dialog" aria-labelledby="全局配置" >
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document" data-show="true">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="globalModalLabel">全局配置</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body" >
+                <form id='global_form' class="form-horizontal "></form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" id="save_global">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="modal" id="host-add" role="dialog" aria-labelledby="添加主机" >
     <div class="modal-dialog modal-lg modal-dialog-centered" role="document" data-show="true">
         <div class="modal-content">
@@ -132,7 +150,7 @@
 
 <div class="container-fluid">
     <div id="toolbar">
-        <form id="global_form" >
+        <form id="vip_form" >
             <div class="row">
                 <label for="k8s_virtual_ip" class="col-sm-2 col-form-label">VIP：</label>
                 <div class="col-sm-10">
@@ -182,8 +200,9 @@
 </div>
 
 </body>
+<script src="js/utils.js"></script>
 <script src="js/play.js"></script>
-<script src="js/policy.js"></script>
+<script src="js/global.js"></script>
 <script src="js/handle.js"></script>
 <script src="js/form.js"></script>
 <script src="js/install.js"></script>

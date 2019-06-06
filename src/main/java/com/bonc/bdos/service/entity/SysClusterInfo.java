@@ -33,6 +33,9 @@ public class SysClusterInfo implements Serializable{
 	@Column(name = "`cfg_type`")
 	private char cfgType;
 
+	@Column(name = "`icon`")
+	private String icon;
+
 	@Column(name = "`memo`")
 	private String memo;
 

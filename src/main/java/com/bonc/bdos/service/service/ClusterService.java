@@ -1,6 +1,7 @@
 package com.bonc.bdos.service.service;
 
 import com.bonc.bdos.service.entity.SysClusterHost;
+import com.bonc.bdos.service.entity.SysClusterInfo;
 import com.bonc.bdos.service.entity.SysClusterRole;
 import com.bonc.bdos.service.entity.SysClusterStoreCfg;
 
@@ -73,7 +74,7 @@ public interface ClusterService {
 	 * 查询全局配置
 	 * @return map 全局配置
 	 */
-	HashMap<String,String> findGlobal();
+	List<SysClusterInfo> findGlobal();
 
     List<SysClusterStoreCfg> storeCfg();
 

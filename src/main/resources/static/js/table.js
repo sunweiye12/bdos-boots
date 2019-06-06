@@ -13,7 +13,7 @@ var Table = function () {
     var cluster_opt={true:{title: '拓展节点',code: 'install_cluster'},false:{title: '安装集群',code:'extend_node'}};
     var dev_enable_swatch={'1':{status:'0',url: 'disable'},'0':{status: '1',url: 'enable'}};
 
-    _this._policy = new Policy(_this);
+    _this._policy = new Global(_this);
     _this.install_flag = _this._policy.isInstalled();
 
     _this._form = new HostForm(_this);
@@ -187,7 +187,7 @@ var Table = function () {
                     return;
                 }
             }else{
-                if(!_this._policy.saveGlobal()){
+                if(!_this._policy.saveVip()){
                     return;
                 }
                 targets = _this.getFields("ip") ;

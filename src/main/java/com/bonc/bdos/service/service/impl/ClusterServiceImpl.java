@@ -116,8 +116,8 @@ public class ClusterServiceImpl extends Global implements ClusterService {
 	}
 
 	@Override
-	public HashMap<String, String> findGlobal() {
-		return Global.getTotal();
+	public List<SysClusterInfo> findGlobal() {
+		return clusterInfoDao.findAll();
 	}
 
 	@Override
