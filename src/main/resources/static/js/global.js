@@ -129,23 +129,10 @@ var Global = function (table) {
         });
     };
 
-    this.saveVip = function(){
-        var masterNum = 0;
-        _table.getFields("roles").forEach(function (roles) {
-            if (roles.master!==undefined){
-                masterNum++;
-            }
-        });
-
-        if (masterNum>1&&$vip.val()===""){
-            alert("多节点master 请设置VIP！");
-            return false;
-        }
-
+    var submitGlobal = function(data){
         var flag = true;
-        var vip =_this.getCfg("COMPOSE_K8S_VIRTUAL_IP");
         $.ajax({
-            url: "v1/dev/allocate",
+            url: "v1/global",
             type:"post",
             async: false,
             contentType:'application/json',
@@ -159,6 +146,22 @@ var Global = function (table) {
             }
         });
         return flag;
+    };
+
+    this.saveVip = function(){
+        var masterNum = 0;
+        _table.getFields("roles").forEach(function (roles) {
+            if (roles.master!==undefined){
+                masterNum++;
+            }
+        });
+
+        if (masterNum>1&&$vip.val()===""){
+            alert("多节点master 请设置VIP！");
+            return false;
+        }
+
+        return submitGlobal({COMPOSE_K8S_VIRTUAL_IP: _this.getCfg("COMPOSE_K8S_VIRTUAL_IP")});
     };
 
     // 提交表单用于检查输入
@@ -177,12 +180,9 @@ var Global = function (table) {
     var saveAllGlobal = function () {
         var data = formJson($global_form);
         if (doValid(data)){
-            $.ajax({
-                url: 'v1/host',
-                type:"post",
-                contentType:'application/json',
-                data: JSON.stringify(data)
-            });
+            if(!submitGlobal(data)){
+                alert("全局配置保存失败！");
+            }
             checkReset();
         }
     };
