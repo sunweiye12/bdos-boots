@@ -1,11 +1,13 @@
 package com.bonc.bdos.service.tasks;
 
 import com.alibaba.fastjson.JSON;
+import com.bonc.bdos.consts.ReturnCode;
 import com.bonc.bdos.service.Global;
 import com.bonc.bdos.service.entity.SysClusterHost;
 import com.bonc.bdos.service.entity.SysInstallLogLabel;
 import com.bonc.bdos.service.entity.SysInstallPlayExec;
 import com.bonc.bdos.service.entity.SysInstallPlaybook;
+import com.bonc.bdos.service.exception.ClusterException;
 import com.bonc.bdos.service.service.CallService;
 import com.bonc.bdos.utils.DateUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -150,7 +152,7 @@ public class CmdExecutor extends Thread {
             // 只有上一个playbook 执行成功才执行下一个playbook
             if (exitCode != 0) {
                 // process.destroy();
-                throw new RuntimeException(playbook.getPlaybookName() + " 执行失败!");
+                throw new ClusterException(ReturnCode.CODE_TASK_EXEC_FAILED,playbook.getPlaybookName() + " 执行失败!");
             }
         }
     }
@@ -249,7 +251,10 @@ public class CmdExecutor extends Thread {
                 // 设置成功
                 exec.setStatus(SysInstallPlayExec.SUCCESS);
             }
-        } catch (Exception e) {
+        }catch (ClusterException e){
+            LOG.error("任务执行失败：{}",e.getMsg());
+            exec.setStatus(SysInstallPlayExec.FAILED);
+        }catch (Exception e) {
             e.printStackTrace();
             exec.setStatus(SysInstallPlayExec.FAILED);
             for (String ip: exec.getTargetIps()){

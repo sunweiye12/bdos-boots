@@ -167,4 +167,5 @@ public class ReturnCode {
     public static final int CODE_CLUSTER_PLAY_NOT_RUNNING = 1520; // 当前任务未在运行中
     public static final int CODE_CLUSTER_HOST_DIR_NOT_EXISTED= 1521; // 主机已经被锁住
     public static final int CODE_DATA_CLONE_ERROR= 1522; // 数据clone 出现异常
+    public static final int CODE_TASK_EXEC_FAILED= 1523; // 数据clone 出现异常
 }
