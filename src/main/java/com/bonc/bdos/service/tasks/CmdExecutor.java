@@ -2,6 +2,7 @@ package com.bonc.bdos.service.tasks;
 
 import com.alibaba.fastjson.JSON;
 import com.bonc.bdos.service.Global;
+import com.bonc.bdos.service.entity.SysClusterHost;
 import com.bonc.bdos.service.entity.SysInstallLogLabel;
 import com.bonc.bdos.service.entity.SysInstallPlayExec;
 import com.bonc.bdos.service.entity.SysInstallPlaybook;
@@ -251,6 +252,9 @@ public class CmdExecutor extends Thread {
         } catch (Exception e) {
             e.printStackTrace();
             exec.setStatus(SysInstallPlayExec.FAILED);
+            for (String ip: exec.getTargetIps()){
+                message.add(JSON.toJSONString(new SysClusterHost(ip,"系统异常")));
+            }
         } finally {
             // 设置保存信息
             if (!pause){

@@ -43,6 +43,7 @@ var Table = function () {
                 field: "ip",
                 title: "主机IP",
                 rowspan: 2,
+                width: "165px",
                 switchable:false,
                 valign: "middle",
                 formatter:IPFormatter
@@ -222,9 +223,9 @@ var Table = function () {
     var IPFormatter = function (value,row,index) {
         var msg = _this._check.getHostMsg(value);
         var has_msg = msg!==undefined && msg.length>0;
-        return [' <span class="',host_status_class[row.status],'" ', pop_msg_data[has_msg] ,' data-container="body" data-content="',has_msg?msg.join(' ; '):'','" > ',
-                        '<i title="校验主机" class="fa fa-desktop" ></i> ', value,
-                    '</span>'].join('');
+        return [' <div class="',host_status_class[row.status],'" ', pop_msg_data[has_msg] ,' data-container="body" data-content="',has_msg?msg.join(' ; '):'','" > ',
+                        '<span><i title="校验主机" class="fa fa-desktop" ></i> ', value,'</span>',
+                    '</div>'].join('');
     };
     // 设备格式化展示
     var devFormatter = function(value,row,index){

@@ -41,6 +41,11 @@ public class SysClusterHost implements Serializable,Cloneable {
 		this.hostLock = false;
 	}
 
+	public SysClusterHost(String ip,String message) {
+		this.ip = ip;
+		this.message = message;
+	}
+
 	public SysClusterHost(HashMap<String, Object> reqhost) {
         this.status = SysClusterHost.NO_CHECK;
         this.sshPort = 22;
