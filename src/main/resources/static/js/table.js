@@ -117,17 +117,17 @@ var Table = function () {
                 align: 'center',
                 events: {
                     'click .change': function (e, value, row, index) {
-                        if (_this.install_flag){
-                            return;
-                        }
                         //更新对应的角色节点
                         var roleCode = role.roleCode;
                         if (row.roles[roleCode]===undefined){
-                            row.roles[roleCode] = {status: '0'}
-                        }else{
-                            delete row.roles[roleCode]
+                            row.roles[roleCode] = {status: '0'};
+                        }else if(row.roles[roleCode].status==='2'){
+                            alert("角色已经安装！");
+                            return;
+                        } else {
+                            delete row.roles[roleCode];
                         }
-                        _this._policy.policyRole(_this.getHosts());
+                        _this._policy.changeRole(row);
                     }
                 }
             });

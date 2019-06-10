@@ -36,7 +36,7 @@ public interface ClusterService {
 	 *     (4)判断需要操作的角色主机是否包含已经安装好的主机     如果已安装好则不能进行操作
 	 * 2.根据数据表中角色集合roleMap和 传入的参数角色集合roleSet，参数集合中与表角色集合相比有新节点，则比较出哪个节点是新增的，哪个节点是需要废弃掉的，并且处理对应的设备信息
 	 * 
-	 * @param roles
+	 * @param hosts
 	 * {
 	 * 	roles:{ //不要 default
 	 * 		docker:[ip1,ip2]
@@ -44,7 +44,7 @@ public interface ClusterService {
 	 * }
 	 * 
 	 */
-	void saveRoles(HashMap<String, Set<String>> roles);
+	void saveRoles(List<SysClusterHost> hosts);
 
 	/**
 	 * 查询集群分布试图

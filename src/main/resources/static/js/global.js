@@ -129,6 +129,23 @@ var Global = function (table) {
         });
     };
 
+    this.changeRole = function(host){
+        $.ajax({
+            type:"post",
+            url: 'v1/roles',
+            contentType:'application/json',
+            data: JSON.stringify([host]),
+            success:function(data){
+                if (data.code === 200){
+                    _table.reload();
+                }else {
+                    alert(data.message);
+                    console.log(data.code);
+                }
+            }
+        });
+    };
+
     var submitGlobal = function(data){
         var flag = true;
         $.ajax({

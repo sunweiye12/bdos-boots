@@ -48,46 +48,43 @@ public class ClusterServiceImpl extends Global implements ClusterService {
 
 	@Override
 	@Transactional
-	public void saveRoles(HashMap<String, Set<String>> roleSet) {
+	public void saveRoles(List<SysClusterHost> hosts) {
 		// 1.涉及的主机状态必须都校验通过     (1)判断传入的ip是否存在于数据表中      (2)ip对应的主机是否已经校验通过    (3)ip是否已经锁住
-		List<String> errorMsgs = new ArrayList<>();
+		List<String> installedRole = new ArrayList<>();
 
 		// (4)判断需要操作的角色主机是否包含已经安装好的主机     如果已安装好则不能进行操作
-		HashMap<String,HashMap<String, SysClusterHostRole>> roleMap = new HashMap<>();
-		List<SysClusterHostRole> roles = clusterHostRoleDao.findAll();
-		for (SysClusterHostRole role:roles){
-			if (!roleMap.containsKey(role.getRoleCode())){
-				roleMap.put(role.getRoleCode(),new HashMap<>());
+		HashMap<String,HashMap<String, SysClusterHostRole>> hostRoleMap = new HashMap<>();
+		List<SysClusterHostRole> hostRoles = clusterHostRoleDao.findAll();
+		for (SysClusterHostRole role:hostRoles){
+			if (!hostRoleMap.containsKey(role.getIp())){
+				hostRoleMap.put(role.getIp(),new HashMap<>());
 			}
-			roleMap.get(role.getRoleCode()).put(role.getIp(),role);
+			hostRoleMap.get(role.getIp()).put(role.getRoleCode(),role);
+		}
 
-			if (role.isInstalled()  &&  roleSet.containsKey(role.getRoleCode())  &&  !roleSet.get(role.getRoleCode()).contains(role.getIp())) {
-				errorMsgs.add(role.getStatusDesc());
+		for (SysClusterHost host: hosts){
+			// 新增主机角色逻辑
+			for (String roleCode: host.getRoles().keySet()){
+				if (!hostRoleMap.containsKey(host.getIp())||!hostRoleMap.get(host.getIp()).containsKey(roleCode)){
+					clusterHostRoleDao.save(new SysClusterHostRole(host.getIp(),roleCode));
+				}
+			}
+			// 删除主机角色逻辑
+			if (hostRoleMap.containsKey(host.getIp())){
+				for (String roleCode: hostRoleMap.get(host.getIp()).keySet()){
+					if (null!=host.getRoles()&&!host.getRoles().containsKey(roleCode)){
+						SysClusterHostRole hostRole = hostRoleMap.get(host.getIp()).get(roleCode);
+						if (hostRole.isInstalled()){
+							installedRole.add(hostRole.getIp()+":"+hostRole.getRoleCode());
+						}else{
+							clusterHostRoleDao.deleteById(hostRole.getId());
+						}
+					}
+				}
 			}
 		}
-		if (!errorMsgs.isEmpty())		{throw new ClusterException(ReturnCode.CODE_CLUSTER_HOST_CHECK,errorMsgs,"已经安装的好的角色不可删除");}
 
-		// 2.根据数据表中角色集合roleMap和 传入的参数角色集合roleSet，参数集合中与表角色集合相比有新节点，则比较出哪个节点是新增的，哪个节点是需要废弃掉的，并且处理对应的设备信息
-		for (String roleCode: roleSet.keySet()){
-			Set<String> newIps = roleSet.get(roleCode);
-			Set<String> oldIps = (roleMap.get(roleCode)!=null)?roleMap.get(roleCode).keySet():new HashSet<>();
-
-			// 添加新增主机角色对应关系
-			Set<String> addIps = new HashSet<>(newIps);
-			addIps.removeAll(oldIps);
-			for(String ip:addIps){
-				clusterHostRoleDao.save(new SysClusterHostRole(ip,roleCode));
-			}
-
-			// 删除废弃主机角色对应关系
-			Set<String> delIps = new HashSet<>(oldIps);
-			//dqy   后面循环删除的集合，应该与此次保持一致  delIps
-			delIps.removeAll(newIps);
-
-			for(String ip:delIps){
-				clusterHostRoleDao.deleteById(roleMap.get(roleCode).get(ip).getId());
-			}
-		}
+		if (!installedRole.isEmpty())		{throw new ClusterException(ReturnCode.CODE_CLUSTER_HOST_CHECK,installedRole,"已经安装的好的角色不可删除");}
 	}
 
 	@Override
@@ -329,17 +326,7 @@ public class ClusterServiceImpl extends Global implements ClusterService {
 		RolePolicyHelper policyHelper = new RolePolicyHelper(hosts);
 		policyHelper.initRoleCtl();
 		policyHelper.doPolicy();
-
-		HashMap<String,Set<String>> roleSet = new HashMap<>();
-		for (SysClusterHost host:hosts){
-			for (String roleCode: host.getRoles().keySet()){
-				if (!roleSet.containsKey(roleCode)){
-					roleSet.put(roleCode,new HashSet<>());
-				}
-				roleSet.get(roleCode).add(host.getIp());
-			}
-		}
-		saveRoles(roleSet);
+		saveRoles(hosts);
 		return hosts;
 	}
 }

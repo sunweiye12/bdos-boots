@@ -17,7 +17,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
 
 @RestController
 @RequestMapping("/v1")
@@ -90,12 +89,12 @@ public class ClusterController {
      */
     @RequestMapping(value = {"/roles"}, method = RequestMethod.POST)
     @ApiOperation(value = "角色保存接口", notes = "角色保存接口")
-    @ApiImplicitParams(@ApiImplicitParam(name = "roles", value = "角色信息", dataType = "Map[String,Set[String]]", example = "{\"roles\":[\"192.168.1.1\",\"192.168.1.2\",\"192.168.1.3\"]}"))
-    public ApiResult saveRoles(@RequestBody HashMap<String, Set<String>> roles) {
+    @ApiImplicitParams(@ApiImplicitParam(name = "hosts", value = "主机角色信息"))
+    public ApiResult saveRoles(@RequestBody List<SysClusterHost> hosts) {
         return ApiHandle.handle(() -> {
-            clusterService.saveRoles(roles);
+            clusterService.saveRoles(hosts);
             return new ArrayList<>();
-        },roles);
+        },hosts);
     }
 
     /**
