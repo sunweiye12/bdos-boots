@@ -99,6 +99,16 @@ int2ip = function(num) {
     return str;
 };
 
+// 根据第一个ip 段补齐剩余的ip
+polishIp = function(example,ip) {
+    if (example.split(".").length!==4){
+        return example;
+    }
+    var ip_seg = example.split(".").slice(0,4-ip.split(".").length);
+    ip_seg.push(ip);
+    return ip_seg.join(".");
+};
+
 formJson = function ($form) {
     var data = {};
     $form.serializeArray().forEach(function (row) {

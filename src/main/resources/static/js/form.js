@@ -60,16 +60,6 @@ var HostForm = function (table) {
         $(value?".hostGroup":".hostSingle").show();
     };
 
-    // 根据第一个ip 段补齐剩余的ip
-    var polishIp = function(example,ip) {
-        if (example.split(".").length!==4){
-            return example;
-        }
-        var ip_seg = example.split(".").slice(0,4-ip.split(".").length);
-        ip_seg.push(ip);
-        return ip_seg.join(".");
-    };
-
     // 提交表单用于检查输入
     var doValid = function (data){
         if (data === undefined){
